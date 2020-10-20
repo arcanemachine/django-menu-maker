@@ -5,6 +5,7 @@ keys.py
 venv
 .del
 runserver
+shell
 gunicorn.sh
 scripts/
 data.dump

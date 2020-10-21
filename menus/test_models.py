@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection
@@ -46,9 +47,16 @@ class MenuModelTest(TestCase):
     ### METHODS ###
 
     # __str__()
-    def test_object_string_representation_method_returns_name(self):
-        #menu = Menu.objects.first()
-        expected_object_string = "Test Menu"
-        self.assertEqual(str(self.test_menu), expected_object_string)
+    def test_method___str___returns_name(self):
+        expected_string = "Test Menu"
+        self.assertEqual(str(self.test_menu), expected_string)
 
-    def test_method_get_absolute_url_returns_menu_detail
+    # get_absolute_url()
+    def test_method_get_absolute_url_returns_menu_detail(self):
+        expected_url = reverse('menus:menu_detail',
+                kwargs = {
+                    'restaurant_slug': self.test_menu.restaurant.slug,
+                    'menu_slug': self.test_menu.slug,
+                    })
+
+        self.assertEqual(self.test_menu.get_absolute_url(), expected_url)

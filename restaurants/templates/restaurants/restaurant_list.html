@@ -12,7 +12,7 @@
 
 <ul>
     {% for restaurant in restaurants %}
-  <li><a href="{% url 'menus:restaurant_menu_list' slug=restaurant.slug %}">{{ restaurant.name }}</li>
+  <li><a href="{% url 'menus:restaurant_menu_list' restaurant_slug=restaurant.slug %}">{{ restaurant.name }}</li>
     {% endfor %}
 </ul>
 {% endif %}

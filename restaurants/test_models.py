@@ -35,8 +35,9 @@ class RestaurantModelTest(TestCase):
     ### FIELDS ###
 
     # name
-    def test_field_name_attname(self):
-        attname = self.test_restaurant._meta.get_field('name').attname
+    def test_field_name_verbose_name(self):
+        verbose_name = \
+            self.test_restaurant._meta.get_field('name').verbose_name
         self.assertEqual(attname, 'name')
 
     def test_field_name_type_is_CharField(self):
@@ -49,8 +50,9 @@ class RestaurantModelTest(TestCase):
         self.assertEqual(max_length, 128)
 
     # slug
-    def test_field_slug_attname(self):
-        attname = self.test_restaurant._meta.get_field('slug').attname
+    def test_field_slug_verbose_name(self):
+        verbose_name = \
+            self.test_restaurant._meta.get_field('slug').verbose_name
         self.assertEqual(attname, 'slug')
 
     def test_field_slug_type_is_SlugField(self):
@@ -71,8 +73,9 @@ class RestaurantModelTest(TestCase):
         self.assertEqual(is_null, True)
 
     # slug
-    def test_field_admin_users_attname(self):
-        attname = self.test_restaurant._meta.get_field('admin_users').attname
+    def test_field_admin_users_verbose_name(self):
+        verbose_name = \
+            self.test_restaurant._meta.get_field('admin_users').verbose_name
         self.assertEqual(attname, 'admin_users')
 
     def test_field_admin_users_type_is_ManyToManyField(self):

@@ -18,6 +18,9 @@ class MenuModelTest(TestCase):
             restaurant=cls.test_restaurant,
             name='Test Menu')
 
+    def test_menu_object_name(self): 
+        self.assertEqual(self.test_menu.__class__.__name__, 'Menu')
+
     def test_menu_object_content(self):
 
         expected_restaurant = self.test_restaurant

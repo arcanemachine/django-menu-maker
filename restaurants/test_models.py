@@ -90,6 +90,10 @@ class RestaurantModelTest(TestCase):
 
     ### VALIDATION ###
 
+    def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
+        with self.assertRaises(ValidationError):
+            invalid_test_restaurant = Restaurant.objects.create(name='all')
+
     def test_validation_do_not_allow_duplicate_restaurant_slugs(self):
         with self.assertRaises(ValidationError):
             test_restaurant_2 = Restaurant.objects.create(

@@ -4,6 +4,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
+from menus_project.constants import RESERVED_KEYWORDS
+
 class Restaurant(models.Model):
 
     name = models.CharField(max_length=128)
@@ -14,6 +16,13 @@ class Restaurant(models.Model):
         return self.name
 
     def clean(self):
+
+        # do not allow slugs to be reserved keywords
+        if self.slug in RESERVED_KEYWORDS:
+            raise ValidationError(
+                "This restaurant name is reserved and cannot be used. "\
+                "Please choose another name.")
+
         # do not allow duplicate restaurant slugs
         existing_restaurants_with_same_slug = \
             Restaurant.objects.filter(slug=slugify(self.name))

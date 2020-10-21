@@ -9,10 +9,13 @@ class RestaurantModelTest(TestCase):
     
     @classmethod
     def setUpTestData(cls):
+
+        # create test user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
         cls.test_user.save()
 
+        # create test_restaurant
         cls.test_restaurant = Restaurant.objects.create(
             name='Test Restaurant')
         cls.test_restaurant.admin_users.add(cls.test_user)

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ restaurant }} - Menu List{% endblock %}
+
+{% block body_title %}{{ restaurant }}{% endblock %}
+{% block body_subheading %}Menu List{% endblock %}
+
+{% block content %}
+
+{% if not menus %}
+<p>This restaurant does not have any menus.</p>
+{% elif menus %}
+
+<ul>
+  {% for menu in menus %}
+  <li>{{ menu }}</li>
+  {% endfor %}
+</ul>
+
+{% endif %}
+
+{% endblock content %}

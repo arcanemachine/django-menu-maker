@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Root{% endblock %}
+
+Menu Maker
+
+{% block content %}
+
+<ul>
+  <li><a href="{% url 'restaurants:restaurant_list' %}">Restaurants</a></li>
+</ul>
+
+{% endblock content %}

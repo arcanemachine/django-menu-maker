@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-apps = {
-    'menus': 'menus/'
-    }
+from . import views
+
+#app_name = 'root'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(apps['menus'], include('menus.urls')),
+    path('', views.root, name='root'),
+    path('restaurant/', include('restaurants.urls')),
+    path('restaurant/<slug:slug>/menu/', include('menus.urls')),
 ]

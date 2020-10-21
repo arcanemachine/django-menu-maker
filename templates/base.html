@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %} - Menu Maker</title>
+
+    {% block head_script %}{% endblock head_script %}
+
+    {% block style %}{% endblock style %}
+
+	</head>
+	<body>
+
+    <h2 style="margin-bottom: 0;">{% block body_title %}{% endblock body_title %}</h2>
+    <h3>{% block body_subheading %}{% endblock body_subheading %}</h3>
+
+    {% block content %}{% endblock content %}
+
+    {% block body_end_script %}{% endblock body_end_script %}
+    
+	</body>
+</html>
+

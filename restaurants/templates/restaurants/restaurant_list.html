@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Restaurant List{% endblock %}
+
+{% block body_title %}Restaurant List{% endblock %}
+
+{% block content %}
+
+{% if not restaurants %}
+<p>There are no restaurants in the database.</p>
+{% elif restaurants %}
+
+<ul>
+    {% for restaurant in restaurants %}
+  <li><a href="{% url 'menus:restaurant_menu_list' slug=restaurant.slug %}">{{ restaurant.name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock content %}

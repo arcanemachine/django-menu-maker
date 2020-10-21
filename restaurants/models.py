@@ -17,7 +17,9 @@ class Restaurant(models.Model):
         # do not allow duplicate restaurant slugs
         existing_restaurants_with_same_slug = \
             Restaurant.objects.filter(slug=slugify(self.name))
-        if existing_restaurants_with_same_slug.exists():
+        if existing_restaurants_with_same_slug.exists() \
+            and existing_restaurants_with_same_slug.first() != self \
+            and existing_restaurants_with_same_slug.last() != self:
             raise ValidationError("This restaurant name is already in use.")
 
     def get_absolute_url(self):

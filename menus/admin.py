@@ -7,7 +7,7 @@ admin.site.register(MenuSection)
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('name', 'restaurant')
+    list_display = ('name', 'restaurant', 'pk')
     readonly_fields = ['slug']
 
     class Meta:

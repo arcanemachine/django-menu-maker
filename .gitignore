@@ -5,6 +5,7 @@ keys.py
 venv
 .del
 runserver
+makenmigrate
 shell
 gunicorn.sh
 scripts/

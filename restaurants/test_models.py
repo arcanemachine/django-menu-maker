@@ -20,6 +20,9 @@ class RestaurantModelTest(TestCase):
             name='Test Restaurant')
         cls.test_restaurant.admin_users.add(cls.test_user)
 
+    def test_restaurant_object_name(self):
+        self.assertEqual(self.test_restaurant.__class__.__name__, 'Restaurant')
+
     def test_restaurant_object_content(self):
         expected_name = 'Test Restaurant'
         expected_slug = 'test-restaurant'

@@ -34,7 +34,7 @@ class MenuModelTest(TestCase):
     def test_field_restaurant_verbose_name(self):
         verbose_name = \
             self.test_menu._meta.get_field('restaurant').verbose_name
-        self.assertEqual(field_label, 'restaurant')
+        self.assertEqual(verbose_name, 'restaurant')
     
     def test_field_restaurant_on_delete(self):
         on_delete = \

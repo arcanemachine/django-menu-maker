@@ -25,7 +25,7 @@ class Restaurant(models.Model):
             kwargs={'restaurant_slug': self.slug })
 
     def save(self, *args, **kwargs):
-        self.clean()
         if not self.slug == slugify(self.name):
             self.slug = slugify(self.name)
+        self.clean()
         super().save(*args, **kwargs)

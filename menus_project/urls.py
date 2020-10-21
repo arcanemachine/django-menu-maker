@@ -18,11 +18,9 @@ from django.urls import include, path
 
 from . import views
 
-#app_name = 'root'
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.root, name='root'),
     path('restaurant/', include('restaurants.urls')),
-    path('restaurant/<slug:slug>/menu/', include('menus.urls')),
+    path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
 ]

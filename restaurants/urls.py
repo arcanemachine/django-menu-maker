@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 
 from . import views
 
@@ -13,6 +13,6 @@ urlpatterns = [
         views.RestaurantDetailView.as_view(),
         name='restaurant_detail'),
 
-    path('<slug:restaurant_slug>/menu/', include('menus.urls'))
+    #path('<slug:restaurant_slug>/menu/', include('menus.urls'))
 
     ]

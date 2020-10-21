@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.root, name='root'),
     path('admin/', admin.site.urls),
     path('restaurant/', include('restaurants.urls')),
+    path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
 ]

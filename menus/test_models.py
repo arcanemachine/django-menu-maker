@@ -69,6 +69,10 @@ class MenuModelTest(TestCase):
         self.assertEqual(slug_max_length, 128)
 
     # theme
+    def test_field_theme_choices_is_THEME_CHOICES(self):
+        choices = self.test_menu._meta.get_field('theme').choices
+        self.assertEqual(self.test_menu.THEME_CHOICES, choices)
+
     def test_field_theme_choices_default(self):
         choices = self.test_menu._meta.get_field('theme').choices
         self.assertEqual(choices[0], ('default', "Default"))

@@ -24,7 +24,7 @@ class Restaurant(models.Model):
 
     def get_absolute_url(self):
         return reverse('restaurants:restaurant_detail',
-            kwargs={'slug': self.slug})
+            kwargs={'restaurant_slug': self.slug })
 
     def save(self, *args, **kwargs):
         if not self.slug == slugify(self.name):

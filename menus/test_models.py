@@ -31,7 +31,7 @@ class MenuModelTest(TestCase):
     ### FIELDS ###
 
     # restaurant
-    def test_field_restaurant_label(self):
+    def test_field_restaurant_verbose_name(self):
         verbose_name = \
             self.test_menu._meta.get_field('restaurant').verbose_name
         self.assertEqual(field_label, 'restaurant')
@@ -41,7 +41,7 @@ class MenuModelTest(TestCase):
             self.test_menu._meta.get_field('restaurant').remote_field.on_delete
         self.assertTrue(on_delete is models.CASCADE)
 
-    def test_field_restaurant_label(self):
+    def test_field_restaurant_null(self):
         null = self.test_menu._meta.get_field('restaurant').null
         self.assertEqual(null, True)
 

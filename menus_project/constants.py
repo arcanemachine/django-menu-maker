@@ -1,1 +1,1 @@
-FORBIDDEN_NAMES = ['all']
+RESERVED_KEYWORDS = ['all']

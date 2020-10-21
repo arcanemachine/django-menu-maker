@@ -22,5 +22,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.root, name='root'),
     path('restaurant/', include('restaurants.urls')),
-    path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
 ]

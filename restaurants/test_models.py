@@ -55,7 +55,7 @@ class RestaurantModelTest(TestCase):
             self.test_restaurant._meta.get_field('slug').verbose_name
         self.assertEqual(attname, 'slug')
 
-    def test_field_slug_type_is_SlugField(self):
+    def test_field_slug_type_SlugField(self):
         internal_type = \
             self.test_restaurant._meta.get_field('slug').get_internal_type()
         self.assertEqual(internal_type, 'SlugField')
@@ -64,11 +64,11 @@ class RestaurantModelTest(TestCase):
         max_length = self.test_restaurant._meta.get_field('slug').max_length
         self.assertEqual(max_length, 128)
 
-    def test_field_slug_is_unique(self):
+    def test_field_slug_unique(self):
         is_unique = self.test_restaurant._meta.get_field('slug').unique
         self.assertEqual(is_unique, True)
 
-    def test_field_slug_is_null(self):
+    def test_field_slug_null(self):
         is_null = self.test_restaurant._meta.get_field('slug').null
         self.assertEqual(is_null, True)
 

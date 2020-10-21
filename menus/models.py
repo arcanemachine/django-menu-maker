@@ -13,7 +13,6 @@ class Menu(models.Model):
         ]
 
     restaurant = models.ForeignKey('restaurants.Restaurant',
-            related_name='menus',
             on_delete=models.CASCADE,
             null=True)
 

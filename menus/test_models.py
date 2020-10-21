@@ -36,11 +36,6 @@ class MenuModelTest(TestCase):
             self.test_menu._meta.get_field('restaurant').verbose_name
         self.assertEqual(field_label, 'restaurant')
     
-    def test_field_restaurant_related_name(self):
-        related_name = \
-            self.test_menu._meta.get_field('restaurant').related_query_name()
-        self.assertEqual(related_name, 'menus')
-
     def test_field_restaurant_on_delete(self):
         on_delete = \
             self.test_menu._meta.get_field('restaurant').remote_field.on_delete

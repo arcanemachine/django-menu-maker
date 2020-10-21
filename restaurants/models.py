@@ -16,7 +16,7 @@ class Restaurant(models.Model):
 
     def clean(self):
 
-        # do not allow duplicate restaurant names
+        # do not allow duplicate restaurant slugs
         existing_restaurants_with_same_slug = \
             Restaurant.objects.filter(slug=slugify(self.name))
         if existing_restaurants_with_same_slug.exists():

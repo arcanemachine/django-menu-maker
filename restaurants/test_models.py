@@ -76,7 +76,7 @@ class RestaurantModelTest(TestCase):
     def test_field_admin_users_verbose_name(self):
         verbose_name = \
             self.test_restaurant._meta.get_field('admin_users').verbose_name
-        self.assertEqual(verbose_name, 'admin_users')
+        self.assertEqual(verbose_name, 'admin users')
 
     def test_field_admin_users_type_is_ManyToManyField(self):
         internal_type = self.test_restaurant._meta.get_field('admin_users') \

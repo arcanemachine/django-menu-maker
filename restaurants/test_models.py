@@ -39,7 +39,7 @@ class RestaurantModelTest(TestCase):
         attname = self.test_restaurant._meta.get_field('name').attname
         self.assertEqual(attname, 'name')
 
-    def test_name_field_is_CharField(self):
+    def test_name_field_type_is_CharField(self):
         internal_type = \
             self.test_restaurant._meta.get_field('name').get_internal_type()
         self.assertEqual(internal_type, 'CharField')
@@ -53,7 +53,7 @@ class RestaurantModelTest(TestCase):
         attname = self.test_restaurant._meta.get_field('slug').attname
         self.assertEqual(attname, 'slug')
 
-    def test_slug_field_is_SlugField(self):
+    def test_slug_field_type_is_SlugField(self):
         internal_type = \
             self.test_restaurant._meta.get_field('slug').get_internal_type()
         self.assertEqual(internal_type, 'SlugField')
@@ -75,7 +75,7 @@ class RestaurantModelTest(TestCase):
         attname = self.test_restaurant._meta.get_field('admin_users').attname
         self.assertEqual(attname, 'admin_users')
 
-    def test_admin_users_field_is_ManyToManyField(self):
+    def test_admin_users_field_type_is_ManyToManyField(self):
         internal_type = self.test_restaurant._meta.get_field('admin_users') \
             .get_internal_type()
         self.assertEqual(internal_type, 'ManyToManyField')

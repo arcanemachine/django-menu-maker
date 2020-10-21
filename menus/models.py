@@ -26,17 +26,22 @@ class Menu(models.Model):
         return self.name
 
     def clean(self):
-        # do not allow duplicate menu names for a given restaurant
+        # do not allow a restaurant to have duplicate menu names
         existing_menus = Menu.objects.filter(
                 restaurant=self.restaurant,
                 name=self.name)
         if existing_menus.count():
             if existing_menus.first() != self or existing_menus.last() != self:
                 raise ValidationError(
-                    "This restaurant already has a menu with this name.")
+                    "This name is too similar to one of this restaurant's "\
+                    "existing menu names.")
 
     def get_absolute_url(self):
-        return reverse('menus:menu_detail', kwargs={'slug': self.slug})
+        return reverse('menus:menu_detail',
+                kwargs={
+                    'restaurant_slug': self.restaurant.slug,
+                    'menu_slug': self.slug,
+                    })
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -53,4 +58,3 @@ class MenuSection(models.Model):
     name = models.CharField(max_length=128, null=True)
     slug = models.SlugField(max_length=128, null=True)
 
-    #image = models.ImageField()

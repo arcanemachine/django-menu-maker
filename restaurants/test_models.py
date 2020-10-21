@@ -35,52 +35,52 @@ class RestaurantModelTest(TestCase):
     ### FIELDS ###
 
     # name
-    def test_field_name_attname(self):
+    def test_name_field_attname(self):
         attname = self.test_restaurant._meta.get_field('name').attname
         self.assertEqual(attname, 'name')
 
-    def test_field_name_is_CharField(self):
+    def test_name_field_is_CharField(self):
         internal_type = \
             self.test_restaurant._meta.get_field('name').get_internal_type()
         self.assertEqual(internal_type, 'CharField')
 
-    def test_field_name_max_length(self):
+    def test_name_field_max_length(self):
         max_length = self.test_restaurant._meta.get_field('name').max_length
         self.assertEqual(max_length, 128)
 
     # slug
-    def test_field_slug_attname(self):
+    def test_slug_field_attname(self):
         attname = self.test_restaurant._meta.get_field('slug').attname
         self.assertEqual(attname, 'slug')
 
-    def test_field_slug_is_SlugField(self):
+    def test_slug_field_is_SlugField(self):
         internal_type = \
             self.test_restaurant._meta.get_field('slug').get_internal_type()
         self.assertEqual(internal_type, 'SlugField')
 
-    def test_field_slug_max_length(self):
+    def test_slug_field_max_length(self):
         max_length = self.test_restaurant._meta.get_field('slug').max_length
         self.assertEqual(max_length, 128)
 
-    def test_field_slug_unique(self):
+    def test_slug_field_unique(self):
         is_unique = self.test_restaurant._meta.get_field('slug').unique
         self.assertEqual(is_unique, True)
 
-    def test_field_slug_null(self):
+    def test_slug_field_null(self):
         is_null = self.test_restaurant._meta.get_field('slug').null
         self.assertEqual(is_null, True)
 
     # slug
-    def test_field_admin_users_attname(self):
+    def test_admin_users_field_attname(self):
         attname = self.test_restaurant._meta.get_field('admin_users').attname
         self.assertEqual(attname, 'admin_users')
 
-    def test_field_admin_users_is_ManyToManyField(self):
+    def test_admin_users_field_is_ManyToManyField(self):
         internal_type = self.test_restaurant._meta.get_field('admin_users') \
             .get_internal_type()
         self.assertEqual(internal_type, 'ManyToManyField')
 
-    def test_field_admin_users_uses_settings_AUTH_USER_MODEL(self):
+    def test_admin_users_field_uses_settings_AUTH_USER_MODEL(self):
         related_model = \
             self.test_restaurant._meta.get_field('admin_users').related_model
         self.assertEqual(related_model, get_user_model())

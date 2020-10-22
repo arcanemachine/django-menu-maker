@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Menu Section - {{ menusection.menu.name }} - {{ menusection.menu.restaurant.name }}{% endblock %}
+
+{% block body_title %}{{ menusection.menu.restaurant.name }} - {{ menusection.menu.name }}{% endblock %}
+{% block body_subheading %}Create Menu Section{% endblock %}
+
+{% block content %}
+
+<p>Please enter the information for your new menu section:</p>
+
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock content %}

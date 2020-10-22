@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 
-from .models import Menu
+from .models import Menu, MenuSection
 from restaurants.models import Restaurant
 
 class MenuDetailView(DetailView):
@@ -12,3 +12,6 @@ class MenuDetailView(DetailView):
         return Menu.objects.get(
             restaurant__slug=self.kwargs['restaurant_slug'],
             slug=self.kwargs['menu_slug'])
+
+class MenuSectionCreateView(CreateView):
+    model = MenuSection

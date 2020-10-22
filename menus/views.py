@@ -28,3 +28,7 @@ class MenuSectionCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['menu'] = self.menu
         return context
+
+    def form_valid(self, form):
+        form.instance.menu = self.menu
+        return super().form_valid(form)

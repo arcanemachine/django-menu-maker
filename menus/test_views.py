@@ -70,4 +70,8 @@ class MenuDetailViewTest(TestCase):
         self.setUp() # reload the page
         self.assertIn('Add New Section', self.html)
 
+    # no sections
+    def test_menu_with_no_menu_sections(self):
+        self.assertIn("This menu does not have any sections.", self.html)
 
+    # TODO: 1 section

@@ -128,3 +128,20 @@ class MenuModelTest(TestCase):
                     'restaurant_slug': self.test_menu.restaurant.slug,
                     'menu_slug': self.test_menu.slug })
         self.assertEqual(self.test_menu.get_absolute_url(), expected_url)
+
+class MenuSectionModelTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+
+        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
+
+        cls.test_menu = Menu.objects.create(
+            restaurant=cls.test_restaurant,
+            name='Test Menu')
+
+        cls.test_menusection = MenuSection.objects.create(
+            menu=cls.test_menu,
+            name='Test Menu Section')
+
+

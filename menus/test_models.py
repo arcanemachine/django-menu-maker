@@ -91,6 +91,14 @@ class MenuModelTest(TestCase):
         default_choice = self.test_menu._meta.get_field('theme').default
         self.assertEqual(default_choice, 'default')
 
+
+    ### META ###
+
+    def test_meta_ordering(self):
+        ordering = self.test_menu._meta.ordering
+        self.assertEqual(ordering, ['name'])
+
+
     ### VALIDATION ###
 
     def test_validation_restaurant_cannot_have_two_menus_with_duplicate_name(self):

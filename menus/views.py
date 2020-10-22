@@ -15,3 +15,4 @@ class MenuDetailView(DetailView):
 
 class MenuSectionCreateView(CreateView):
     model = MenuSection
+    fields = ['name']

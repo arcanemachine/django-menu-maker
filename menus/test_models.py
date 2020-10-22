@@ -37,6 +37,16 @@ class MenuModelTest(TestCase):
         verbose_name = \
             self.test_menu._meta.get_field('restaurant').verbose_name
         self.assertEqual(verbose_name, 'restaurant')
+
+    def test_field_restaurant_field_type(self):
+        field_type = \
+            self.test_menu._meta.get_field('restaurant').__class__.__name__
+        self.assertEqual(field_type, 'ForeignKey')
+
+    def test_field_restaurant_related_model(self):
+        related_model = \
+            self.test_menu._meta.get_field('restaurant').related_model.__name__
+        self.assertEqual(related_model, 'Restaurant')
     
     def test_field_restaurant_on_delete(self):
         on_delete = \
@@ -52,6 +62,11 @@ class MenuModelTest(TestCase):
         verbose_name = self.test_menu._meta.get_field('name').verbose_name
         self.assertEqual(verbose_name, 'name')
 
+    def test_field_name_field_type(self):
+        field_type = \
+            self.test_menu._meta.get_field('name').__class__.__name__
+        self.assertEqual(field_type, 'CharField')
+
     def test_field_name_max_length(self):
         max_length = self.test_menu._meta.get_field('name').max_length
         self.assertEqual(max_length, 128)
@@ -61,15 +76,20 @@ class MenuModelTest(TestCase):
         verbose_name = self.test_menu._meta.get_field('slug').verbose_name
         self.assertEqual(verbose_name, 'slug')
 
+    def test_field_slug_field_type(self):
+        field_type = \
+            self.test_menu._meta.get_field('slug').__class__.__name__
+        self.assertEqual(field_type, 'SlugField')
+
     def test_field_slug_max_length(self):
         slug_max_length = self.test_menu._meta.get_field('slug').max_length
         self.assertEqual(slug_max_length, 128)
 
-    # theme
-    def test_field_theme_choices_is_THEME_CHOICES(self):
-        choices = self.test_menu._meta.get_field('theme').choices
-        self.assertEqual(self.test_menu.THEME_CHOICES, choices)
+    def test_field_slug_null(self):
+        null = self.test_menu._meta.get_field('slug').null
+        self.assertEqual(null, True)
 
+    # theme
     def test_field_theme_choices_default(self):
         choices = self.test_menu._meta.get_field('theme').choices
         self.assertEqual(choices[0], ('default', "Default"))
@@ -82,9 +102,18 @@ class MenuModelTest(TestCase):
         verbose_name = self.test_menu._meta.get_field('theme').verbose_name
         self.assertEqual(verbose_name, 'theme')
 
+    def test_field_theme_field_type(self):
+        field_type = \
+            self.test_menu._meta.get_field('theme').__class__.__name__
+        self.assertEqual(field_type, 'CharField')
+
     def test_field_theme_max_length(self):
         max_length = self.test_menu._meta.get_field('theme').max_length
         self.assertEqual(max_length, 32)
+
+    def test_field_theme_choices_is_THEME_CHOICES(self):
+        choices = self.test_menu._meta.get_field('theme').choices
+        self.assertEqual(self.test_menu.THEME_CHOICES, choices)
 
     def test_field_theme_default(self):
         default_choice = self.test_menu._meta.get_field('theme').default

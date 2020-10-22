@@ -10,5 +10,5 @@ class MenuDetailView(DetailView):
 
     def get_object(self):
         return Menu.objects.get(
-                restaurant__slug=self.kwargs['restaurant_slug'],
-                slug=self.kwargs['menu_slug'])
+            restaurant__slug=self.kwargs['restaurant_slug'],
+            slug=self.kwargs['menu_slug'])

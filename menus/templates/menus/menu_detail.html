@@ -12,7 +12,7 @@
 <p>This menu does not have any sections.</p>
 {% else %}
 <ul>
-  {% for section in sections %}
+  {% for section in menu.menusection_set.all %}
   <li>{{ section.name }}</li>
   {% endfor %}
 </ul>

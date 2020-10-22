@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ menu.restaurant.name }} - {{ menu.name }} - Menu Detail{% endblock %}
+
+{% block body_title %}Restaurant: {{ menu.restaurant.name }}{% endblock %}
+{% block body_subheading %}Menu: {{ menu.name }}{% endblock %}
+
+{% block content %}
+
+<h3>Sections</h3>
+{% if not menu.menusection_set.count %}
+<p>This menu does not have any sections.</p>
+{% else %}
+<ul>
+  {% for section in sections %}
+  <li>{{ section.name }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<div id="bottom-links">
+<p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menu.restaurant.slug %}">Return to {{ menu.restaurant.name }}</a></p>
+</div>
+
+{% endblock content %}

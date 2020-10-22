@@ -53,9 +53,7 @@ class Menu(models.Model):
 
 class MenuSection(models.Model):
 
-    menu = models.ForeignKey(
-        'Menu',
-        on_delete=models.CASCADE)
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=128, null=True)
     slug = models.SlugField(max_length=128, null=True)

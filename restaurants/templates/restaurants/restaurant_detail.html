@@ -13,7 +13,7 @@
   {% else %}
 <ul>
     {% for menu in restaurant.menu_set.all %}
-  <li>{{ menu.name }}</li>
+  <li><a href="{% url 'menus:menu_detail' restaurant_slug=restaurant.slug menu_slug=menu.slug %}">{{ menu.name }}</a></li>
     {% endfor %}
 </ul>
   {% endif %}

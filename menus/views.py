@@ -16,3 +16,15 @@ class MenuDetailView(DetailView):
 class MenuSectionCreateView(CreateView):
     model = MenuSection
     fields = ['name']
+    template_name = 'menus/menusection_create.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.menu = Menu.objects.get(
+                restaurant__slug=self.kwargs['restaurant_slug'],
+                slug=self.kwargs['menu_slug'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = self.menu
+        return context

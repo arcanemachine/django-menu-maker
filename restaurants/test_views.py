@@ -28,8 +28,7 @@ class RestaurantListViewTest(TestCase):
 
     def test_view_type_is_ListView(self):
         self.assertEqual(
-            self.context['view'].__class__.__bases__[0].__name__,
-            "ListView")
+            self.context['view'].__class__.__bases__[0].__name__, "ListView")
 
     def test_context_object_name_is_restaurants(self):
         self.assertTrue('restaurants' in self.context)

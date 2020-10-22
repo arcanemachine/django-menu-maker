@@ -147,4 +147,14 @@ class MenuSectionModelTest(TestCase):
     def test_menusection_object_name(self):
         self.assertEqual(
                 self.test_menusection._meta.object_name, 'MenuSection')
+    
+    def test_menusection_object_content(self):
+
+        expected_menu = self.test_menu
+        expected_name = 'Test Menu Section'
+        expected_slug = 'test-menu-section'
+
+        self.assertEqual(self.test_menusection.menu, self.test_menu)
+        self.assertEqual(self.test_menusection.name, expected_name)
+        self.assertEqual(self.test_menusection.slug, expected_slug)
 

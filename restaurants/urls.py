@@ -13,6 +13,4 @@ urlpatterns = [
         views.RestaurantDetailView.as_view(),
         name='restaurant_detail'),
 
-    #path('<slug:restaurant_slug>/menu/', include('menus.urls'))
-
     ]

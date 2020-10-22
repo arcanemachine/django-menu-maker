@@ -9,8 +9,10 @@ Menu Maker is a project that showcases my understanding of best practices using 
 
 Menu Maker makes use of the following Django features:
 
+- Django ORM (This project uses SQLite for maximum ease of setup)
+- Function-Based Views
 - Class-Based Views
-- Testing using the built-in tests (Models and Views)
+- Testing using Django's built-in testing tools
 
 This project also represents an effort to implement proper Git best practices, including:
 

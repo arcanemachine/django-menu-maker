@@ -1,17 +1,16 @@
-## Custom ##
-keys.py
-*~ 
+## Custom (Folders) ##
+static/
+*~
 *.sw*
-venv
-.del
-runserver
-makenmigrate
-shell
-gunicorn.sh
-scripts/
 data.dump
-temp/
 geckodriver.log
+keys.py
+gunicorn.sh 
+
+## local scripts
+makenmigrate
+runserver
+shell
 
 # Django #
 *.log

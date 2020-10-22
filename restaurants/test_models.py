@@ -21,7 +21,7 @@ class RestaurantModelTest(TestCase):
         cls.test_restaurant.admin_users.add(cls.test_user)
 
     def test_restaurant_object_name(self):
-        self.assertEqual(self.test_restaurant.__class__.__name__, 'Restaurant')
+        self.assertEqual(self.test_restaurant._meta.object_name, 'Restaurant')
 
     def test_restaurant_object_content(self):
         expected_name = 'Test Restaurant'
@@ -90,6 +90,7 @@ class RestaurantModelTest(TestCase):
         related_model = \
             self.test_restaurant._meta.get_field('admin_users').related_model
         self.assertEqual(related_model, get_user_model())
+
 
     ### VALIDATION ###
 

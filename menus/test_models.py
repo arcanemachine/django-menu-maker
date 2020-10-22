@@ -19,7 +19,7 @@ class MenuModelTest(TestCase):
             name='Test Menu')
 
     def test_menu_object_name(self): 
-        self.assertEqual(self.test_menu.__class__.__name__, 'Menu')
+        self.assertEqual(self.test_menu._meta.object_name, 'Menu')
 
     def test_menu_object_content(self):
 

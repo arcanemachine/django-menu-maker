@@ -61,9 +61,20 @@ class MenuSection(models.Model):
     def __str__(self):
         return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
 
-    def clean(self):
+    def get_absolute_url(self):
+        return reverse('menus:menusection_detail',
+            kwargs = {
+                'restaurant_slug': restaurant.slug,
+                'menu_slug': menu.slug,
+                'menusection_slug': menusection.slug,
+                })
+
+    def save(self, *args, **kwargs):
+        if not self.slug == slugify(self.name):
+            self.slug = slugify(self.name)
+
         # do not allow a menu to have duplicate section slugs
-        existing_menusections = Menu.objects.filter(
+        existing_menusections = MenuSection.objects.filter(
                 menu=self.menu,
                 name=self.slug)
         if existing_menusections.count():
@@ -73,10 +84,4 @@ class MenuSection(models.Model):
                     "This name is too similar to one of this menu's "\
                     "existing section names.")
 
-    def get_absolute_url(self):
-        return reverse('menus:menusection_detail',
-            kwargs = {
-                'restaurant_slug': restaurant.slug,
-                'menu_slug': menu.slug,
-                'menusection_slug': menusection.slug,
-                })
+        super().save(*args, **kwargs)

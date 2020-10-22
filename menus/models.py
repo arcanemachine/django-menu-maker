@@ -28,10 +28,10 @@ class Menu(models.Model):
         return self.name
 
     def clean(self):
-        # do not allow a restaurant to have duplicate menu names
+        # do not allow a restaurant to have duplicate menu slugs
         existing_menus = Menu.objects.filter(
                 restaurant=self.restaurant,
-                name=self.name)
+                slug=self.slug)
         if existing_menus.count():
             if existing_menus.first() != self or existing_menus.last() != self:
                 raise ValidationError(

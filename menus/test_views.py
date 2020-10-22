@@ -54,4 +54,20 @@ class MenuDetailViewTest(TestCase):
     def test_slug_url_kwarg_is_menu_slug(self):
         self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
 
+    # authentication
+    def test_unauthenticated_user_cannot_view_link_to_add_section(self):
+        self.assertNotIn('Add New Section', self.html)
+
+    def test_unprivileged_user_cannot_view_link_to_add_section(self):
+        self.client.login(
+                username='test_user', password='password')
+        self.setUp() # reload the page
+        self.assertNotIn('Add New Section', self.html)
+
+    def test_restaurant_admin_user_can_view_link_to_add_section(self):
+        self.client.login(
+                username='restaurant_admin_user', password='password')
+        self.setUp() # reload the page
+        self.assertIn('Add New Section', self.html)
+
 

@@ -11,4 +11,7 @@ urlpatterns = [
     path('<slug:menu_slug>/new-section/',
         views.MenuSectionCreateView.as_view(),
         name='menusection_create'),
+    path('<slug:menu_slug>/<slug:menusection_slug>/',
+        views.MenuSectionDetailView.as_view(),
+        name='menusection_detail'),
 ]

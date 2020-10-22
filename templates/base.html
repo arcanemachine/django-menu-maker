@@ -1,13 +1,16 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en-us">
 	<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block style %}{% endblock style %}
+
     <title>{% block title %}{% endblock title %} - Menu Maker</title>
 
     {% block head_script %}{% endblock head_script %}
-
-    {% block style %}{% endblock style %}
 
 	</head>
 	<body>

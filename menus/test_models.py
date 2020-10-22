@@ -11,9 +11,10 @@ class MenuModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
 
-        cls.test_restaurant = \
-            Restaurant.objects.create(name='Test Restaurant')
+        # create test restaurant
+        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
 
+        # create test menu
         cls.test_menu = Menu.objects.create(
             restaurant=cls.test_restaurant,
             name='Test Menu')

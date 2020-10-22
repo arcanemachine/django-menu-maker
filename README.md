@@ -7,7 +7,6 @@ Menu Maker is a project that showcases my understanding of best practices using 
 * Django
 * Git
 
-
 Menu Maker makes use of the following Django features:
 
 - Class-Based Views

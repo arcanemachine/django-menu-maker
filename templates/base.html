@@ -15,13 +15,14 @@
 	</head>
 	<body>
 
-    <h2 style="margin-bottom: 0;">{% block body_title %}{% endblock body_title %}</h2>
-    <h3>{% block body_subheading %}{% endblock body_subheading %}</h3>
+    <h1 id="body-title">{% block body_title %}{% endblock body_title %}</h1>
+    <h3 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h3>
 
-    {% block content %}{% endblock content %}
+    <div id="content">
+      {% block content %}{% endblock content %}
+    </div>
 
     {% block body_end_script %}{% endblock body_end_script %}
     
 	</body>
 </html>
-

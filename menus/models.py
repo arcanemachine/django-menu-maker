@@ -46,9 +46,9 @@ class Menu(models.Model):
                     })
 
     def save(self, *args, **kwargs):
-        self.clean()
         if not self.slug == slugify(self.name):
             self.slug = slugify(self.name)
+        self.clean()
         super().save(*args, **kwargs)
 
 class MenuSection(models.Model):

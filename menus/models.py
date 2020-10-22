@@ -63,6 +63,18 @@ class MenuSection(models.Model):
     def __str__(self):
         return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
 
+    def clean(self):
+        # do not allow a menu to have duplicate section slugs
+        existing_menusections = Menu.objects.filter(
+                menu=self.menu,
+                name=self.slug)
+        if existing_menusections.count():
+            if existing_menusections.first() != self \
+                    or existing_menusections.last() != self:
+                raise ValidationError(
+                    "This name is too similar to one of this menu's "\
+                    "existing section names.")
+
     def get_absolute_url(self):
         return reverse('menus:menusection_detail',
             kwargs = {

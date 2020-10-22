@@ -23,7 +23,13 @@
     </nav>
 
     <h1 id="body-title">{% block body_title %}{% endblock body_title %}</h1>
-    <h3 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h3>
+    <h2 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h2>
+
+      {% if messages %}
+        {% for message in messages %}
+      <div class="message {% if message.tags %}{{ message.tags }}"{% endif %} style="margin-bottom: 1.5em;"><strong>{{ message|safe }}</strong></div>
+        {% endfor %}
+      {% endif %}
 
     <div id="content">
       {% block content %}{% endblock content %}

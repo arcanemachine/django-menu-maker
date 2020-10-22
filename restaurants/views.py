@@ -10,3 +10,4 @@ class RestaurantListView(ListView):
 
 class RestaurantDetailView(DetailView):
     model = Restaurant
+    slug_url_kwarg = 'restaurant_slug'

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+
+<h1>Logged Out</h1>
+
+<p>Thanks for visiting!</p>
+
+<div id="bottom-links">
+  <p><a href="{% url 'login' %}">Login</a></p>
+  <p><a href="{% url 'root' %}">Return to Menu Maker homepage</a></p>
+</div>
+
+{% endblock %}

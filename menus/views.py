@@ -39,7 +39,7 @@ class MenuSectionDetailView(DetailView):
 
     def get_object(self):
         return MenuSection.objects.get(
-            restaurant__slug=self.kwargs['restaurant_slug'],
+            menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menu__slug=self.kwargs['menu_slug'],
             slug=self.kwargs['menusection_slug'])
 

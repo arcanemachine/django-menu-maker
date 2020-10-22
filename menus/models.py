@@ -62,3 +62,11 @@ class MenuSection(models.Model):
 
     def __str__(self):
         return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
+
+    def get_absolute_url(self):
+        return reverse('menus:menusection_detail',
+            kwargs = {
+                'restaurant_slug': restaurant.slug,
+                'menu_slug': menu.slug,
+                'menusection_slug': menusection.slug,
+                })

@@ -40,4 +40,18 @@ class MenuDetailViewTest(TestCase):
         self.context = self.response.context
         self.html = self.response.content.decode('utf-8')
 
+    # view logic
+    def test_get(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_view_type_is_DetailView(self):
+        self.assertEqual(
+            self.context['view'].__class__.__bases__[0].__name__, 'DetailView')
+
+    def test_view_model_is_Menu(self):
+        self.assertEqual(self.context['view'].model.__name__, 'Menu')
+
+    def test_slug_url_kwarg_is_menu_slug(self):
+        self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
+
 

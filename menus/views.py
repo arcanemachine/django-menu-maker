@@ -32,3 +32,14 @@ class MenuSectionCreateView(CreateView):
     def form_valid(self, form):
         form.instance.menu = self.menu
         return super().form_valid(form)
+
+class MenuSectionDetailView(DetailView):
+    model = MenuSection
+    slug_url_kwarg = 'menusection_slug'
+
+    def get_object(self):
+        return MenuSection.objects.get(
+            restaurant__slug=self.kwargs['restaurant_slug'],
+            menu__slug=self.kwargs['menu_slug'],
+            slug=self.kwargs['menusection_slug'])
+

@@ -14,4 +14,8 @@
     <input type="submit" value="Submit">
 </form>
 
+<div id="bottom-links">
+      <p><a href="{% url 'menus:menu_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Return to Menu</a></p>
+</div>
+
 {% endblock content %}

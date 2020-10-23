@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, DetailView, ListView
 
@@ -32,6 +33,9 @@ class MenuSectionCreateView(CreateView):
     def form_valid(self, form):
         form.instance.menu = self.menu
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user in self.menu.restaurant.admin_users.all()
 
 class MenuSectionDetailView(DetailView):
     model = MenuSection

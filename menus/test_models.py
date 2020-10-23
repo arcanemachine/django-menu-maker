@@ -187,3 +187,68 @@ class MenuSectionModelTest(TestCase):
         self.assertEqual(self.test_menusection.name, expected_name)
         self.assertEqual(self.test_menusection.slug, expected_slug)
 
+    ### FIELDS ###
+
+    # menu
+    def test_field_menu_verbose_name(self):
+        verbose_name = \
+            self.test_menusection._meta.get_field('menu').verbose_name
+        self.assertEqual(verbose_name, 'menu')
+
+    def test_field_menu_field_type(self):
+        field_type = \
+            self.test_menusection._meta.get_field('menu').__class__.__name__
+        self.assertEqual(field_type, 'ForeignKey')
+
+    def test_field_menu_related_model(self):
+        related_model = self.test_menusection._meta.get_field('menu') \
+            .related_model.__name__
+        self.assertEqual(related_model, 'Menu')
+
+    def test_field_menu_on_delete(self):
+        on_delete = self.test_menusection._meta.get_field('menu') \
+                .remote_field.on_delete
+        self.assertTrue(on_delete is models.CASCADE)
+
+
+    # name
+    def test_field_name_verbose_name(self):
+        verbose_name = \
+            self.test_menusection._meta.get_field('name').verbose_name
+        self.assertEqual(verbose_name, 'name')
+
+    def test_field_name_field_type(self):
+        field_type = \
+            self.test_menusection._meta.get_field('name').__class__.__name__
+        self.assertEqual(field_type, 'CharField')
+
+    def test_field_name_max_length(self):
+        max_length = self.test_menusection._meta.get_field('name').max_length
+        self.assertEqual(max_length, 128)
+
+    def test_field_name_null(self):
+        null = self.test_menusection._meta.get_field('name').null
+        self.assertEqual(null, True)
+
+
+    ## slug
+    def test_field_slug_verbose_name(self):
+        verbose_name = \
+            self.test_menusection._meta.get_field('slug').verbose_name
+        self.assertEqual(verbose_name, 'slug')
+
+    def test_field_slug_field_type(self):
+        field_type = \
+            self.test_menusection._meta.get_field('slug').__class__.__name__
+        self.assertEqual(field_type, 'SlugField')
+
+    def test_field_slug_max_length(self):
+        max_length = self.test_menusection._meta.get_field('slug').max_length
+        self.assertEqual(max_length, 128)
+
+    def test_field_slug_null(self):
+        null = self.test_menusection._meta.get_field('slug').null
+        self.assertEqual(null, True)
+
+    
+

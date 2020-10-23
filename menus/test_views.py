@@ -137,7 +137,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.view = self.response.context['view']
 
-    # view logic
+    # view parameters
     def test_view_name_is_MenuSectionCreateView(self):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuSectionCreateView')

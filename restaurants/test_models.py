@@ -16,8 +16,7 @@ class RestaurantModelTest(TestCase):
         cls.test_user.save()
 
         # create test_restaurant
-        cls.test_restaurant = Restaurant.objects.create(
-            name='Test Restaurant')
+        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
         cls.test_restaurant.admin_users.add(cls.test_user)
 
     def test_restaurant_object_name(self):

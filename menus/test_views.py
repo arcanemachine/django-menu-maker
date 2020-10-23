@@ -149,8 +149,9 @@ class MenuSectionCreateViewTest(TestCase):
     def test_view_model(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
 
-    def test_view_fields(self):
-        self.assertEqual(self.context['view'].fields, ['name'])
+    def test_view_form_class(self):
+        self.assertEqual(self.context['view'].form_class.__name__,
+                'MenuSectionCreateForm')
 
     def test_view_template_name(self):
         self.assertEqual(self.context['view'].template_name,

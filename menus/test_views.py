@@ -191,7 +191,10 @@ class MenuSectionCreateViewTest(TestCase):
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url,
-                kwargs = {'name': 'Test Menu Section'})
+                kwargs = {
+                    'menu': self.test_menu.pk,
+                    'name': 'Test Menu Section',
+                    })
 
         # new menusection count should be the same as before
         new_menusection_count = MenuSection.objects.count()
@@ -215,10 +218,12 @@ class MenuSectionCreateViewTest(TestCase):
         old_menusection_count = MenuSection.objects.count()
 
         # create new menusection via POST
-        self.response = self.client.post(self.current_test_url,
-                kwargs = {'name': 'Test Menu Section'})
+        self.response = self.client.post(self.current_test_url, {
+                    'menu': self.test_menu.pk,
+                    'name': 'Test Menu Section',
+                    })
 
         # menusection object count increased by 1
         new_menusection_count = MenuSection.objects.count()
-        self.assertEqual(old_menusection_count, new_menusection_count)
+        self.assertEqual(old_menusection_count + 1, new_menusection_count)
 

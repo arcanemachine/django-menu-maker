@@ -27,9 +27,7 @@ class MenuDetailViewTest(TestCase):
         cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
 
         # create test menu
-        cls.test_menu = Menu.objects.create(
-                restaurant=cls.test_restaurant,
-                name='Test Menu')
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
     def setUp(self):
         self.response = self.client.get(

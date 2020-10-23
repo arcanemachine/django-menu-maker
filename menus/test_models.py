@@ -13,9 +13,7 @@ class MenuModelTest(TestCase):
 
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
 
-        cls.test_menu = Menu.objects.create(
-            restaurant=cls.test_restaurant,
-            name='Test Menu')
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
     def test_menu_object_name(self): 
         self.assertEqual(self.test_menu._meta.object_name, 'Menu')
@@ -131,20 +129,14 @@ class MenuModelTest(TestCase):
 
     def test_validation_restaurant_cannot_have_two_menus_with_duplicate_slug(self):
         with self.assertRaises(ValidationError):
-            test_menu_2 = Menu.objects.create(
-                restaurant=self.test_restaurant,
-                name='Test Menu')
+            self.test_restaurant.menu_set.create(name='Test Menu')
         with self.assertRaises(ValidationError):
-            test_menu_2 = Menu.objects.create(
-                restaurant=self.test_restaurant,
-                name='Test--Menu')
+            self.test_restaurant.menu_set.create(name='Test--Menu')
 
     def test_validation_two_different_restaurants_can_have_same_menu_slug(self):
         test_restaurant_2 = \
             Restaurant.objects.create(name="Test Restaurant 2")
-        test_menu_2 = Menu.objects.create(
-            restaurant=test_restaurant_2,
-            name='Test Menu')
+        test_menu_2 = test_restaurant_2.menu_set.create(name='Test Menu')
         self.assertEqual(Menu.objects.count(), 2)
 
     ### METHODS ###
@@ -167,13 +159,8 @@ class MenuSectionModelTest(TestCase):
     def setUpTestData(cls):
 
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
-
-        cls.test_menu = Menu.objects.create(
-            restaurant=cls.test_restaurant,
-            name='Test Menu')
-
-        cls.test_menusection = MenuSection.objects.create(
-            menu=cls.test_menu,
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+        cls.test_menusection = cls.test_menu.menusection_set.create(
             name='Test Menu Section')
 
     def test_menusection_object_name(self):

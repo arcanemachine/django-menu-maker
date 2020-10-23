@@ -69,7 +69,6 @@ class MenuSection(models.Model):
                 'menusection_slug': self.slug,
                 })
 
-
     def clean(self):
         # do not allow a menu to have duplicate section slugs
         existing_menusections = MenuSection.objects.filter(

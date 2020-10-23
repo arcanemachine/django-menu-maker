@@ -39,9 +39,6 @@ class MenuDetailViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
 
     # view logic
-    def test_get(self):
-        self.assertEqual(self.response.status_code, 200)
-
     def test_view_type_is_DetailView(self):
         self.assertEqual(
             self.context['view'].__class__.__bases__[0].__name__, 'DetailView')
@@ -53,6 +50,10 @@ class MenuDetailViewTest(TestCase):
         self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
 
     # authentication
+    def test_get(self):
+        # page should load for all users
+        self.assertEqual(self.response.status_code, 200)
+
     def test_unauthenticated_user_cannot_view_link_to_add_section(self):
         self.assertNotIn('Add New Section', self.html)
 

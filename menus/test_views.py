@@ -92,7 +92,16 @@ class MenuDetailViewTest(TestCase):
         self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
 
     # improper kwargs
-    def test_get(self):
+    def test_get_bad_restaurant_slug(self):
+        self.current_test_url = reverse('menus:menu_detail', kwargs = {
+                'restaurant_slug': 'bad-slug',
+                'menu_slug': self.test_menu.slug,
+                })
+        self.response = self.client.get(self.current_test_url)
+
+        self.assertEqual(self.response.status_code, 404)
+
+    def test_get_bad_menu_slug(self):
         self.current_test_url = reverse('menus:menu_detail', kwargs = {
                 'restaurant_slug': self.test_restaurant.slug,
                 'menu_slug': 'fake-slug',

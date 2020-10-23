@@ -229,4 +229,22 @@ class MenuSectionModelTest(TestCase):
         null = self.test_menusection._meta.get_field('name').null
         self.assertEqual(null, True)
 
+    # slug
+    def test_field_slug_verbose_name(self):
+        verbose_name = \
+            self.test_menusection._meta.get_field('slug').verbose_name
+        self.assertEqual(verbose_name, 'slug')
+
+    def test_field_slug_field_type(self):
+        field_type = \
+            self.test_menusection._meta.get_field('slug').__class__.__name__
+        self.assertEqual(field_type, 'SlugField')
+
+    def test_field_slug_max_length(self):
+        max_length = self.test_menusection._meta.get_field('slug').max_length
+        self.assertEqual(max_length, 128)
+
+    def test_field_slug_null(self):
+        null = self.test_menusection._meta.get_field('slug').null
+        self.assertEqual(null, True)
 

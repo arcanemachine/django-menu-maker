@@ -252,3 +252,15 @@ class MenuSectionModelTest(TestCase):
         null = self.test_menusection._meta.get_field('slug').null
         self.assertEqual(null, True)
 
+    ### VALIDATION ###
+
+    def test_validation_menu_cannot_have_two_menusections_with_same_name(self):
+        with self.assertRaises(ValidationError):
+            self.test_menu.menusection_set.create(
+                    name=self.test_menusection.name)
+
+    def test_validation_two_different_menus_can_have_same_menusection_slug(self):
+        test_menu_2 = self.test_restaurant.menu_set.create(name='Test Menu 2')
+        test_menu_2.menusection_set.create(name=self.test_menusection.name)
+        self.assertEqual(MenuSection.objects.count(), 2)
+

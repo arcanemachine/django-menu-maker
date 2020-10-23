@@ -30,11 +30,11 @@ class MenuDetailViewTest(TestCase):
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
     def setUp(self):
-        self.response = self.client.get(
-            reverse('menus:menu_detail', kwargs = {
+        self.current_test_url = reverse('menus:menu_detail', kwargs = {
                 'restaurant_slug': self.test_restaurant.slug,
                 'menu_slug': self.test_menu.slug,
-                }))
+                })
+        self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = self.response.content.decode('utf-8')
 

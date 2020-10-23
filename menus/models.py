@@ -59,7 +59,7 @@ class MenuSection(models.Model):
     slug = models.SlugField(max_length=128, null=True)
 
     def __str__(self):
-        return f"{self.menu.restaurant.name} - {self.menu.name} - {self.name}"
+        return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
 
     def get_absolute_url(self):
         return reverse('menus:menusection_detail',

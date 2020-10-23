@@ -14,7 +14,7 @@ class MenuDetailView(DetailView):
             restaurant__slug=self.kwargs['restaurant_slug'],
             slug=self.kwargs['menu_slug'])
 
-class MenuSectionCreateView(CreateView):
+class MenuSectionCreateView(CreateView, UserPassesTestMixin):
     model = MenuSection
     fields = ['name']
     template_name = 'menus/menusection_create.html'

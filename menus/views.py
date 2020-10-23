@@ -20,7 +20,7 @@ class MenuSectionCreateView(UserPassesTestMixin, CreateView):
     template_name = 'menus/menusection_create.html'
 
     def dispatch(self, request, *args, **kwargs):
-        self.menu = Menu.objects.get(
+        self.menu = get_object_or_404(Menu,
                 restaurant__slug=self.kwargs['restaurant_slug'],
                 slug=self.kwargs['menu_slug'])
         return super().dispatch(request, *args, **kwargs)

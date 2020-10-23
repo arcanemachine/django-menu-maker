@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Menu
+from .models import Menu, MenuSection
 from restaurants.models import Restaurant
 
 class MenuDetailViewTest(TestCase):
@@ -59,17 +59,37 @@ class MenuDetailViewTest(TestCase):
     def test_unprivileged_user_cannot_view_link_to_add_section(self):
         self.client.login(
                 username='test_user', password='password')
+
         self.setUp() # reload the page
         self.assertNotIn('Add New Section', self.html)
 
     def test_restaurant_admin_user_can_view_link_to_add_section(self):
         self.client.login(
                 username='restaurant_admin_user', password='password')
+
         self.setUp() # reload the page
         self.assertIn('Add New Section', self.html)
 
-    # no sections
+    # number of menusections
     def test_menu_with_no_menusections(self):
         self.assertIn("This menu does not have any sections.", self.html)
+        self.assertEqual(MenuSection.objects.count(), 0)
 
-    # TODO: 1 section
+    def test_menu_with_1_menusection(self):
+        test_menusection = \
+                self.test_menu.menusection_set.create(name='Test Menu Section')
+        self.assertEqual(MenuSection.objects.count(), 1)
+
+        self.setUp() # reload the page
+        self.assertIn(test_menusection.name, self.html)
+
+    def test_menu_with_1_menusection(self):
+        test_menusection_1 = self.test_menu.menusection_set.create(
+                name='Test Menu Section 1')
+        test_menusection_2 = self.test_menu.menusection_set.create(
+                name='Test Menu Section 2')
+        self.assertEqual(MenuSection.objects.count(), 2)
+
+        self.setUp() # reload the page
+        self.assertIn(test_menusection_1.name, self.html)
+        self.assertIn(test_menusection_2.name, self.html)

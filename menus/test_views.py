@@ -91,6 +91,16 @@ class MenuDetailViewTest(TestCase):
     def test_slug_url_kwarg_is_menu_slug(self):
         self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
 
+    # improper kwargs
+    def test_get(self):
+        self.current_test_url = reverse('menus:menu_detail', kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': 'fake-slug',
+                })
+        self.response = self.client.get(self.current_test_url)
+
+        self.assertEqual(self.response.status_code, 404)
+
     # authentication
     def test_get(self):
         # page should load for all users

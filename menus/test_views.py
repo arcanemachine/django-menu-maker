@@ -135,16 +135,16 @@ class MenuSectionCreateViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = self.response.content.decode('utf-8')
+        self.view = self.response.context['view']
 
     # view logic
     def test_view_name_is_MenuSectionCreateView(self):
         self.assertEqual(
-            self.context['view'].__class__.__name__, 'MenuSectionCreateView')
+            self.view.__class__.__name__, 'MenuSectionCreateView')
 
     def test_view_type_is_CreateView(self):
         self.assertEqual(
-            self.context['view'].__class__.__bases__[-1].__name__,
-            'CreateView')
+            self.view.__class__.__bases__[-1].__name__, 'CreateView')
 
     def test_view_model_is_MenuSection(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')

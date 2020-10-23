@@ -129,13 +129,13 @@ class MenuModelTest(TestCase):
 
     ### VALIDATION ###
 
-    def test_validation_restaurant_cannot_have_two_menus_with_duplicate_name(self):
+    def test_validation_restaurant_cannot_have_two_menus_with_duplicate_slug(self):
         with self.assertRaises(ValidationError):
             test_menu_2 = Menu.objects.create(
                 restaurant=self.test_restaurant,
                 name='Test Menu')
 
-    def test_validation_two_different_restaurants_can_have_same_menu_name(self):
+    def test_validation_two_different_restaurants_can_have_same_menu_slug(self):
         test_restaurant_2 = \
             Restaurant.objects.create(name="Test Restaurant 2")
         test_menu_2 = Menu.objects.create(

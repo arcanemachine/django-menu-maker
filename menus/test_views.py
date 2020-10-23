@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.text import slugify
 
 from urllib.parse import urlparse
 
@@ -98,7 +99,6 @@ class MenuDetailViewTest(TestCase):
                 'menu_slug': self.test_menu.slug,
                 })
         self.response = self.client.get(self.current_test_url)
-
         self.assertEqual(self.response.status_code, 404)
 
     def test_get_bad_menu_slug(self):
@@ -107,7 +107,6 @@ class MenuDetailViewTest(TestCase):
                 'menu_slug': 'fake-slug',
                 })
         self.response = self.client.get(self.current_test_url)
-
         self.assertEqual(self.response.status_code, 404)
 
     # authentication
@@ -223,9 +222,18 @@ class MenuSectionCreateViewTest(TestCase):
     def test_view_context_contains_correct_menu(self):
         self.assertEqual(self.context['menu'], self.test_menu)
 
+    # get_initial
+    def test_view_get_initial_returns_menu(self):
+        self.assertEqual(self.view.get_initial(), {'menu': self.test_menu})
+
     # authentication - unauthorized user
     def test_view_get_method_unauthenticated_user(self):
         self.client.logout()
+
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        self.assertTrue(reverse('login') in self.response.url)
+
         self.response = self.client.get(self.current_test_url, follow=True)
         self.context = self.response.context
         self.html = self.response.content.decode('utf-8')
@@ -269,9 +277,49 @@ class MenuSectionCreateViewTest(TestCase):
     # authentication - authorized user
 
     def test_view_get_method_authorized_user(self):
-        pass
+        self.assertEqual(self.response.status_code, 200)
+        self.assertIn(
+                "Please enter the information for your new menu section:",
+                self.html)
 
     def test_view_post_method_authorized_user(self):
+
+        new_menusection_name = 'Test Menu Section'
+        new_menusection_slug = slugify(new_menusection_name)
+
+        # get menusection count before attempting to post data
+        old_menusection_count = MenuSection.objects.count()
+
+        # create new menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+                    'menu': self.test_menu.pk,
+                    'name': new_menusection_name},
+                    follow=True)
+        self.html = self.response.content.decode('utf-8')
+
+        # menusection object count increased by 1
+        new_menusection_count = MenuSection.objects.count()
+        self.assertEqual(old_menusection_count + 1, new_menusection_count)
+
+        # user is redirected to new menusection_detail
+        new_menusection = MenuSection.objects.get(
+                menu=self.test_menu,
+                slug=new_menusection_slug)
+        self.assertEqual(self.response.redirect_chain[0][0], reverse(
+            'menus:menusection_detail', kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                'menusection_slug': new_menusection_slug,
+            }))
+
+        # page loads successfully and uses proper template and expected text
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
+        self.assertIn("This section has no items.", self.html)
+
+
+    # validation - duplicate post should fail
+    def test_view_validation_duplicate_post_method_authorized_user(self):
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
@@ -285,4 +333,19 @@ class MenuSectionCreateViewTest(TestCase):
         # menusection object count increased by 1
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count + 1, new_menusection_count)
+
+        # get menusection count before attempting to post data
+        old_menusection_count = MenuSection.objects.count()
+
+        # attempt to create duplicate menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+                    'menu': self.test_menu.pk,
+                    'name': 'Test Menu Section',
+                    })
+        self.html = self.response.content.decode('utf-8')
+        self.assertIn("This name is too similar", self.html)
+
+        # menusection object count has not changed
+        new_menusection_count = MenuSection.objects.count()
+        self.assertEqual(old_menusection_count, new_menusection_count)
 

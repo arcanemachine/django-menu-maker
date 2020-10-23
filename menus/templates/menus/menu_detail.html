@@ -12,8 +12,8 @@
 <p>This menu does not have any sections.</p>
 {% else %}
 <ul>
-  {% for section in menu.menusection_set.all %}
-  <li>{{ section.name }}</li>
+  {% for menusection in menu.menusection_set.all %}
+  <li><a href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></li>
   {% endfor %}
 </ul>
 {% endif %}

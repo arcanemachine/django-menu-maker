@@ -94,3 +94,64 @@ class MenuDetailViewTest(TestCase):
         self.setUp() # reload the page
         self.assertIn(test_menusection_1.name, self.html)
         self.assertIn(test_menusection_2.name, self.html)
+
+class MenuSectionCreateViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(username='test_user')
+        cls.test_user.set_password('password')
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = \
+            get_user_model().objects.create(username='restaurant_admin_user')
+        cls.restaurant_admin_user.set_password('password')
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+        # create test menu
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+
+    def setUp(self):
+
+        # login as authorized user
+        self.client.login(
+            username='restaurant_admin_user', password='password')
+
+        self.current_test_url = reverse('menus:menusection_create',
+            kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                })
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = self.response.content.decode('utf-8')
+
+    # view logic
+    def test_view_name_is_MenuSectionCreateView(self):
+        self.assertEqual(
+            self.context['view'].__class__.__name__, 'MenuSectionCreateView')
+
+    def test_view_type_is_CreateView(self):
+        self.assertEqual(
+            self.context['view'].__class__.__bases__[-1].__name__,
+            'CreateView')
+
+    def test_view_model_is_MenuSection(self):
+        self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
+
+    def test_view_fields(self):
+        self.assertEqual(self.context['view'].fields, ['name'])
+
+    def test_view_template_name(self):
+        self.assertEqual(self.context['view'].template_name,
+                'menus/menusection_create.html')
+
+

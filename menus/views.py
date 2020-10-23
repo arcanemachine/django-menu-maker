@@ -47,9 +47,3 @@ class MenuSectionDetailView(DetailView):
     model = MenuSection
     slug_url_kwarg = 'menusection_slug'
 
-    def get_object(self):
-        return MenuSection.objects.get(
-            menu__restaurant__slug=self.kwargs['restaurant_slug'],
-            menu__slug=self.kwargs['menu_slug'],
-            slug=self.kwargs['menusection_slug'])
-

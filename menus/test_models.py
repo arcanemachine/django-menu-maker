@@ -263,3 +263,19 @@ class MenuSectionModelTest(TestCase):
         test_menu_2.menusection_set.create(name=self.test_menusection.name)
         self.assertEqual(MenuSection.objects.count(), 2)
 
+    ### METHODS ###
+
+    def test_method_str_returns_restaurant_name_and_menu_name_and_menusection_name(self):
+        self.assertEqual(str(self.test_menusection),
+            f"{self.test_menusection.menu.restaurant.name}: "\
+                f"{self.test_menusection.menu.name} - "\
+                    f"{self.test_menusection.name}")
+
+    def test_method_get_absolute_url_returns_menusection_detail(self):
+        expected_url = reverse('menus:menusection_detail', kwargs = {
+            'restaurant_slug': self.test_menusection.menu.restaurant.slug,
+            'menu_slug': self.test_menusection.menu.slug,
+            'menusection_slug': self.test_menusection.slug,
+            })
+        self.assertEqual(
+            self.test_menusection.get_absolute_url(), expected_url)

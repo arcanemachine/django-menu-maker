@@ -150,7 +150,7 @@ class MenuModelTest(TestCase):
     ### METHODS ###
 
     # __str__()
-    def test_method___str___returns_menu_name(self):
+    def test_method_str_returns_menu_name(self):
         expected_string = "Test Menu"
         self.assertEqual(str(self.test_menu), expected_string)
 

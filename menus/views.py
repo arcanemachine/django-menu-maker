@@ -14,7 +14,7 @@ class MenuDetailView(DetailView):
             restaurant__slug=self.kwargs['restaurant_slug'],
             slug=self.kwargs['menu_slug'])
 
-class MenuSectionCreateView(CreateView, UserPassesTestMixin):
+class MenuSectionCreateView(UserPassesTestMixin, CreateView):
     model = MenuSection
     fields = ['name']
     template_name = 'menus/menusection_create.html'
@@ -30,9 +30,12 @@ class MenuSectionCreateView(CreateView, UserPassesTestMixin):
         context['menu'] = self.menu
         return context
 
-    def form_valid(self, form):
-        form.instance.menu = self.menu
-        return super().form_valid(form)
+    #def form_valid(self, form):
+    #    form.instance.menu = self.menu
+    #    return super().form_valid(form)
+
+    def get_initial(self):
+        return {'menu': self.menu.pk}
 
     def test_func(self):
         return self.request.user in self.menu.restaurant.admin_users.all()

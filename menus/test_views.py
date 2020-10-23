@@ -203,4 +203,21 @@ class MenuSectionCreateViewTest(TestCase):
         redirect_url = urlparse(self.response.url)[2]
         self.assertEqual(redirect_url, reverse('login'))
 
+    # authentication - authorized user
+
+    def test_view_get_method_authorized_user(self):
+        pass
+
+    def test_view_post_method_authorized_user(self):
+
+        # get menusection count before attempting to post data
+        old_menusection_count = MenuSection.objects.count()
+
+        # create new menusection via POST
+        self.response = self.client.post(self.current_test_url,
+                kwargs = {'name': 'Test Menu Section'})
+
+        # menusection object count increased by 1
+        new_menusection_count = MenuSection.objects.count()
+        self.assertEqual(old_menusection_count, new_menusection_count)
 

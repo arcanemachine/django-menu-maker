@@ -69,14 +69,12 @@ class MenuSection(models.Model):
                 'menusection_slug': self.slug,
                 })
 
-    def save(self, *args, **kwargs):
-        if not self.slug == slugify(self.name):
-            self.slug = slugify(self.name)
 
+    def clean(self):
         # do not allow a menu to have duplicate section slugs
         existing_menusections = MenuSection.objects.filter(
                 menu=self.menu,
-                name=self.slug)
+                slug=self.slug)
         if existing_menusections.count():
             if existing_menusections.first() != self \
                     or existing_menusections.last() != self:
@@ -84,4 +82,9 @@ class MenuSection(models.Model):
                     "This name is too similar to one of this menu's "\
                     "existing section names.")
 
+    def save(self, *args, **kwargs):
+        if not self.slug == slugify(self.name):
+            self.slug = slugify(self.name)
+        self.clean()
         super().save(*args, **kwargs)
+

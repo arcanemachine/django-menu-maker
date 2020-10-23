@@ -146,7 +146,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'CreateView')
 
-    def test_view_model_is_MenuSection(self):
+    def test_view_model(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
 
     def test_view_fields(self):

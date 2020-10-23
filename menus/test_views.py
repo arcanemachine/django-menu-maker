@@ -7,6 +7,46 @@ from urllib.parse import urlparse
 from .models import Menu, MenuSection
 from restaurants.models import Restaurant
 
+class MenusRootViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(username='test_user')
+        cls.test_user.set_password('password')
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = \
+            get_user_model().objects.create(username='restaurant_admin_user')
+        cls.restaurant_admin_user.set_password('password')
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+    def setUp(self):
+        self.current_test_url = reverse('menus:menus_root', kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                })
+        self.response = self.client.get(self.current_test_url)
+        #self.context = self.response.context
+        #self.html = self.response.content.decode('utf-8')
+
+    def test_get_redirects_to_restaurant_detail(self):
+        self.assertEqual(self.response.status_code, 302)
+
+        self.response = self.client.get(self.current_test_url, follow=True)
+
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(self.response.redirect_chain[0][0],
+            reverse('restaurants:restaurant_detail', kwargs = {
+                'restaurant_slug': self.test_restaurant.slug
+                }))
+
 class MenuDetailViewTest(TestCase):
 
     @classmethod

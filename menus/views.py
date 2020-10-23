@@ -1,10 +1,16 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
 from .forms import MenuSectionCreateForm
 from .models import Menu, MenuSection
 from restaurants.models import Restaurant
+
+def menus_root(request, restaurant_slug):
+    return HttpResponseRedirect(reverse('restaurants:restaurant_detail',
+        kwargs = {'restaurant_slug': restaurant_slug}))
 
 class MenuDetailView(DetailView):
     model = Menu

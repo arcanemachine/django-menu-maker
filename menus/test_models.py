@@ -156,10 +156,9 @@ class MenuModelTest(TestCase):
 
     # get_absolute_url()
     def test_method_get_absolute_url_returns_menu_detail(self):
-        expected_url = reverse('menus:menu_detail',
-                kwargs = {
-                    'restaurant_slug': self.test_menu.restaurant.slug,
-                    'menu_slug': self.test_menu.slug })
+        expected_url = reverse('menus:menu_detail', kwargs = {
+            'restaurant_slug': self.test_menu.restaurant.slug,
+            'menu_slug': self.test_menu.slug })
         self.assertEqual(self.test_menu.get_absolute_url(), expected_url)
 
 class MenuSectionModelTest(TestCase):

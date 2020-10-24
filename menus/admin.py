@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Menu, MenuSection
 
 #admin.site.register(Menu)
-admin.site.register(MenuSection)
+#admin.site.register(MenuSection)
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
@@ -12,3 +12,10 @@ class MenuAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Menu
+
+@admin.register(MenuSection)
+class MenuSectionAdmin(admin.ModelAdmin):
+    readonly_fields = ['slug']
+
+    class Meta:
+        model = MenuSection

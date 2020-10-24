@@ -42,10 +42,10 @@ class RestaurantModelTest(TestCase):
             self.test_restaurant._meta.get_field('name').verbose_name
         self.assertEqual(verbose_name, 'name')
 
-    def test_field_name_type_is_CharField(self):
-        internal_type = \
+    def test_field_name_field_type(self):
+        field_type = \
             self.test_restaurant._meta.get_field('name').get_internal_type()
-        self.assertEqual(internal_type, 'CharField')
+        self.assertEqual(field_type, 'CharField')
 
     def test_field_name_max_length(self):
         max_length = self.test_restaurant._meta.get_field('name').max_length
@@ -57,10 +57,10 @@ class RestaurantModelTest(TestCase):
             self.test_restaurant._meta.get_field('slug').verbose_name
         self.assertEqual(verbose_name, 'slug')
 
-    def test_field_slug_type_SlugField(self):
-        internal_type = \
+    def test_field_slug_field_type(self):
+        field_type = \
             self.test_restaurant._meta.get_field('slug').get_internal_type()
-        self.assertEqual(internal_type, 'SlugField')
+        self.assertEqual(field_type, 'SlugField')
 
     def test_field_slug_max_length(self):
         max_length = self.test_restaurant._meta.get_field('slug').max_length
@@ -80,12 +80,12 @@ class RestaurantModelTest(TestCase):
             self.test_restaurant._meta.get_field('admin_users').verbose_name
         self.assertEqual(verbose_name, 'admin users')
 
-    def test_field_admin_users_type_is_ManyToManyField(self):
-        internal_type = self.test_restaurant._meta.get_field('admin_users') \
+    def test_field_admin_users_field_type(self):
+        field_type = self.test_restaurant._meta.get_field('admin_users') \
             .get_internal_type()
-        self.assertEqual(internal_type, 'ManyToManyField')
+        self.assertEqual(field_type, 'ManyToManyField')
 
-    def test_field_admin_users_uses_settings_AUTH_USER_MODEL(self):
+    def test_field_admin_users_related_model(self):
         related_model = \
             self.test_restaurant._meta.get_field('admin_users').related_model
         self.assertEqual(related_model, get_user_model())

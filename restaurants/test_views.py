@@ -22,19 +22,24 @@ class RestaurantListViewTest(TestCase):
     def setUp(self):
         self.response = self.client.get(reverse('restaurants:restaurant_list'))
         self.context = self.response.context
+        self.view = self.context['view']
 
-    def test_get(self):
-        self.assertEqual(self.response.status_code, 200)
+    def test_view_name(self):
+        self.assertEqual(self.view.__class__.__name__, 'RestaurantListView')
 
-    def test_view_type_is_ListView(self):
+    def test_view_parent_class_name(self):
         self.assertEqual(
-            self.context['view'].__class__.__bases__[0].__name__, 'ListView')
+            self.view.__class__.__bases__[0].__name__, 'ListView')
+
+    def test_view_model(self):
+        self.assertEqual(self.view.model.__name__, 'Restaurant')
 
     def test_context_object_name_is_restaurants(self):
         self.assertTrue('restaurants' in self.context)
 
-    def test_context_object_type_is_Restaurant(self):
-        self.assertEqual(self.context['view'].model.__name__, 'Restaurant')
+    # request.GET
+    def test_view_get_method_unauthenticated_user(self):
+        self.assertEqual(self.response.status_code, 200)
 
 class RestaurantDetailViewTest(TestCase):
 
@@ -56,13 +61,26 @@ class RestaurantDetailViewTest(TestCase):
             reverse('restaurants:restaurant_detail', 
                 kwargs = {'restaurant_slug': self.test_restaurant.slug }))
         self.context = self.response.context
+        self.view = self.context['view']
 
-    def test_get(self):
+    # view attributes
+    def test_view_name(self):
+        self.assertEqual(self.view.__class__.__name__, 'RestaurantDetailView')
+
+    def test_view_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, "DetailView")
+
+    def test_view_model(self):
+        self.assertEqual(self.view.model.__name__, 'Restaurant')
+
+    # request.GET
+    def test_view_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_view_type_is_DetailView(self):
-        self.assertEqual(
-            self.context['view'].__class__.__bases__[0].__name__, "DetailView")
-
-    def test_context_object_type_is_Restaurant(self):
-        self.assertEqual(self.context['view'].model.__name__, 'Restaurant')
+    # bad kwargs
+    def test_view_bad_kwargs_restaurant_slug(self):
+        self.response = self.client.get(
+            reverse('restaurants:restaurant_detail', 
+                kwargs = {'restaurant_slug': 'bad-restaurant-slug' }))
+        self.assertEqual(self.response.status_code, 404)

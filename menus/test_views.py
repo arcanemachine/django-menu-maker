@@ -350,7 +350,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn("This section has no items.", self.html)
 
-    def test_view_validation_duplicate_post_method_authorized_user_should_fail(self):
+    def test_view_validation_duplicate_post_method_by_authorized_user_should_fail(self):
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()

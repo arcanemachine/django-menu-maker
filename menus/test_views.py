@@ -345,9 +345,10 @@ class MenuSectionCreateViewTest(TestCase):
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
+        self.html = self.response.content.decode('utf-8')
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
-        #self.assertIn("This section has no items.", self.html)
+        self.assertIn("This section has no items.", self.html)
 
     # validation - duplicate post should fail
     def test_view_validation_duplicate_post_method_authorized_user(self):

@@ -384,6 +384,7 @@ class MenuSectionDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')

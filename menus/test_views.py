@@ -3,8 +3,10 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
 
+from inspect import getfullargspec
 from urllib.parse import urlparse
 
+from . import views
 from .models import Menu, MenuSection
 from restaurants.models import Restaurant
 
@@ -12,41 +14,51 @@ class MenusRootViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
-        # create unprivileged user
-        cls.test_user = get_user_model().objects.create(username='test_user')
-        cls.test_user.set_password('password')
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = \
-            get_user_model().objects.create(username='restaurant_admin_user')
-        cls.restaurant_admin_user.set_password('password')
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
         cls.test_restaurant = \
             Restaurant.objects.create(name='Test Restaurant')
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
 
     def setUp(self):
+        self.view = views.menus_root
         self.current_test_url = reverse('menus:menus_root', kwargs = {
                 'restaurant_slug': self.test_restaurant.slug,
                 })
         self.response = self.client.get(self.current_test_url)
-        #self.context = self.response.context
-        #self.html = self.response.content.decode('utf-8')
 
-    def test_get_redirects_to_restaurant_detail(self):
+    # view attributes
+    def test_view_name(self):
+        self.assertEqual(self.view.__name__, 'menus_root')
+
+    def test_view_get_arguments(self):
+        view_args = getfullargspec(self.view)[0]
+        return self.assertEqual(view_args, ['request', 'restaurant_slug'])
+
+    # request.GET
+    def test_view_get_method_unauthenticated_user(self):
+
+        # response returns 302 redirect
         self.assertEqual(self.response.status_code, 302)
 
+        # following the redirect will lead to restaurants:restaurant_detail
         self.response = self.client.get(self.current_test_url, follow=True)
-
         self.assertEqual(self.response.status_code, 200)
         self.assertEqual(self.response.redirect_chain[0][0],
             reverse('restaurants:restaurant_detail', kwargs = {
                 'restaurant_slug': self.test_restaurant.slug
                 }))
+
+    # bad kwargs
+    def test_view_get_method_with_bad_kwargs_restaurant_slug(self):
+        self.current_test_url = reverse('menus:menus_root', kwargs = {
+                'restaurant_slug': 'bad-restaurant-slug',
+                })
+
+        # response returns 302 redirect
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+
+        # following the redirect leads to 404 error
+        self.response = self.client.get(self.current_test_url, follow=True)
+        self.assertEqual(self.response.status_code, 404)
 
 class MenuDetailViewTest(TestCase):
 

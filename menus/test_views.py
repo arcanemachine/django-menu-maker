@@ -210,7 +210,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.view = self.response.context['view']
 
-    # view logic
+    # view attributes
     def test_view_name(self):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuSectionCreateView')
@@ -245,7 +245,7 @@ class MenuSectionCreateViewTest(TestCase):
     def test_view_context_contains_correct_menu(self):
         self.assertEqual(self.context['menu'], self.test_menu)
 
-    # get_initial
+    # get_initial()
     def test_view_get_initial_returns_menu(self):
         self.assertEqual(self.view.get_initial(), {'menu': self.test_menu})
 

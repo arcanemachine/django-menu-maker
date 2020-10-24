@@ -38,7 +38,7 @@ class MenuModelTest(TestCase):
 
     def test_field_restaurant_field_type(self):
         field_type = \
-            self.test_menu._meta.get_field('restaurant').__class__.__name__
+            self.test_menu._meta.get_field('restaurant').get_internal_type()
         self.assertEqual(field_type, 'ForeignKey')
 
     def test_field_restaurant_related_model(self):
@@ -62,7 +62,7 @@ class MenuModelTest(TestCase):
 
     def test_field_name_field_type(self):
         field_type = \
-            self.test_menu._meta.get_field('name').__class__.__name__
+            self.test_menu._meta.get_field('name').get_internal_type()
         self.assertEqual(field_type, 'CharField')
 
     def test_field_name_max_length(self):
@@ -76,7 +76,7 @@ class MenuModelTest(TestCase):
 
     def test_field_slug_field_type(self):
         field_type = \
-            self.test_menu._meta.get_field('slug').__class__.__name__
+            self.test_menu._meta.get_field('slug').get_internal_type()
         self.assertEqual(field_type, 'SlugField')
 
     def test_field_slug_max_length(self):
@@ -102,7 +102,7 @@ class MenuModelTest(TestCase):
 
     def test_field_theme_field_type(self):
         field_type = \
-            self.test_menu._meta.get_field('theme').__class__.__name__
+            self.test_menu._meta.get_field('theme').get_internal_type()
         self.assertEqual(field_type, 'CharField')
 
     def test_field_theme_max_length(self):
@@ -187,7 +187,7 @@ class MenuSectionModelTest(TestCase):
 
     def test_field_menu_field_type(self):
         field_type = \
-            self.test_menusection._meta.get_field('menu').__class__.__name__
+            self.test_menusection._meta.get_field('menu').get_internal_type()
         self.assertEqual(field_type, 'ForeignKey')
 
     def test_field_menu_related_model(self):
@@ -208,7 +208,7 @@ class MenuSectionModelTest(TestCase):
 
     def test_field_name_field_type(self):
         field_type = \
-            self.test_menusection._meta.get_field('name').__class__.__name__
+            self.test_menusection._meta.get_field('name').get_internal_type()
         self.assertEqual(field_type, 'CharField')
 
     def test_field_name_max_length(self):
@@ -227,7 +227,7 @@ class MenuSectionModelTest(TestCase):
 
     def test_field_slug_field_type(self):
         field_type = \
-            self.test_menusection._meta.get_field('slug').__class__.__name__
+            self.test_menusection._meta.get_field('slug').get_internal_type()
         self.assertEqual(field_type, 'SlugField')
 
     def test_field_slug_max_length(self):

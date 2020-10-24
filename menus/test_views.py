@@ -98,7 +98,7 @@ class MenuDetailViewTest(TestCase):
     def test_view_name(self):
         self.assertEqual(self.view.__class__.__name__, 'MenuDetailView')
 
-    def test_view_parent_class(self):
+    def test_view_parent_class_name(self):
         self.assertEqual(
             self.context['view'].__class__.__bases__[0].__name__, 'DetailView')
 
@@ -125,13 +125,14 @@ class MenuDetailViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 404)
 
-    # authentication
+    # request.GET
     def test_view_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
     def test_unauthenticated_user_cannot_view_link_to_add_section(self):
         self.assertNotIn('Add New Section', self.html)
 
+    # template - authentication-based conditions
     def test_unprivileged_user_cannot_view_link_to_add_section(self):
         self.client.login(
                 username='test_user', password='password')
@@ -146,7 +147,7 @@ class MenuDetailViewTest(TestCase):
         self.setUp() # reload the page
         self.assertIn('Add New Section', self.html)
 
-    # number of menusections
+    # template - number of menusections
     def test_menu_with_no_menusections(self):
         self.assertIn("This menu does not have any sections.", self.html)
         self.assertEqual(MenuSection.objects.count(), 0)
@@ -215,7 +216,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuSectionCreateView')
 
-    def test_view_parent_class(self):
+    def test_view_parent_class_name(self):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'CreateView')
 
@@ -249,7 +250,7 @@ class MenuSectionCreateViewTest(TestCase):
     def test_view_get_initial_returns_menu(self):
         self.assertEqual(self.view.get_initial(), {'menu': self.test_menu})
 
-    # authentication
+    # request.GET
     def test_view_get_method_unauthenticated_user(self):
         self.client.logout()
 
@@ -267,6 +268,13 @@ class MenuSectionCreateViewTest(TestCase):
         self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
+    def test_view_get_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertIn(
+                "Please enter the information for your new menu section:",
+                self.html)
+
+    # request.POST
     def test_view_post_method_unauthenticated_user(self):
         self.client.logout()
 
@@ -306,13 +314,6 @@ class MenuSectionCreateViewTest(TestCase):
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
 
-
-    def test_view_get_authorized_user(self):
-        self.assertEqual(self.response.status_code, 200)
-        self.assertIn(
-                "Please enter the information for your new menu section:",
-                self.html)
-
     def test_view_post_method_authorized_user(self):
 
         new_menusection_name = 'Test Menu Section'
@@ -350,7 +351,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn("This section has no items.", self.html)
 
-    def test_view_validation_duplicate_post_method_by_authorized_user_should_fail(self):
+    def test_view_validation_post_method_duplicate_post_attempt_by_authorized_user_should_fail(self):
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
@@ -429,7 +430,7 @@ class MenuSectionDetailViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuSectionDetailView')
 
-    def test_view_parent_class(self):
+    def test_view_parent_class_name(self):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'DetailView')
 

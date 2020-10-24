@@ -443,3 +443,13 @@ class MenuSectionDetailViewTest(TestCase):
     def test_view_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    # bad kwargs
+    def test_view_bad_kwargs_menusection_slug(self):
+        self.current_test_url = reverse('menus:menusection_detail',
+            kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                'menusection_slug': 'bad-menusection-slug',
+                })
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 404)

@@ -210,14 +210,18 @@ class MenuSectionCreateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.view = self.response.context['view']
 
-    # view parameters
-    def test_view_name_is_MenuSectionCreateView(self):
+    # view logic
+    def test_view_name(self):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuSectionCreateView')
 
-    def test_view_type_is_CreateView(self):
+    def test_view_parent_class(self):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'CreateView')
+
+    def test_view_mixins(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
 
     def test_view_model(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
@@ -230,7 +234,11 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(self.context['view'].template_name,
                 'menus/menusection_create.html')
 
-    # get_context_data
+    # dispatch()
+    def test_view_has_self_menu(self):
+        self.assertEqual(self.view.menu, self.test_menu)
+
+    # get_context_data()
     def test_view_context_contains_menu(self):
         self.assertTrue('menu' in self.context)
 
@@ -241,28 +249,22 @@ class MenuSectionCreateViewTest(TestCase):
     def test_view_get_initial_returns_menu(self):
         self.assertEqual(self.view.get_initial(), {'menu': self.test_menu})
 
-    # authentication - unauthorized user
+    # authentication
     def test_view_get_method_unauthenticated_user(self):
         self.client.logout()
 
+        # request by unauthenticated user should redirect to login
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 302)
-        self.assertTrue(reverse('login') in self.response.url)
-
-        self.response = self.client.get(self.current_test_url, follow=True)
-        self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
-
-        self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, 'registration/login.html')
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
 
     def test_view_get_method_authenticated_but_unauthorized_user(self):
-        self.client.login(
-                username='test_user', password='password')
+        self.client.login(username='test_user', password='password')
+
+        # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
-
         self.assertEqual(self.response.status_code, 403)
 
     def test_view_post_method_unauthenticated_user(self):

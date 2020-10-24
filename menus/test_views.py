@@ -92,20 +92,24 @@ class MenuDetailViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = self.response.content.decode('utf-8')
+        self.view = self.response.context['view']
 
-    # view logic
-    def test_view_type_is_DetailView(self):
+    # view attributes
+    def test_view_name(self):
+        self.assertEqual(self.view.__class__.__name__, 'MenuDetailView')
+
+    def test_view_parent_class(self):
         self.assertEqual(
             self.context['view'].__class__.__bases__[0].__name__, 'DetailView')
 
-    def test_view_model_is_Menu(self):
+    def test_view_model(self):
         self.assertEqual(self.context['view'].model.__name__, 'Menu')
 
-    def test_slug_url_kwarg_is_menu_slug(self):
+    def test_slug_url_kwarg(self):
         self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
 
-    # improper kwargs
-    def test_get_bad_restaurant_slug(self):
+    # bad kwargs
+    def test_view_bad_kwargs_restaurant_slug(self):
         self.current_test_url = reverse('menus:menu_detail', kwargs = {
                 'restaurant_slug': 'bad-slug',
                 'menu_slug': self.test_menu.slug,
@@ -113,7 +117,7 @@ class MenuDetailViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 404)
 
-    def test_get_bad_menu_slug(self):
+    def test_view_bad_kwargs_menu_slug(self):
         self.current_test_url = reverse('menus:menu_detail', kwargs = {
                 'restaurant_slug': self.test_restaurant.slug,
                 'menu_slug': 'fake-slug',
@@ -122,8 +126,7 @@ class MenuDetailViewTest(TestCase):
         self.assertEqual(self.response.status_code, 404)
 
     # authentication
-    def test_get(self):
-        # page should load for all users
+    def test_view_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
     def test_unauthenticated_user_cannot_view_link_to_add_section(self):

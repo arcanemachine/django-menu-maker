@@ -147,8 +147,8 @@ class MenuDetailViewTest(TestCase):
         self.setUp() # reload the page
         self.assertIn('Add New Section', self.html)
 
-    # template - number of menusections
-    def test_menu_with_no_menusections(self):
+    # template - menusection count
+    def test_menu_with_0_menusections(self):
         self.assertIn("This menu does not have any sections.", self.html)
         self.assertEqual(MenuSection.objects.count(), 0)
 

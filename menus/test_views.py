@@ -160,7 +160,7 @@ class MenuDetailViewTest(TestCase):
         self.setUp() # reload the page
         self.assertIn(test_menusection.name, self.html)
 
-    def test_menu_with_1_menusection(self):
+    def test_menu_with_2_menusections(self):
         test_menusection_1 = self.test_menu.menusection_set.create(
                 name='Test Menu Section 1')
         test_menusection_2 = self.test_menu.menusection_set.create(

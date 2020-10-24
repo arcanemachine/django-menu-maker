@@ -142,8 +142,8 @@ class MenuModelTest(TestCase):
     ### METHODS ###
 
     # __str__()
-    def test_method_str_returns_menu_name(self):
-        expected_string = "Test Menu"
+    def test_method_str_returns_restaurant_name_and_menu_name(self):
+        expected_string = "Test Restaurant - Test Menu"
         self.assertEqual(str(self.test_menu), expected_string)
 
     # get_absolute_url()

@@ -25,7 +25,7 @@ class Menu(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return f"{self.restaurant.name} - {self.name}"
 
     def clean(self):
         # do not allow a restaurant to have duplicate menu slugs

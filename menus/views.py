@@ -58,7 +58,7 @@ class MenuItemDetailView(DetailView):
     slug_url_kwargs = 'menuitem_slug'
 
     def get_object(self):
-        return get_object_or_404(MenuSection,
+        return get_object_or_404(MenuItem,
             menusection__menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menusection__menu__slug=self.kwargs['menu_slug'],
             menusection__slug=self.kwargs['menusection_slug'],

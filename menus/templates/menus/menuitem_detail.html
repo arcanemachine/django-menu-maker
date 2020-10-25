@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Menu Item: {{ menuitem.menusection.menu.restaurant.name }} - {{ menuitem.name }}{% endblock %}
+
+{% block body_title %}{{ menuitem.menusection.menu.restaurant.name }}{% endblock %}
+{% block body_subheading %}Item Detail: {{ menuitem.name }}{% endblock %}
+
+{% block content %}
+
+<p><strong>Description:</strong> {{ menuitem.description }}</p>
+
+<br>
+<p><strong>Menu:</strong> {{ menuitem.menusection.menu.name }}</p>
+<p><strong>Section:</strong> {{ menuitem.menusection.name }}</p>
+
+
+<div id="bottom-links">
+  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to Menu Section: {{ menuitem.menusection.menu.name }}</a></p>
+</div>
+
+{% endblock content %}

@@ -92,7 +92,7 @@ class MenuItem(models.Model):
     menusection = models.ForeignKey('MenuSection', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=128, default=None, blank=False)
-    description = models.CharField(max_length=1024, default=None, blank=False)
+    description = models.CharField(max_length=1024, blank=True)
     slug = models.SlugField(max_length=128)
 
     def __str__(self):

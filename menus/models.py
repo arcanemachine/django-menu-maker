@@ -121,7 +121,7 @@ class MenuItem(models.Model):
                 'menuitem_slug': self.slug,
                 })
 
-    def save():
+    def save(self, *args, **kwargs):
         if not self.slug == slugify(self.name):
             self.slug = slugify(self.name)
         self.clean()

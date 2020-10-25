@@ -16,7 +16,7 @@ class Menu(models.Model):
             on_delete=models.CASCADE,
             null=True)
 
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128, null=True)
     theme = models.CharField(
             max_length=32, choices=THEME_CHOICES, default='default')
@@ -55,7 +55,7 @@ class MenuSection(models.Model):
 
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE)
 
-    name = models.CharField(max_length=128, null=True)
+    name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128, null=True)
 
     def __str__(self):

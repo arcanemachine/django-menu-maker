@@ -8,7 +8,7 @@ from menus_project.constants import RESERVED_KEYWORDS
 
 class Restaurant(models.Model):
 
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128, unique=True, null=True)
     admin_users = models.ManyToManyField(settings.AUTH_USER_MODEL)
 

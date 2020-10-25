@@ -78,10 +78,6 @@ class RestaurantModelTest(TestCase):
         is_unique = self.test_restaurant._meta.get_field('slug').unique
         self.assertEqual(is_unique, True)
 
-    def test_field_slug_null(self):
-        is_null = self.test_restaurant._meta.get_field('slug').null
-        self.assertEqual(is_null, True)
-
     # slug
     def test_field_admin_users_verbose_name(self):
         verbose_name = \

@@ -77,7 +77,6 @@ class MenuModelTest(TestCase):
         blank = self.test_restaurant._meta.get_field('name').blank
         self.assertEqual(blank, False)
 
-
     # slug
     def test_field_slug_verbose_name(self):
         verbose_name = self.test_menu._meta.get_field('slug').verbose_name
@@ -91,10 +90,6 @@ class MenuModelTest(TestCase):
     def test_field_slug_max_length(self):
         slug_max_length = self.test_menu._meta.get_field('slug').max_length
         self.assertEqual(slug_max_length, 128)
-
-    def test_field_slug_null(self):
-        null = self.test_menu._meta.get_field('slug').null
-        self.assertEqual(null, True)
 
     # theme
     def test_field_theme_choices_default(self):
@@ -246,10 +241,6 @@ class MenuSectionModelTest(TestCase):
     def test_field_slug_max_length(self):
         max_length = self.test_menusection._meta.get_field('slug').max_length
         self.assertEqual(max_length, 128)
-
-    def test_field_slug_null(self):
-        null = self.test_menusection._meta.get_field('slug').null
-        self.assertEqual(null, True)
 
     ### VALIDATION ###
 

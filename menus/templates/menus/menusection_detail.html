@@ -9,12 +9,12 @@
 
 <h3>Items</h3>
 
-{% if not menusection.item_set.count %}
+{% if not menusection.menuitem_set.count %}
 <p>This section has no items.</p>
 {% else %}
 
 <ul>
-  {% for item in menusection.item_set.all %}
+  {% for item in menusection.menuitem_set.all %}
   <li>{{ item }}</li>
   {% endfor %}
 </ul>

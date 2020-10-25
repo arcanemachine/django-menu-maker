@@ -15,7 +15,7 @@
 
 <ul>
   {% for item in menusection.menuitem_set.all %}
-  <li>{{ item }}</li>
+  <li><a href="{% url 'menus:menuitem_detail' restaurant_slug=item.menusection.menu.restaurant.slug menu_slug=item.menusection.menu.slug menusection_slug=item.menusection.slug menuitem_slug=item.slug %}">{{ item.name }}</a></li>
   {% endfor %}
 </ul>
 

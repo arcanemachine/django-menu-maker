@@ -14,8 +14,8 @@
 {% else %}
 
 <ul>
-  {% for item in menusection.menuitem_set.all %}
-  <li><a href="{% url 'menus:menuitem_detail' restaurant_slug=item.menusection.menu.restaurant.slug menu_slug=item.menusection.menu.slug menusection_slug=item.menusection.slug menuitem_slug=item.slug %}">{{ item.name }}</a></li>
+  {% for menuitem in menusection.menuitem_set.all %}
+  <li><a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a></li>
   {% endfor %}
 </ul>
 

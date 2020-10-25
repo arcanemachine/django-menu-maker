@@ -15,7 +15,6 @@ class Menu(models.Model):
     restaurant = models.ForeignKey('restaurants.Restaurant',
             on_delete=models.CASCADE,
             null=True)
-
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
     theme = models.CharField(
@@ -54,7 +53,6 @@ class Menu(models.Model):
 class MenuSection(models.Model):
 
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE)
-
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
 
@@ -90,10 +88,9 @@ class MenuSection(models.Model):
 class MenuItem(models.Model):
 
     menusection = models.ForeignKey('MenuSection', on_delete=models.CASCADE)
-
     name = models.CharField(max_length=128, default=None, blank=False)
-    description = models.CharField(max_length=1024, blank=True)
     slug = models.SlugField(max_length=128)
+    description = models.CharField(max_length=1024, blank=True)
 
     def __str__(self):
         return f"{self.menusection.menu.restaurant.name}: "\

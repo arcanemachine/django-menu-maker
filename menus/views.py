@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
 from .forms import MenuSectionCreateForm
-from .models import Menu, MenuSection
+from .models import Menu, MenuSection, MenuItem
 from restaurants.models import Restaurant
 
 def menus_root(request, restaurant_slug):
@@ -52,4 +52,15 @@ class MenuSectionDetailView(DetailView):
             menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menu__slug=self.kwargs['menu_slug'],
             slug=self.kwargs['menusection_slug'])
+
+class MenuItemDetailView(DetailView):
+    model = MenuItem
+    slug_url_kwargs = 'menuitem_slug'
+
+    def get_object(self):
+        return get_object_or_404(MenuSection,
+            menusection__menu__restaurant__slug=self.kwargs['restaurant_slug'],
+            menusection__menu__slug=self.kwargs['menu_slug'],
+            menusection__slug=self.kwargs['menusection_slug'],
+            slug=self.kwargs['menuitem_slug'])
 

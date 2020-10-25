@@ -87,3 +87,34 @@ class MenuSection(models.Model):
         self.clean()
         super().save(*args, **kwargs)
 
+class MenuItem(models.Model):
+
+    menusection = models.ForeignKey('MenuSection', on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=128, default=None, blank=False)
+    description = models.CharField(max_length=1024, default=None, blank=False)
+    slug = models.SlugField(max_length=128)
+
+    def __str__(self):
+        return f"{self.menusection.menu.restaurant.name}: "\
+            f"{self.menusection.menu.name} - {self.menusection.name} - "\
+                f"{self.name}"
+
+    def clean(self):
+        # do not allow a menusection to have duplicate menuitem slugs
+        existing_menuitems = MenuItem.objects.filter(
+                menusection=self.menusection,
+                slug=slugify(self.name))
+        if existing_menuitems.count():
+            if existing_menuitems.first() != self \
+                    or existing_menuitems.last() != self:
+                raise ValidationError(
+                    "This name is too similar to one of this menu's "\
+                    "existing section names.")
+
+    def save():
+        if not self.slug == slugify(self.name):
+            self.slug = slugify(self.name)
+        self.clean()
+        super().save(*args, **kwargs)
+

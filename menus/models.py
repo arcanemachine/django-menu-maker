@@ -112,9 +112,17 @@ class MenuItem(models.Model):
                     "This name is too similar to one of this menu's "\
                     "existing section names.")
 
+    def get_absolute_url(self):
+        return reverse('menus:menuitem_detail',
+            kwargs = {
+                'restaurant_slug': self.menusection.menu.restaurant.slug,
+                'menu_slug': self.menusection.menu.slug,
+                'menusection_slug': self.menusection.slug,
+                'menuitem_slug': self.slug,
+                })
+
     def save():
         if not self.slug == slugify(self.name):
             self.slug = slugify(self.name)
         self.clean()
         super().save(*args, **kwargs)
-

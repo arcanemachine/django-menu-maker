@@ -104,7 +104,7 @@ class RestaurantModelTest(TestCase):
     def test_validation_do_not_allow_duplicate_restaurant_slugs(self):
         with self.assertRaises(ValidationError):
             test_restaurant_2 = Restaurant.objects.create(
-                    name='Test Restaurant')
+                name='Test Restaurant')
 
     ### METHODS ###
 

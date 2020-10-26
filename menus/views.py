@@ -14,7 +14,6 @@ def menus_root(request, restaurant_slug):
 
 class MenuDetailView(DetailView):
     model = Menu
-    slug_url_kwarg = 'menu_slug'
 
     def get_object(self):
         return get_object_or_404(Menu,
@@ -45,7 +44,6 @@ class MenuSectionCreateView(UserPassesTestMixin, CreateView):
 
 class MenuSectionDetailView(DetailView):
     model = MenuSection
-    slug_url_kwarg = 'menusection_slug'
 
     def get_object(self):
         return get_object_or_404(MenuSection,
@@ -55,7 +53,6 @@ class MenuSectionDetailView(DetailView):
 
 class MenuItemDetailView(DetailView):
     model = MenuItem
-    slug_url_kwargs = 'menuitem_slug'
 
     def get_object(self):
         return get_object_or_404(MenuItem,

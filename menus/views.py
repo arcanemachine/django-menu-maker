@@ -86,7 +86,6 @@ class MenuItemDetailView(DetailView):
             menusection__slug=self.kwargs['menusection_slug'],
             slug=self.kwargs['menuitem_slug'])
 
-# TODO: test
 class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
     model = MenuItem
     form_class = MenuItemForm

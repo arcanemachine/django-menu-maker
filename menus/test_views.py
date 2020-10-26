@@ -102,7 +102,7 @@ class MenuDetailViewTest(TestCase):
         self.assertEqual(
             self.context['view'].__class__.__bases__[0].__name__, 'DetailView')
 
-    def test_view_model(self):
+    def test_view_model_name(self):
         self.assertEqual(self.context['view'].model.__name__, 'Menu')
 
     # bad kwargs
@@ -234,7 +234,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
 
-    def test_view_model(self):
+    def test_view_model_name(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
 
     def test_view_form_class(self):
@@ -458,7 +458,7 @@ class MenuSectionDetailViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'DetailView')
 
-    def test_view_model(self):
+    def test_view_model_name(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
 
     # request.GET
@@ -549,7 +549,7 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
 
-    def test_view_model(self):
+    def test_view_model_name(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuItem')
 
     def test_view_form_class(self):
@@ -791,7 +791,7 @@ class MenuItemDetailViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'DetailView')
 
-    def test_view_model(self):
+    def test_view_model_name(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuItem')
 
     # get_object()

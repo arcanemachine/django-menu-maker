@@ -15,10 +15,10 @@ class MenuModelTest(TestCase):
 
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
-    def test_menu_object_name(self): 
+    def test_object_name(self): 
         self.assertEqual(self.test_menu._meta.object_name, 'Menu')
 
-    def test_menu_object_content(self):
+    def test_object_content(self):
 
         expected_restaurant = self.test_restaurant
         expected_name = 'Test Menu'
@@ -70,11 +70,11 @@ class MenuModelTest(TestCase):
         self.assertEqual(max_length, 128)
 
     def test_field_name_default(self):
-        default = self.test_restaurant._meta.get_field('name').default
+        default = self.test_menu._meta.get_field('name').default
         self.assertEqual(default, None)
 
     def test_field_name_blank(self):
-        blank = self.test_restaurant._meta.get_field('name').blank
+        blank = self.test_menu._meta.get_field('name').blank
         self.assertEqual(blank, False)
 
     # slug
@@ -151,7 +151,7 @@ class MenuModelTest(TestCase):
         self.assertEqual(str(self.test_menu), expected_string)
 
     # get_absolute_url()
-    def test_method_get_absolute_url_returns_menu_detail(self):
+    def test_method_get_absolute_url(self):
         expected_url = reverse('menus:menu_detail', kwargs = {
             'restaurant_slug': self.test_menu.restaurant.slug,
             'menu_slug': self.test_menu.slug })
@@ -167,11 +167,11 @@ class MenuSectionModelTest(TestCase):
         cls.test_menusection = cls.test_menu.menusection_set.create(
             name='Test Menu Section')
 
-    def test_menusection_object_name(self):
+    def test_object_name(self):
         self.assertEqual(
                 self.test_menusection._meta.object_name, 'MenuSection')
     
-    def test_menusection_object_content(self):
+    def test_object_content(self):
 
         expected_menu = self.test_menu
         expected_name = 'Test Menu Section'
@@ -220,11 +220,11 @@ class MenuSectionModelTest(TestCase):
         self.assertEqual(max_length, 128)
 
     def test_field_name_default(self):
-        default = self.test_restaurant._meta.get_field('name').default
+        default = self.test_menusection._meta.get_field('name').default
         self.assertEqual(default, None)
 
     def test_field_name_blank(self):
-        blank = self.test_restaurant._meta.get_field('name').blank
+        blank = self.test_menusection._meta.get_field('name').blank
         self.assertEqual(blank, False)
 
     # slug
@@ -262,7 +262,7 @@ class MenuSectionModelTest(TestCase):
                 f"{self.test_menusection.menu.name} - "\
                     f"{self.test_menusection.name}")
 
-    def test_method_get_absolute_url_returns_menusection_detail(self):
+    def test_method_get_absolute_url(self):
         expected_url = reverse('menus:menusection_detail', kwargs = {
             'restaurant_slug': self.test_menusection.menu.restaurant.slug,
             'menu_slug': self.test_menusection.menu.slug,

@@ -19,10 +19,10 @@ class RestaurantModelTest(TestCase):
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
         cls.test_restaurant.admin_users.add(cls.test_user)
 
-    def test_restaurant_object_name(self):
+    def test_object_name(self):
         self.assertEqual(self.test_restaurant._meta.object_name, 'Restaurant')
 
-    def test_restaurant_object_content(self):
+    def test_object_content(self):
         expected_name = 'Test Restaurant'
         expected_slug = 'test-restaurant'
         expected_admin_users = \
@@ -111,7 +111,7 @@ class RestaurantModelTest(TestCase):
     def test_method___str___returns_restaurant_name(self):
         self.assertEqual(str(self.test_restaurant), self.test_restaurant.name)
 
-    def test_method_get_absolute_url_returns_restaurant_detail(self):
+    def test_method_get_absolute_url(self):
         expected_url = reverse('restaurants:restaurant_detail',
             kwargs = {'restaurant_slug': self.test_restaurant.slug})
         self.assertEqual(self.test_restaurant.get_absolute_url(), expected_url)

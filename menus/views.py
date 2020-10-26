@@ -94,11 +94,11 @@ class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['action_verb'] = 'Update'
-        context['menusection'] = self.menusection
+        context['menusection'] = self.get_object().menusection
         return context
 
     def get_initial(self):
-        return {'menusection': self.menusection}
+        return {'menusection': self.get_object().menusection}
 
     def get_object(self):
         return get_object_or_404(MenuItem,

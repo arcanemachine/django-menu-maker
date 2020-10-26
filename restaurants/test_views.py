@@ -79,7 +79,7 @@ class RestaurantDetailViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     # bad kwargs
-    def test_view_bad_kwargs_restaurant_slug(self):
+    def test_view_bad_kwargs(self):
         self.response = self.client.get(
             reverse('restaurants:restaurant_detail', 
                 kwargs = {'restaurant_slug': 'bad-restaurant-slug' }))

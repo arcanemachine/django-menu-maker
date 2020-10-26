@@ -465,26 +465,31 @@ class MenuSectionDetailViewTest(TestCase):
     def test_view_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_view_non_restaurant_admin_user_cannot_view_link_to_add_menuitem(self):
+    # template
+    def test_template_non_restaurant_admin_user_cannot_view_link_to_add_menuitem(self):
         self.client.logout()
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = self.response.content.decode('utf-8')
         self.assertNotIn('Add New Menu Item', self.html)
 
-    def test_view_restaurant_admin_user_can_view_link_to_add_menuitem(self):
+    def test_template_restaurant_admin_user_can_view_link_to_add_menuitem(self):
         self.assertIn('Add New Menu Item', self.html)
 
     # bad kwargs
-    def test_view_bad_kwargs_menusection_slug(self):
-        self.current_test_url = reverse('menus:menusection_detail',
-            kwargs = {
-                'restaurant_slug': self.test_restaurant.slug,
-                'menu_slug': self.test_menu.slug,
-                'menusection_slug': 'bad-menusection-slug',
-                })
-        self.response = self.client.get(self.current_test_url)
-        self.assertEqual(self.response.status_code, 404)
+    def test_view_bad_kwargs(self):
+        for i in range(3):
+            self.current_test_url = reverse('menus:menusection_detail',
+                kwargs = {
+                    'restaurant_slug': self.test_restaurant.slug \
+                        if i != 0 else 'bad-restaurant-slug',
+                    'menu_slug': self.test_menu.slug \
+                        if i != 1 else 'bad-menu-slug',
+                    'menusection_slug': self.test_menusection.slug \
+                        if i != 2 else 'bad-menusection-slug',
+                    })
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
 
 class MenuItemCreateViewTest(TestCase):
 
@@ -801,14 +806,19 @@ class MenuItemDetailViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     # bad kwargs
-    def test_view_bad_kwargs_menuitem_slug(self):
-        self.current_test_url = reverse('menus:menuitem_detail',
-            kwargs = {
-                'restaurant_slug': self.test_restaurant.slug,
-                'menu_slug': self.test_menu.slug,
-                'menusection_slug': self.test_menusection.slug,
-                'menuitem_slug': 'bad-menuitem-slug',
-                })
-        self.response = self.client.get(self.current_test_url)
-        self.assertEqual(self.response.status_code, 404)
+    def test_view_bad_kwargs(self):
+        for i in range(4):
+            self.current_test_url = reverse('menus:menuitem_detail',
+                kwargs = {
+                    'restaurant_slug': self.test_restaurant.slug \
+                        if i != 0 else 'bad-restaurant-slug',
+                    'menu_slug': self.test_menu.slug \
+                        if i != 1 else 'bad-menu-slug',
+                    'menusection_slug': self.test_menusection.slug \
+                        if i != 2 else 'bad-menusection-slug',
+                    'menuitem_slug': 'bad-menuitem-slug' \
+                        if i != 3 else 'bad-menuitem-slug',
+                    })
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
 

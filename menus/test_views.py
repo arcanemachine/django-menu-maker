@@ -1003,6 +1003,7 @@ class MenuItemUpdateViewTest(TestCase):
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description
         old_menuitem_slug = self.test_menuitem.slug
+
         new_menuitem_name = 'New Test Menu Item'
         new_menuitem_description = 'New Test Menu Item Description'
         new_menuitem_slug = slugify(new_menuitem_name)

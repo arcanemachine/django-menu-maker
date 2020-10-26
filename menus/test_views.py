@@ -168,6 +168,19 @@ class MenuDetailViewTest(TestCase):
         self.assertIn(test_menusection_1.name, self.html)
         self.assertIn(test_menusection_2.name, self.html)
 
+    # bad kwargs
+    def test_view_bad_kwargs(self):
+        for i in range(2):
+            self.current_test_url = reverse('menus:menu_detail',
+                kwargs = {
+                    'restaurant_slug': self.test_restaurant.slug \
+                        if i != 0 else 'bad-restaurant-slug',
+                    'menu_slug': self.test_menu.slug \
+                        if i != 1 else 'bad-menu-slug',
+                    })
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
+
 class MenuSectionCreateViewTest(TestCase):
 
     @classmethod
@@ -377,6 +390,19 @@ class MenuSectionCreateViewTest(TestCase):
         # menusection object count has not changed
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
+
+    # bad kwargs
+    def test_view_bad_kwargs(self):
+        for i in range(2):
+            self.current_test_url = reverse('menus:menusection_create',
+                kwargs = {
+                    'restaurant_slug': self.test_restaurant.slug \
+                        if i != 0 else 'bad-restaurant-slug',
+                    'menu_slug': self.test_menu.slug \
+                        if i != 1 else 'bad-menu-slug',
+                    })
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
 
 class MenuSectionDetailViewTest(TestCase):
 
@@ -688,6 +714,21 @@ class MenuItemCreateViewTest(TestCase):
         # menusection object count has not changed
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
+
+    # bad kwargs
+    def test_view_bad_kwargs(self):
+        for i in range(3):
+            self.current_test_url = reverse('menus:menuitem_create',
+                kwargs = {
+                    'restaurant_slug': self.test_restaurant.slug \
+                        if i != 0 else 'bad-restaurant-slug',
+                    'menu_slug': self.test_menu.slug \
+                        if i != 1 else 'bad-menu-slug',
+                    'menusection_slug': self.test_menusection.slug \
+                        if i != 2 else 'bad-menusection-slug',
+                    })
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
 
 class MenuItemDetailViewTest(TestCase):
 

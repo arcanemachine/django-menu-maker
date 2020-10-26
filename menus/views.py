@@ -87,7 +87,7 @@ class MenuItemDetailView(DetailView):
             slug=self.kwargs['menuitem_slug'])
 
 # TODO: test
-class MenuItemUpdateView(UpdateView):
+class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
     model = MenuItem
     form_class = MenuItemForm
 
@@ -109,5 +109,5 @@ class MenuItemUpdateView(UpdateView):
 
     def test_func(self):
         return self.request.user in \
-            self.menusection.menu.restaurant.admin_users.all()
+            self.get_object().menusection.menu.restaurant.admin_users.all()
 

@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from restaurants.models import Restaurant
-from menus.models import Menu, MenuSection
+from menus.models import Menu, MenuSection, MenuItem
 
 class MenuModelTest(TestCase):
 
@@ -364,11 +364,11 @@ class MenuItemModelTest(TestCase):
             self.test_menusection.menuitem_set.create(
                 name=self.test_menuitem.name)
 
-    def test_validation_two_different_menusections_can_have_same_menusection_slug(self):
+    def test_validation_two_different_menusections_can_have_same_menuitem_slug(self):
         test_menusection_2 = self.test_menu.menusection_set.create(
             name='Test Menu Section 2')
         test_menusection_2.menuitem_set.create(name=self.test_menuitem.name)
-        self.assertEqual(MenuSection.objects.count(), 2)
+        self.assertEqual(MenuItem.objects.count(), 2)
 
     ### METHODS ###
 

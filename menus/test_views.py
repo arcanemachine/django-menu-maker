@@ -246,7 +246,10 @@ class MenuSectionCreateViewTest(TestCase):
             'menus/menusection_create.html')
 
     # dispatch()
-    def test_view_method_dispatch_self_has_menu(self):
+    def test_view_method_dispatch_self_has_attribute_menu(self):
+        self.assertTrue(hasattr(self.view, 'menu'))
+
+    def test_view_method_dispatch_self_has_correct_menu(self):
         self.assertEqual(self.view.menu, self.test_menu)
 
     # get_context_data()

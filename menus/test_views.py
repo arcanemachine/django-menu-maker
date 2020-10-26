@@ -105,9 +105,6 @@ class MenuDetailViewTest(TestCase):
     def test_view_model(self):
         self.assertEqual(self.context['view'].model.__name__, 'Menu')
 
-    def test_slug_url_kwarg(self):
-        self.assertEqual(self.context['view'].slug_url_kwarg, 'menu_slug')
-
     # bad kwargs
     def test_view_bad_kwargs_restaurant_slug(self):
         self.current_test_url = reverse('menus:menu_detail', kwargs = {
@@ -405,6 +402,7 @@ class MenuSectionDetailViewTest(TestCase):
         # create test menu
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
+        # create test menusection
         cls.test_menusection = \
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
@@ -436,10 +434,6 @@ class MenuSectionDetailViewTest(TestCase):
 
     def test_view_model(self):
         self.assertEqual(self.context['view'].model.__name__, 'MenuSection')
-
-    def test_view_slug_url_kwarg(self):
-        self.assertEqual(self.context['view'].slug_url_kwarg,
-            'menusection_slug')
 
     # request.GET
     def test_view_get_method_unauthenticated_user(self):
@@ -520,6 +514,7 @@ class MenuItemDetailViewTest(TestCase):
 
     # get_object()
     def test_view_method_get_object(self):
+        breakpoint()
         self.assertEqual(self.view.get_object(), self.test_menuitem)
 
     # request.GET

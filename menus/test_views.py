@@ -563,7 +563,10 @@ class MenuItemCreateViewTest(TestCase):
             'MenuItemForm')
 
     # dispatch()
-    def test_view_method_dispatch_self_has_menu(self):
+    def test_view_method_dispatch_self_has_attribute_menusection(self):
+        self.assertTrue(hasattr(self.view, 'menusection'))
+
+    def test_view_method_dispatch_self_has_correct_menusection(self):
         self.assertEqual(self.view.menusection, self.test_menusection)
 
     # get_context_data()
@@ -576,11 +579,11 @@ class MenuItemCreateViewTest(TestCase):
     def test_view_context_has_menusection(self):
         self.assertTrue('menusection' in self.context)
 
-    def test_view_context_has_correct_menu(self):
+    def test_view_context_has_correct_menusection(self):
         self.assertEqual(self.context['menusection'], self.test_menusection)
 
     # get_initial()
-    def test_view_method_get_initial_returns_menu(self):
+    def test_view_method_get_initial_returns_menusection(self):
         self.assertEqual(self.view.get_initial(),
             {'menusection': self.test_menusection})
 
@@ -639,8 +642,7 @@ class MenuItemCreateViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # attempt to create new menusection via POST
-        self.response = self.client.post(self.current_test_url,
-            kwargs = {
+        self.response = self.client.post(self.current_test_url, {
                 'menusection': self.test_menusection.pk,
                 'name': 'Test Menu Item',
                 'description': 'Test Menu Item Description',

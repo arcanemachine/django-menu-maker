@@ -15,7 +15,7 @@ class MenuModelTest(TestCase):
 
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
-    def test_object_name(self): 
+    def test_object_name(self):
         self.assertEqual(self.test_menu._meta.object_name, 'Menu')
 
     def test_object_content(self):
@@ -170,7 +170,7 @@ class MenuSectionModelTest(TestCase):
     def test_object_name(self):
         self.assertEqual(
                 self.test_menusection._meta.object_name, 'MenuSection')
-    
+
     def test_object_content(self):
 
         expected_menu = self.test_menu

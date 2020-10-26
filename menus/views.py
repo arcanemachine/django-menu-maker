@@ -91,13 +91,6 @@ class MenuItemUpdateView(UpdateView):
     model = MenuItem
     form_class = MenuItemForm
 
-    def dispatch(self, request, *args, **kwargs):
-        self.menusection = get_object_or_404(MenuSection,
-                menu__restaurant__slug=self.kwargs['restaurant_slug'],
-                menu__slug=self.kwargs['menu_slug'],
-                slug=self.kwargs['menusection_slug'])
-        return super().dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['action_verb'] = 'Update'

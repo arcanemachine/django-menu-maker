@@ -226,11 +226,11 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_view_form_class(self):
         self.assertEqual(self.context['view'].form_class.__name__,
-                'MenuSectionCreateForm')
+            'MenuSectionCreateForm')
 
     def test_view_template_name(self):
         self.assertEqual(self.context['view'].template_name,
-                'menus/menusection_create.html')
+            'menus/menusection_create.html')
 
     # dispatch()
     def test_view_has_self_menu(self):
@@ -268,8 +268,8 @@ class MenuSectionCreateViewTest(TestCase):
     def test_view_get_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertIn(
-                "Please enter the information for your new menu section:",
-                self.html)
+            "Please enter the information for your new menu section:",
+            self.html)
 
     # request.POST
     def test_view_post_method_unauthenticated_user(self):
@@ -280,10 +280,10 @@ class MenuSectionCreateViewTest(TestCase):
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url,
-                kwargs = {
-                    'menu': self.test_menu.pk,
-                    'name': 'Test Menu Section',
-                    })
+            kwargs = {
+                'menu': self.test_menu.pk,
+                'name': 'Test Menu Section',
+                })
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -302,10 +302,10 @@ class MenuSectionCreateViewTest(TestCase):
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url,
-                kwargs = {
-                    'menu': self.test_menu.pk,
-                    'name': 'Test Menu Section',
-                    })
+            kwargs = {
+                'menu': self.test_menu.pk,
+                'name': 'Test Menu Section',
+                })
 
         # menusection count should be unchanged
         new_menusection_count = MenuSection.objects.count()
@@ -321,8 +321,8 @@ class MenuSectionCreateViewTest(TestCase):
 
         # create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
-                    'menu': self.test_menu.pk,
-                    'name': new_menusection_name})
+            'menu': self.test_menu.pk,
+            'name': new_menusection_name})
         self.html = self.response.content.decode('utf-8')
 
         # menusection object count increased by 1
@@ -331,8 +331,8 @@ class MenuSectionCreateViewTest(TestCase):
 
         # user is redirected to new menusection_detail
         new_menusection = MenuSection.objects.get(
-                menu=self.test_menu,
-                slug=new_menusection_slug)
+            menu=self.test_menu,
+            slug=new_menusection_slug)
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, reverse(
             'menus:menusection_detail', kwargs = {
@@ -355,9 +355,9 @@ class MenuSectionCreateViewTest(TestCase):
 
         # create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
-                    'menu': self.test_menu.pk,
-                    'name': 'Test Menu Section',
-                    })
+            'menu': self.test_menu.pk,
+            'name': 'Test Menu Section',
+            })
 
         # menusection object count increased by 1
         new_menusection_count = MenuSection.objects.count()
@@ -368,9 +368,9 @@ class MenuSectionCreateViewTest(TestCase):
 
         # attempt to create duplicate menusection via POST
         self.response = self.client.post(self.current_test_url, {
-                    'menu': self.test_menu.pk,
-                    'name': 'Test Menu Section',
-                    })
+            'menu': self.test_menu.pk,
+            'name': 'Test Menu Section',
+            })
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
@@ -581,11 +581,11 @@ class MenuItemCreateViewTest(TestCase):
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url,
-                kwargs = {
-                    'menusection': self.test_menusection.pk,
-                    'name': 'Test Menu Item',
-                    'description': 'Test Menu Item Description',
-                    })
+            kwargs = {
+                'menusection': self.test_menusection.pk,
+                'name': 'Test Menu Item',
+                'description': 'Test Menu Item Description',
+                })
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -604,11 +604,11 @@ class MenuItemCreateViewTest(TestCase):
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url,
-                kwargs = {
-                    'menusection': self.test_menusection.pk,
-                    'name': 'Test Menu Item',
-                    'description': 'Test Menu Item Description',
-                    })
+            kwargs = {
+                'menusection': self.test_menusection.pk,
+                'name': 'Test Menu Item',
+                'description': 'Test Menu Item Description',
+                })
 
         # menusection count should be unchanged
         new_menuitem_count = MenuItem.objects.count()
@@ -624,10 +624,10 @@ class MenuItemCreateViewTest(TestCase):
 
         # create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
-                    'menusection': self.test_menusection.pk,
-                    'name': 'Test Menu Item',
-                    'description': 'Test Menu Item Description',
-                    })
+            'menusection': self.test_menusection.pk,
+            'name': 'Test Menu Item',
+            'description': 'Test Menu Item Description',
+            })
         self.html = self.response.content.decode('utf-8')
 
         # menusection object count increased by 1
@@ -636,8 +636,8 @@ class MenuItemCreateViewTest(TestCase):
 
         # user is redirected to new menusection_detail
         new_menuitem = MenuItem.objects.get(
-                menusection=self.test_menusection,
-                slug=new_menuitem_slug)
+            menusection=self.test_menusection,
+            slug=new_menuitem_slug)
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, reverse(
             'menus:menuitem_detail', kwargs = {
@@ -645,7 +645,7 @@ class MenuItemCreateViewTest(TestCase):
                 'menu_slug': self.test_menu.slug,
                 'menusection_slug': self.test_menusection.slug,
                 'menuitem_slug': new_menuitem_slug,
-            }))
+                }))
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
@@ -664,10 +664,10 @@ class MenuItemCreateViewTest(TestCase):
 
         # create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
-                    'menusection': self.test_menusection.pk,
-                    'name': 'Test Menu Item',
-                    'description': 'Test Menu Item Description',
-                    })
+            'menusection': self.test_menusection.pk,
+            'name': 'Test Menu Item',
+            'description': 'Test Menu Item Description',
+            })
 
         # menusection object count increased by 1
         new_menuitem_count = MenuItem.objects.count()
@@ -678,10 +678,10 @@ class MenuItemCreateViewTest(TestCase):
 
         # attempt to create duplicate menusection via POST
         self.response = self.client.post(self.current_test_url, {
-                    'menusection': self.test_menusection.pk,
-                    'name': 'Test Menu Item',
-                    'description': 'Test Menu Item Description',
-                    })
+            'menusection': self.test_menusection.pk,
+            'name': 'Test Menu Item',
+            'description': 'Test Menu Item Description',
+            })
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 

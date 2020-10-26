@@ -316,7 +316,7 @@ class MenuItemModelTest(TestCase):
 
     def test_field_menusection_on_delete(self):
         on_delete = self.test_menuitem._meta.get_field('menusection') \
-                .remote_field.on_delete
+            .remote_field.on_delete
         self.assertTrue(on_delete is models.CASCADE)
 
     # name
@@ -366,7 +366,7 @@ class MenuItemModelTest(TestCase):
 
     def test_validation_two_different_menusections_can_have_same_menusection_slug(self):
         test_menusection_2 = self.test_menu.menusection_set.create(
-                name='Test Menu Section 2')
+            name='Test Menu Section 2')
         test_menusection_2.menuitem_set.create(name=self.test_menuitem.name)
         self.assertEqual(MenuSection.objects.count(), 2)
 
@@ -382,7 +382,7 @@ class MenuItemModelTest(TestCase):
     def test_method_get_absolute_url(self):
         expected_url = reverse('menus:menuitem_detail', kwargs = {
             'restaurant_slug': \
-                    self.test_menuitem.menusection.menu.restaurant.slug,
+                self.test_menuitem.menusection.menu.restaurant.slug,
             'menu_slug': self.test_menuitem.menusection.menu.slug,
             'menusection_slug': self.test_menuitem.menusection.slug,
             'menuitem_slug': self.test_menuitem.slug,

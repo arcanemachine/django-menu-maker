@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic.edit import UpdateView
 
 from .forms import *
 from .models import Menu, MenuSection, MenuItem
@@ -53,8 +54,7 @@ class MenuSectionDetailView(DetailView):
 
 class MenuItemCreateView(UserPassesTestMixin, CreateView):
     model = MenuItem
-    form_class = MenuItemCreateForm
-    template_name = 'menus/menuitem_create.html'
+    form_class = MenuItemForm
 
     def dispatch(self, request, *args, **kwargs):
         self.menusection = get_object_or_404(MenuSection,
@@ -84,4 +84,35 @@ class MenuItemDetailView(DetailView):
             menusection__menu__slug=self.kwargs['menu_slug'],
             menusection__slug=self.kwargs['menusection_slug'],
             slug=self.kwargs['menuitem_slug'])
+
+# TODO: test
+class MenuItemUpdateView(UpdateView):
+    model = MenuItem
+    form_class = MenuItemForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.menusection = get_object_or_404(MenuSection,
+                menu__restaurant__slug=self.kwargs['restaurant_slug'],
+                menu__slug=self.kwargs['menu_slug'],
+                slug=self.kwargs['menusection_slug'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menusection'] = self.menusection
+        return context
+
+    def get_initial(self):
+        return {'menusection': self.menusection}
+
+    def get_object(self):
+        return get_object_or_404(MenuItem,
+            menusection__menu__restaurant__slug=self.kwargs['restaurant_slug'],
+            menusection__menu__slug=self.kwargs['menu_slug'],
+            menusection__slug=self.kwargs['menusection_slug'],
+            slug=self.kwargs['menuitem_slug'])
+
+    def test_func(self):
+        return self.request.user in \
+            self.menusection.menu.restaurant.admin_users.all()
 

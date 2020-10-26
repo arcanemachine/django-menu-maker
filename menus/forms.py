@@ -12,7 +12,7 @@ class MenuSectionCreateForm(ModelForm):
         fields = ['menu', 'name']
         widgets = {'menu': forms.HiddenInput()}
 
-class MenuItemCreateForm(ModelForm):
+class MenuItemForm(ModelForm):
 
     class Meta:
         model = MenuItem

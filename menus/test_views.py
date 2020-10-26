@@ -7,7 +7,7 @@ from inspect import getfullargspec
 from urllib.parse import urlparse
 
 from . import views
-from .models import Menu, MenuSection
+from .models import Menu, MenuSection, MenuItem
 from restaurants.models import Restaurant
 
 class MenusRootViewTest(TestCase):
@@ -459,6 +459,235 @@ class MenuSectionDetailViewTest(TestCase):
                 })
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 404)
+
+class MenuItemCreateViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(username='test_user')
+        cls.test_user.set_password('password')
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = \
+            get_user_model().objects.create(username='restaurant_admin_user')
+        cls.restaurant_admin_user.set_password('password')
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+        # create test menu
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+
+        # create test menusection
+        cls.test_menusection = \
+            cls.test_menu.menusection_set.create(name='Test Menu Section')
+
+    def setUp(self):
+
+        # login as authorized user
+        self.client.login(
+            username='restaurant_admin_user', password='password')
+
+        self.current_test_url = reverse('menus:menuitem_create',
+            kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                'menusection_slug': self.test_menusection.slug,
+                })
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = self.response.content.decode('utf-8')
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_name(self):
+        self.assertEqual(
+            self.view.__class__.__name__, 'MenuItemCreateView')
+
+    def test_view_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'CreateView')
+
+    def test_view_mixins(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+
+    def test_view_model(self):
+        self.assertEqual(self.context['view'].model.__name__, 'MenuItem')
+
+    def test_view_form_class(self):
+        self.assertEqual(self.context['view'].form_class.__name__,
+            'MenuItemCreateForm')
+
+    def test_view_template_name(self):
+        self.assertEqual(self.context['view'].template_name,
+            'menus/menuitem_create.html')
+
+
+    ### METHODS ###
+
+    # dispatch()
+    def test_view_method_dispatch_self_has_menu(self):
+        self.assertEqual(self.view.menusection, self.test_menusection)
+
+    # get_context_data()
+    def test_view_context_has_menu(self):
+        self.assertTrue('menusection' in self.context)
+
+    def test_view_context_has_correct_menu(self):
+        self.assertEqual(self.context['menusection'], self.test_menusection)
+
+    # get_initial()
+    def test_view_get_initial_returns_menu(self):
+        self.assertEqual(self.view.get_initial(),
+            {'menusection': self.test_menusection})
+
+    # request.GET
+    def test_view_get_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # request by unauthenticated user should redirect to login
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+    def test_view_get_method_authenticated_but_unauthorized_user(self):
+        self.client.login(username='test_user', password='password')
+
+        # request by unauthorized user should return 403
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.assertEqual(self.response.status_code, 403)
+
+    def test_view_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertIn(
+            "Please enter the information for your new menu item:",
+            self.html)
+
+    # request.POST
+    def test_view_post_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # get menusection count before attempting to post data
+        old_menuitem_count = MenuItem.objects.count()
+
+        # attempt to create new menusection via POST
+        self.response = self.client.post(self.current_test_url,
+                kwargs = {
+                    'menusection': self.test_menusection.pk,
+                    'name': 'Test Menu Item',
+                    'description': 'Test Menu Item Description',
+                    })
+
+        # user is redirected to login page
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+        # menusection count should be unchanged
+        new_menuitem_count = MenuItem.objects.count()
+        self.assertEqual(old_menuitem_count, new_menuitem_count)
+
+    def test_view_post_method_authenticated_but_unauthorized_user(self):
+        self.client.login(username='test_user', password='password')
+
+        # get menusection count before attempting to post data
+        old_menuitem_count = MenuItem.objects.count()
+
+        # attempt to create new menusection via POST
+        self.response = self.client.post(self.current_test_url,
+                kwargs = {
+                    'menusection': self.test_menusection.pk,
+                    'name': 'Test Menu Item',
+                    'description': 'Test Menu Item Description',
+                    })
+
+        # menusection count should be unchanged
+        new_menuitem_count = MenuItem.objects.count()
+        self.assertEqual(old_menuitem_count, new_menuitem_count)
+
+    def test_view_post_method_authorized_user(self):
+
+        new_menuitem_name = 'Test Menu Item'
+        new_menuitem_slug = slugify(new_menuitem_name)
+
+        # get menusection count before attempting to post data
+        old_menuitem_count = MenuItem.objects.count()
+
+        # create new menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+                    'menusection': self.test_menusection.pk,
+                    'name': 'Test Menu Item',
+                    'description': 'Test Menu Item Description',
+                    })
+        self.html = self.response.content.decode('utf-8')
+
+        # menusection object count increased by 1
+        new_menuitem_count = MenuItem.objects.count()
+        self.assertEqual(old_menuitem_count + 1, new_menuitem_count)
+
+        # user is redirected to new menusection_detail
+        new_menuitem = MenuItem.objects.get(
+                menusection=self.test_menusection,
+                slug=new_menuitem_slug)
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.url, reverse(
+            'menus:menuitem_detail', kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                'menusection_slug': self.test_menusection.slug,
+                'menuitem_slug': new_menuitem_slug,
+            }))
+
+        # page loads successfully and uses proper template and expected text
+        self.response = self.client.get(self.response.url)
+        self.html = self.response.content.decode('utf-8')
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'menus/menuitem_detail.html')
+        self.assertIn(f"{new_menuitem.description}", self.html)
+
+
+    ### VALIDATION ###
+
+    def test_view_validation_post_method_duplicate_post_attempt_by_authorized_user_should_fail(self):
+
+        # get menusection count before attempting to post data
+        old_menuitem_count = MenuItem.objects.count()
+
+        # create new menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+                    'menusection': self.test_menusection.pk,
+                    'name': 'Test Menu Item',
+                    'description': 'Test Menu Item Description',
+                    })
+
+        # menusection object count increased by 1
+        new_menuitem_count = MenuItem.objects.count()
+        self.assertEqual(old_menuitem_count + 1, new_menuitem_count)
+
+        # get menusection count before attempting to post data
+        old_menuitem_count = MenuItem.objects.count()
+
+        # attempt to create duplicate menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+                    'menusection': self.test_menusection.pk,
+                    'name': 'Test Menu Item',
+                    'description': 'Test Menu Item Description',
+                    })
+        self.html = self.response.content.decode('utf-8')
+        self.assertIn("This name is too similar", self.html)
+
+        # menusection object count has not changed
+        new_menuitem_count = MenuItem.objects.count()
+        self.assertEqual(old_menuitem_count, new_menuitem_count)
 
 class MenuItemDetailViewTest(TestCase):
 

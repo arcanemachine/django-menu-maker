@@ -57,7 +57,7 @@ class MenusRootViewTest(TestCase):
         self.assertEqual(self.response.status_code, 302)
 
         # following the redirect leads to 404 error
-        self.response = self.client.get(self.current_test_url, follow=True)
+        self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 404)
 
 class MenuDetailViewTest(TestCase):

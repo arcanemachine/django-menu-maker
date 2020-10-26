@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
-from .forms import MenuSectionCreateForm
+from .forms import *
 from .models import Menu, MenuSection, MenuItem
 from restaurants.models import Restaurant
 
@@ -50,6 +50,30 @@ class MenuSectionDetailView(DetailView):
             menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menu__slug=self.kwargs['menu_slug'],
             slug=self.kwargs['menusection_slug'])
+
+class MenuItemCreateView(UserPassesTestMixin, CreateView):
+    model = MenuItem
+    form_class = MenuItemCreateForm
+    template_name = 'menus/menuitem_create.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.menusection = get_object_or_404(MenuSection,
+                menu__restaurant__slug=self.kwargs['restaurant_slug'],
+                menu__slug=self.kwargs['menu_slug'],
+                slug=self.kwargs['menusection_slug'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menusection'] = self.menusection
+        return context
+
+    def get_initial(self):
+        return {'menusection': self.menusection}
+
+    def test_func(self):
+        return self.request.user in \
+            self.menusection.menu.restaurant.admin_users.all()
 
 class MenuItemDetailView(DetailView):
     model = MenuItem

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Menu Item - {{ menusection.menu.name }} - {{ menusection.menu.restaurant.name }}{% endblock %}
+
+{% block body_title %}{{ menusection.menu.restaurant.name }} - {{ menusection.menu.name }}{% endblock %}
+{% block body_subheading %}{{ menusection.name }}: Create Menu Item{% endblock %}
+
+{% block content %}
+
+<p>Please enter the information for your new menu item:</p>
+
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<div id="bottom-links">
+      <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Return to Section: {{ menusection.name }}</a></p>
+</div>
+
+{% endblock content %}

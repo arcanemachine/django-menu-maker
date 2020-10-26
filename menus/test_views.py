@@ -455,3 +455,86 @@ class MenuSectionDetailViewTest(TestCase):
                 })
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 404)
+
+class MenuItemDetailViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(username='test_user')
+        cls.test_user.set_password('password')
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = \
+            get_user_model().objects.create(username='restaurant_admin_user')
+        cls.restaurant_admin_user.set_password('password')
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+        # create test menu
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+
+        # create test menusection
+        cls.test_menusection = \
+            cls.test_menu.menusection_set.create(name='Test Menu Section')
+
+        # create test menuitem
+        cls.test_menuitem = \
+            cls.test_menusection.menuitem_set.create(name='Test Menu Item')
+
+    def setUp(self):
+
+        # login as authorized user
+        self.client.login(
+            username='restaurant_admin_user', password='password')
+
+        self.current_test_url = reverse('menus:menuitem_detail',
+            kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                'menusection_slug': self.test_menusection.slug,
+                'menuitem_slug': self.test_menuitem.slug,
+                })
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = self.response.content.decode('utf-8')
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_name(self):
+        self.assertEqual(
+            self.view.__class__.__name__, 'MenuItemDetailView')
+
+    def test_view_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'DetailView')
+
+    def test_view_model(self):
+        self.assertEqual(self.context['view'].model.__name__, 'MenuItem')
+
+    # get_object()
+    def test_view_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.test_menuitem)
+
+    # request.GET
+    def test_view_get_method_unauthenticated_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    # bad kwargs
+    def test_view_bad_kwargs_menuitem_slug(self):
+        self.current_test_url = reverse('menus:menuitem_detail',
+            kwargs = {
+                'restaurant_slug': self.test_restaurant.slug,
+                'menu_slug': self.test_menu.slug,
+                'menusection_slug': self.test_menusection.slug,
+                'menuitem_slug': 'bad-menuitem-slug',
+                })
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 404)
+

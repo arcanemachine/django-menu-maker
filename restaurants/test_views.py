@@ -71,7 +71,7 @@ class RestaurantDetailViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, "DetailView")
 
-    def test_view_model(self):
+    def test_view_model_name(self):
         self.assertEqual(self.view.model.__name__, 'Restaurant')
 
     # request.GET

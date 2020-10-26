@@ -1046,3 +1046,57 @@ class MenuItemUpdateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.assertIn(f"{self.test_menuitem.name}", self.html)
         self.assertIn(f"{self.test_menuitem.description}", self.html)
+
+    def test_view_validation_postmethod_duplicate_post_attempt_by_authorized_user_should_fail(self):
+
+        self.test_menuitem_2 = self.test_menusection.menuitem_set.create(
+                name='New Test Menu Item',
+                description='New Test Menu Description')
+
+        old_menuitem_name = self.test_menuitem.name
+        old_menuitem_description = self.test_menuitem.description
+        old_menuitem_slug = self.test_menuitem.slug
+
+        new_menuitem_name = self.test_menuitem_2.name
+        new_menuitem_description = self.test_menuitem_2.description
+        new_menuitem_slug = self.test_menuitem_2.slug
+
+        # get menuitem count before attempting to post data
+        old_menuitem_count = MenuItem.objects.count()
+
+        # update self.test_menuitem via POST
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': self.test_menuitem.menusection.pk,
+            'name': new_menuitem_name,
+            'description': new_menuitem_description,
+            })
+
+        # returns menus:menuitem_update template with error message
+        self.html = self.response.content.decode('utf-8')
+        self.assertIn("This name is too similar", self.html)
+
+        # self.test_menuitem still has original values
+        self.test_menuitem.refresh_from_db()
+        self.assertEqual(self.test_menuitem.name, old_menuitem_name)
+        self.assertEqual(
+            self.test_menuitem.description, old_menuitem_description)
+        self.assertEqual(self.test_menuitem.slug, old_menuitem_slug)
+
+    # bad kwargs
+    def test_view_bad_kwargs(self):
+        for i in range(3):
+            self.current_test_url = reverse('menus:menuitem_update',
+                kwargs = {
+                    'restaurant_slug': self.test_restaurant.slug \
+                        if i != 0 else 'bad-restaurant-slug',
+                    'menu_slug': self.test_menu.slug \
+                        if i != 1 else 'bad-menu-slug',
+                    'menusection_slug': self.test_menusection.slug \
+                        if i != 2 else 'bad-menusection-slug',
+                    'menuitem_slug': self.test_menuitem.slug \
+                        if i != 3 else 'bad-menuitem-slug',
+                    })
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
+
+

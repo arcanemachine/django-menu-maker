@@ -724,6 +724,8 @@ class MenuItemCreateViewTest(TestCase):
             'name': 'Test Menu Item',
             'description': 'Test Menu Item Description',
             })
+
+        # returns menusection_create with error message
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 

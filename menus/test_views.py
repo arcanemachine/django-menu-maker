@@ -514,7 +514,6 @@ class MenuItemDetailViewTest(TestCase):
 
     # get_object()
     def test_view_method_get_object(self):
-        breakpoint()
         self.assertEqual(self.view.get_object(), self.test_menuitem)
 
     # request.GET

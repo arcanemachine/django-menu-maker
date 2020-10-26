@@ -323,6 +323,9 @@ class MenuSectionCreateViewTest(TestCase):
                 'name': 'Test Menu Section',
                 })
 
+        # user should receive HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
         # menusection count should be unchanged
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
@@ -646,6 +649,10 @@ class MenuItemCreateViewTest(TestCase):
         # menusection count should be unchanged
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
+
+        # user should receive HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
 
     def test_view_post_method_authorized_user(self):
 

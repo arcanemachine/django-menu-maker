@@ -18,10 +18,10 @@ class MenuSectionCreateFormTest(SimpleTestCase):
         self.assertTrue(isinstance(self.form._meta.widgets['menu'],
             widgets.HiddenInput))
 
-class MenuItemCreateFormTest(SimpleTestCase):
+class MenuItemFormTest(SimpleTestCase):
 
     def setUp(self):
-        self.form = MenuItemCreateForm
+        self.form = MenuItemForm
 
     def test_meta_model_name(self):
         self.assertEqual(self.form._meta.model.__name__, 'MenuItem')

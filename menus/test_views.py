@@ -725,7 +725,7 @@ class MenuItemCreateViewTest(TestCase):
             'description': 'Test Menu Item Description',
             })
 
-        # returns menusection_create with error message
+        # returns template for menus:menusection_create, with error message
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
@@ -1074,7 +1074,7 @@ class MenuItemUpdateViewTest(TestCase):
             'description': new_menuitem_description,
             })
 
-        # returns menus:menuitem_update template with error message
+        # returns template for menus:menuitem_update, with error message
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 

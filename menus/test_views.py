@@ -985,8 +985,8 @@ class MenuItemUpdateViewTest(TestCase):
         # attempt to update self.test_menuitem via POST
         self.response = self.client.post(self.current_test_url, {
             'menusection': self.test_menuitem.menusection.pk,
-            'name': 'Test Menu Item',
-            'description': 'Test Menu Item Description',
+            'name': new_menuitem_name,
+            'description': new_menuitem_description,
             })
 
         # self.test_menuitem is unchanged

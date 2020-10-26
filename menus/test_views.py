@@ -439,6 +439,16 @@ class MenuSectionDetailViewTest(TestCase):
     def test_view_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_view_non_restaurant_admin_user_cannot_view_link_to_add_menuitem(self):
+        self.client.logout()
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = self.response.content.decode('utf-8')
+        self.assertNotIn('Add New Menu Item', self.html)
+
+    def test_view_restaurant_admin_user_can_view_link_to_add_menuitem(self):
+        self.assertIn('Add New Menu Item', self.html)
+
     # bad kwargs
     def test_view_bad_kwargs_menusection_slug(self):
         self.current_test_url = reverse('menus:menusection_detail',

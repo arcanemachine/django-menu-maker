@@ -65,6 +65,7 @@ class MenuItemCreateView(UserPassesTestMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['action_verb'] = 'Create'
         context['menusection'] = self.menusection
         return context
 
@@ -99,6 +100,7 @@ class MenuItemUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['action_verb'] = 'Update'
         context['menusection'] = self.menusection
         return context
 

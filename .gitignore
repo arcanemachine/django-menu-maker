@@ -9,6 +9,7 @@ gunicorn.sh
 ## local scripts
 makenmigrate
 runserver
+runserver_insecure.sh
 shell
 
 # Django #

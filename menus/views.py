@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
 from .forms import MenuSectionCreateForm, MenuItemForm
@@ -124,3 +124,21 @@ class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.request.user in \
             self.get_object().menusection.menu.restaurant.admin_users.all()
+
+
+class MenuItemDeleteView(DeleteView):
+    model = MenuItem
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_object(self):
+        return get_object_or_404(
+            MenuItem,
+            menusection__menu__restaurant__slug=self.kwargs['restaurant_slug'],
+            menusection__menu__slug=self.kwargs['menu_slug'],
+            menusection__slug=self.kwargs['menusection_slug'],
+            slug=self.kwargs['menuitem_slug'])
+
+    def get_success_url(self):
+        return self.object.menusection.get_absolute_url()

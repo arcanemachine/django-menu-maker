@@ -33,4 +33,9 @@ urlpatterns = [
         '<slug:menu_slug>/<slug:menusection_slug>/<slug:menuitem_slug>/edit/',
         views.MenuItemUpdateView.as_view(),
         name='menuitem_update'),
+    path(
+        '<slug:menu_slug>/<slug:menusection_slug>/'
+        '<slug:menuitem_slug>/delete/',
+        views.MenuItemDeleteView.as_view(),
+        name='menuitem_delete'),
 ]

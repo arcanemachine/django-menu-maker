@@ -11,6 +11,7 @@
 <p><strong>Section:</strong> {{ menuitem.menusection.name }}</p>
 
 <br>
+<p><strong>Name:</strong> {{ menuitem.name }}</p>
 <p><strong>Description:</strong> {{ menuitem.description }}</p>
 
 {% if user.is_authenticated and user in menuitem.menusection.menu.restaurant.admin_users.all %}

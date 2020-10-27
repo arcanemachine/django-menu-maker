@@ -2,24 +2,28 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView
 from django.views.generic.edit import UpdateView
 
-from .forms import *
+from .forms import MenuSectionCreateForm, MenuItemForm
 from .models import Menu, MenuSection, MenuItem
-from restaurants.models import Restaurant
+
 
 def menus_root(request, restaurant_slug):
-    return HttpResponseRedirect(reverse('restaurants:restaurant_detail',
-        kwargs = {'restaurant_slug': restaurant_slug}))
+    return HttpResponseRedirect(
+        reverse('restaurants:restaurant_detail', kwargs={
+            'restaurant_slug': restaurant_slug}))
+
 
 class MenuDetailView(DetailView):
     model = Menu
 
     def get_object(self):
-        return get_object_or_404(Menu,
+        return get_object_or_404(
+            Menu,
             restaurant__slug=self.kwargs['restaurant_slug'],
             slug=self.kwargs['menu_slug'])
+
 
 class MenuSectionCreateView(UserPassesTestMixin, CreateView):
     model = MenuSection
@@ -27,9 +31,10 @@ class MenuSectionCreateView(UserPassesTestMixin, CreateView):
     template_name = 'menus/menusection_create.html'
 
     def dispatch(self, request, *args, **kwargs):
-        self.menu = get_object_or_404(Menu,
-                restaurant__slug=self.kwargs['restaurant_slug'],
-                slug=self.kwargs['menu_slug'])
+        self.menu = get_object_or_404(
+            Menu,
+            restaurant__slug=self.kwargs['restaurant_slug'],
+            slug=self.kwargs['menu_slug'])
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -43,24 +48,28 @@ class MenuSectionCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         return self.request.user in self.menu.restaurant.admin_users.all()
 
+
 class MenuSectionDetailView(DetailView):
     model = MenuSection
 
     def get_object(self):
-        return get_object_or_404(MenuSection,
+        return get_object_or_404(
+            MenuSection,
             menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menu__slug=self.kwargs['menu_slug'],
             slug=self.kwargs['menusection_slug'])
+
 
 class MenuItemCreateView(UserPassesTestMixin, CreateView):
     model = MenuItem
     form_class = MenuItemForm
 
     def dispatch(self, request, *args, **kwargs):
-        self.menusection = get_object_or_404(MenuSection,
-                menu__restaurant__slug=self.kwargs['restaurant_slug'],
-                menu__slug=self.kwargs['menu_slug'],
-                slug=self.kwargs['menusection_slug'])
+        self.menusection = get_object_or_404(
+            MenuSection,
+            menu__restaurant__slug=self.kwargs['restaurant_slug'],
+            menu__slug=self.kwargs['menu_slug'],
+            slug=self.kwargs['menusection_slug'])
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -76,15 +85,18 @@ class MenuItemCreateView(UserPassesTestMixin, CreateView):
         return self.request.user in \
             self.menusection.menu.restaurant.admin_users.all()
 
+
 class MenuItemDetailView(DetailView):
     model = MenuItem
 
     def get_object(self):
-        return get_object_or_404(MenuItem,
+        return get_object_or_404(
+            MenuItem,
             menusection__menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menusection__menu__slug=self.kwargs['menu_slug'],
             menusection__slug=self.kwargs['menusection_slug'],
             slug=self.kwargs['menuitem_slug'])
+
 
 class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
     model = MenuItem
@@ -100,7 +112,8 @@ class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
         return {'menusection': self.get_object().menusection}
 
     def get_object(self):
-        return get_object_or_404(MenuItem,
+        return get_object_or_404(
+            MenuItem,
             menusection__menu__restaurant__slug=self.kwargs['restaurant_slug'],
             menusection__menu__slug=self.kwargs['menu_slug'],
             menusection__slug=self.kwargs['menusection_slug'],
@@ -109,4 +122,3 @@ class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.request.user in \
             self.get_object().menusection.menu.restaurant.admin_users.all()
-

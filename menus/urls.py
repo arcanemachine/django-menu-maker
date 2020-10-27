@@ -5,25 +5,32 @@ from . import views
 app_name = 'menus'
 
 urlpatterns = [
-    path('',
+    path(
+        '',
         views.menus_root,
         name='menus_root'),
-    path('<slug:menu_slug>/',
+    path(
+        '<slug:menu_slug>/',
         views.MenuDetailView.as_view(),
         name='menu_detail'),
-    path('<slug:menu_slug>/new-section/',
+    path(
+        '<slug:menu_slug>/new-section/',
         views.MenuSectionCreateView.as_view(),
         name='menusection_create'),
-    path('<slug:menu_slug>/<slug:menusection_slug>/',
+    path(
+        '<slug:menu_slug>/<slug:menusection_slug>/',
         views.MenuSectionDetailView.as_view(),
         name='menusection_detail'),
-    path('<slug:menu_slug>/<slug:menusection_slug>/new-item/',
+    path(
+        '<slug:menu_slug>/<slug:menusection_slug>/new-item/',
         views.MenuItemCreateView.as_view(),
         name='menuitem_create'),
-    path('<slug:menu_slug>/<slug:menusection_slug>/<slug:menuitem_slug>/',
+    path(
+        '<slug:menu_slug>/<slug:menusection_slug>/<slug:menuitem_slug>/',
         views.MenuItemDetailView.as_view(),
         name='menuitem_detail'),
-    path('<slug:menu_slug>/<slug:menusection_slug>/<slug:menuitem_slug>/edit/',
+    path(
+        '<slug:menu_slug>/<slug:menusection_slug>/<slug:menuitem_slug>/edit/',
         views.MenuItemUpdateView.as_view(),
         name='menuitem_update'),
 ]

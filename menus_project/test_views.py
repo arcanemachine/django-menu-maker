@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
+
 class RootViewTest(TestCase):
 
     def setUp(self):

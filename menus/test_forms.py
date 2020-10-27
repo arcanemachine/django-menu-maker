@@ -1,7 +1,8 @@
 from django.forms import widgets
 from django.test import SimpleTestCase
 
-from menus.forms import *
+from menus.forms import MenuSectionCreateForm, MenuItemForm
+
 
 class MenuSectionCreateFormTest(SimpleTestCase):
 
@@ -15,8 +16,11 @@ class MenuSectionCreateFormTest(SimpleTestCase):
         self.assertEqual(self.form._meta.fields, ['menu', 'name'])
 
     def test_meta_widgets(self):
-        self.assertTrue(isinstance(self.form._meta.widgets['menu'],
-            widgets.HiddenInput))
+        self.assertTrue(
+            isinstance(
+                self.form._meta.widgets['menu'], widgets.HiddenInput)
+            )
+
 
 class MenuItemFormTest(SimpleTestCase):
 
@@ -27,10 +31,11 @@ class MenuItemFormTest(SimpleTestCase):
         self.assertEqual(self.form._meta.model.__name__, 'MenuItem')
 
     def test_meta_fields(self):
-        self.assertEqual(self.form._meta.fields,
-            ['menusection', 'name', 'description'])
+        self.assertEqual(
+            self.form._meta.fields, ['menusection', 'name', 'description'])
 
     def test_meta_widgets(self):
-        self.assertTrue(isinstance(self.form._meta.widgets['menusection'],
-            widgets.HiddenInput))
-
+        self.assertTrue(
+            isinstance(
+                self.form._meta.widgets['menusection'], widgets.HiddenInput)
+            )

@@ -5,8 +5,9 @@ from django.urls import reverse
 
 from .models import Restaurant
 
+
 class RestaurantModelTest(TestCase):
-    
+
     @classmethod
     def setUpTestData(cls):
 
@@ -34,7 +35,7 @@ class RestaurantModelTest(TestCase):
             set(self.test_restaurant.admin_users.all()),
             set(expected_admin_users))
 
-    ### FIELDS ###
+    # FIELDS #
 
     # name
     def test_field_name_verbose_name(self):
@@ -94,25 +95,23 @@ class RestaurantModelTest(TestCase):
             self.test_restaurant._meta.get_field('admin_users').related_model
         self.assertEqual(related_model, get_user_model())
 
-
-    ### VALIDATION ###
+    # VALIDATION #
 
     def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
         with self.assertRaises(ValidationError):
-            invalid_test_restaurant = Restaurant.objects.create(name='all')
+            Restaurant.objects.create(name='all')
 
     def test_validation_do_not_allow_duplicate_restaurant_slugs(self):
         with self.assertRaises(ValidationError):
-            test_restaurant_2 = Restaurant.objects.create(
-                name='Test Restaurant')
+            Restaurant.objects.create(name='Test Restaurant')
 
-    ### METHODS ###
+    # METHODS #
 
     def test_method_str(self):
-        self.assertEqual(self.test_restaurant.__str__(),
-                self.test_restaurant.name)
+        self.assertEqual(
+            self.test_restaurant.__str__(), self.test_restaurant.name)
 
     def test_method_get_absolute_url(self):
-        expected_url = reverse('restaurants:restaurant_detail',
-            kwargs = {'restaurant_slug': self.test_restaurant.slug})
+        expected_url = reverse('restaurants:restaurant_detail', kwargs={
+            'restaurant_slug': self.test_restaurant.slug})
         self.assertEqual(self.test_restaurant.get_absolute_url(), expected_url)

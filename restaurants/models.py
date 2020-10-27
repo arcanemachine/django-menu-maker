@@ -6,6 +6,7 @@ from django.utils.text import slugify
 
 from menus_project.constants import RESERVED_KEYWORDS
 
+
 class Restaurant(models.Model):
 
     name = models.CharField(max_length=128, default=None, blank=False)
@@ -20,20 +21,20 @@ class Restaurant(models.Model):
         # do not allow slugs to be reserved keywords
         if self.slug in RESERVED_KEYWORDS:
             raise ValidationError(
-                "This restaurant name is reserved and cannot be used. "\
+                "This restaurant name is reserved and cannot be used. "
                 "Please choose another name.")
 
         # do not allow duplicate restaurant slugs
-        existing_restaurants_with_same_slug = \
+        restaurants_with_same_slug = \
             Restaurant.objects.filter(slug=slugify(self.name))
-        if existing_restaurants_with_same_slug.exists() \
-            and existing_restaurants_with_same_slug.first() != self \
-            and existing_restaurants_with_same_slug.last() != self:
+        if restaurants_with_same_slug.exists() \
+            and restaurants_with_same_slug.first() != self \
+                and restaurants_with_same_slug.last() != self:
             raise ValidationError("This restaurant name is already in use.")
 
     def get_absolute_url(self):
-        return reverse('restaurants:restaurant_detail',
-            kwargs={'restaurant_slug': self.slug })
+        return reverse('restaurants:restaurant_detail', kwargs={
+            'restaurant_slug': self.slug})
 
     def save(self, *args, **kwargs):
         if not self.slug == slugify(self.name):

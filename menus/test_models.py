@@ -6,13 +6,13 @@ from django.urls import reverse
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
+
 class MenuModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
 
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
-
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
     def test_object_name(self):
@@ -28,7 +28,7 @@ class MenuModelTest(TestCase):
         self.assertEqual(self.test_menu.name, expected_name)
         self.assertEqual(self.test_menu.slug, expected_slug)
 
-    ### FIELDS ###
+    # FIELDS #
 
     # restaurant
     def test_field_restaurant_verbose_name(self):
@@ -45,7 +45,7 @@ class MenuModelTest(TestCase):
         related_model = \
             self.test_menu._meta.get_field('restaurant').related_model.__name__
         self.assertEqual(related_model, 'Restaurant')
-    
+
     def test_field_restaurant_on_delete(self):
         on_delete = \
             self.test_menu._meta.get_field('restaurant').remote_field.on_delete
@@ -121,29 +121,27 @@ class MenuModelTest(TestCase):
         default_choice = self.test_menu._meta.get_field('theme').default
         self.assertEqual(default_choice, 'default')
 
-
-    ### META ###
+    # META #
 
     def test_meta_ordering(self):
         ordering = self.test_menu._meta.ordering
         self.assertEqual(ordering, ['name'])
 
+    # VALIDATION #
 
-    ### VALIDATION ###
-
-    def test_validation_restaurant_cannot_have_two_menus_with_duplicate_slug(self):
+    def test_validation_fail_restaurant_makes_two_menus_with_same_slug(self):
         with self.assertRaises(ValidationError):
             self.test_restaurant.menu_set.create(name='Test Menu')
         with self.assertRaises(ValidationError):
             self.test_restaurant.menu_set.create(name='Test--Menu')
 
-    def test_validation_two_different_restaurants_can_have_same_menu_slug(self):
+    def test_validation_pass_two_restaurants_with_same_menu_slug(self):
         test_restaurant_2 = \
             Restaurant.objects.create(name="Test Restaurant 2")
-        test_menu_2 = test_restaurant_2.menu_set.create(name='Test Menu')
+        test_restaurant_2.menu_set.create(name='Test Menu')
         self.assertEqual(Menu.objects.count(), 2)
 
-    ### METHODS ###
+    # METHODS #
 
     # __str__()
     def test_method_str_returns_restaurant_name_and_menu_name(self):
@@ -152,10 +150,11 @@ class MenuModelTest(TestCase):
 
     # get_absolute_url()
     def test_method_get_absolute_url(self):
-        expected_url = reverse('menus:menu_detail', kwargs = {
+        expected_url = reverse('menus:menu_detail', kwargs={
             'restaurant_slug': self.test_menu.restaurant.slug,
-            'menu_slug': self.test_menu.slug })
+            'menu_slug': self.test_menu.slug})
         self.assertEqual(self.test_menu.get_absolute_url(), expected_url)
+
 
 class MenuSectionModelTest(TestCase):
 
@@ -177,11 +176,11 @@ class MenuSectionModelTest(TestCase):
         expected_name = 'Test Menu Section'
         expected_slug = 'test-menu-section'
 
-        self.assertEqual(self.test_menusection.menu, self.test_menu)
+        self.assertEqual(self.test_menusection.menu, expected_menu)
         self.assertEqual(self.test_menusection.name, expected_name)
         self.assertEqual(self.test_menusection.slug, expected_slug)
 
-    ### FIELDS ###
+    # FIELDS #
 
     # menu
     def test_field_menu_verbose_name(self):
@@ -242,34 +241,35 @@ class MenuSectionModelTest(TestCase):
         max_length = self.test_menusection._meta.get_field('slug').max_length
         self.assertEqual(max_length, 128)
 
-    ### VALIDATION ###
+    # VALIDATION #
 
-    def test_validation_menu_cannot_have_two_menusections_with_same_name(self):
+    def test_validation_fail_two_menusections_with_same_slug(self):
         with self.assertRaises(ValidationError):
             self.test_menu.menusection_set.create(
                 name=self.test_menusection.name)
 
-    def test_validation_two_different_menus_can_have_same_menusection_slug(self):
+    def test_validation_pass_two_menus_with_same_menusection_slug(self):
         test_menu_2 = self.test_restaurant.menu_set.create(name='Test Menu 2')
         test_menu_2.menusection_set.create(name=self.test_menusection.name)
         self.assertEqual(MenuSection.objects.count(), 2)
 
-    ### METHODS ###
+    # METHODS #
 
-    def test_method_str_returns_restaurant_name_and_menu_name_and_menusection_name(self):
-        self.assertEqual(str(self.test_menusection),
-            f"{self.test_menusection.menu.restaurant.name}: "\
-                f"{self.test_menusection.menu.name} - "\
-                    f"{self.test_menusection.name}")
+    def test_method_str(self):
+        self.assertEqual(
+            str(self.test_menusection),
+            f"{self.test_menusection.menu.restaurant.name}: "
+            f"{self.test_menusection.menu.name} - "
+            f"{self.test_menusection.name}")
 
     def test_method_get_absolute_url(self):
-        expected_url = reverse('menus:menusection_detail', kwargs = {
+        expected_url = reverse('menus:menusection_detail', kwargs={
             'restaurant_slug': self.test_menusection.menu.restaurant.slug,
             'menu_slug': self.test_menusection.menu.slug,
-            'menusection_slug': self.test_menusection.slug,
-            })
+            'menusection_slug': self.test_menusection.slug})
         self.assertEqual(
             self.test_menusection.get_absolute_url(), expected_url)
+
 
 class MenuItemModelTest(TestCase):
 
@@ -292,11 +292,11 @@ class MenuItemModelTest(TestCase):
         expected_name = 'Test Menu Item'
         expected_slug = 'test-menu-item'
 
-        self.assertEqual(self.test_menuitem.menusection, self.test_menusection)
+        self.assertEqual(self.test_menuitem.menusection, expected_menusection)
         self.assertEqual(self.test_menuitem.name, expected_name)
         self.assertEqual(self.test_menuitem.slug, expected_slug)
 
-    ### FIELDS ###
+    # FIELDS #
 
     # menu
     def test_field_menusection_verbose_name(self):
@@ -357,36 +357,35 @@ class MenuItemModelTest(TestCase):
         max_length = self.test_menuitem._meta.get_field('slug').max_length
         self.assertEqual(max_length, 128)
 
-    ### VALIDATION ###
+    # VALIDATION #
 
-    def test_validation_menusection_cannot_have_two_menuitems_with_same_name(self):
+    def test_validation_fail_two_menuitems_with_same_slug(self):
         with self.assertRaises(ValidationError):
             self.test_menusection.menuitem_set.create(
                 name=self.test_menuitem.name)
 
-    def test_validation_two_different_menusections_can_have_same_menuitem_slug(self):
+    def test_validation_pass_two_menusections_with_same_menuitem_slug(self):
         test_menusection_2 = self.test_menu.menusection_set.create(
             name='Test Menu Section 2')
         test_menusection_2.menuitem_set.create(name=self.test_menuitem.name)
         self.assertEqual(MenuItem.objects.count(), 2)
 
-    ### METHODS ###
+    # METHODS #
 
     def test_method_str(self):
-        self.assertEqual(str(self.test_menuitem),
-            f"{self.test_menuitem.menusection.menu.restaurant.name}: "\
-            f"{self.test_menuitem.menusection.menu.name} - "\
-            f"{self.test_menuitem.menusection.name} - "\
+        self.assertEqual(
+            str(self.test_menuitem),
+            f"{self.test_menuitem.menusection.menu.restaurant.name}: "
+            f"{self.test_menuitem.menusection.menu.name} - "
+            f"{self.test_menuitem.menusection.name} - "
             f"{self.test_menuitem.name}")
 
     def test_method_get_absolute_url(self):
-        expected_url = reverse('menus:menuitem_detail', kwargs = {
-            'restaurant_slug': \
+        expected_url = reverse('menus:menuitem_detail', kwargs={
+            'restaurant_slug':
                 self.test_menuitem.menusection.menu.restaurant.slug,
             'menu_slug': self.test_menuitem.menusection.menu.slug,
             'menusection_slug': self.test_menuitem.menusection.slug,
-            'menuitem_slug': self.test_menuitem.slug,
-            })
+            'menuitem_slug': self.test_menuitem.slug})
         self.assertEqual(
             self.test_menuitem.get_absolute_url(), expected_url)
-

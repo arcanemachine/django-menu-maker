@@ -26,7 +26,11 @@ django.contrib.auth views:
 
 """
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
+
+import keys
 
 from . import views
 
@@ -37,3 +41,6 @@ urlpatterns = [
     path('restaurant/', include('restaurants.urls')),
     path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
 ]
+
+if keys.SERVER_NAME == 'dev':
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

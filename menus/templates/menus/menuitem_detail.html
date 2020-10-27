@@ -13,6 +13,7 @@
 <br>
 <p><strong>Name:</strong> {{ menuitem.name }}</p>
 <p><strong>Description:</strong> {{ menuitem.description }}</p>
+<br>
 
 {% if user.is_authenticated and user in menuitem.menusection.menu.restaurant.admin_users.all %}
 <p><a href="{% url 'menus:menuitem_update' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Update This Item</p>

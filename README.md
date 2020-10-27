@@ -1,5 +1,7 @@
 # Menu Maker
 
+![Coverage Badge](/assets/img/coverage.svg "Coverage Badge")
+
 This project allows restaurant owners to register their restaurant and create a customized menu, allowing customers to easily view the restaurant's offerings from a desktop or mobile device.
 
 Menu Maker is a project that showcases my understanding of best practices using the following technologies:

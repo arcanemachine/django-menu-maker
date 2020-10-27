@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -128,6 +129,12 @@ class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
 
 class MenuItemDeleteView(DeleteView):
     model = MenuItem
+    success_message = "'%(name)s' has been deleted from the menu."
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        messages.success(self.request, self.success_message % obj.__dict__)
+        return super().delete(request, *args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)

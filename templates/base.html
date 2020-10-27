@@ -26,9 +26,11 @@
     <h2 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h2>
 
       {% if messages %}
+    <div class="message-box">
         {% for message in messages %}
       <div class="message {% if message.tags %}{{ message.tags }}"{% endif %} style="margin-bottom: 1.5em;"><strong>{{ message|safe }}</strong></div>
         {% endfor %}
+    </div>
       {% endif %}
 
     <div id="content">

@@ -372,7 +372,7 @@ class MenuItemModelTest(TestCase):
 
     ### METHODS ###
 
-    def test_method_str_returns_name_of_restaurant_and_menu_and_menusection_and_menuitem(self):
+    def test_method_str(self):
         self.assertEqual(str(self.test_menuitem),
             f"{self.test_menuitem.menusection.menu.restaurant.name}: "\
             f"{self.test_menuitem.menusection.menu.name} - "\

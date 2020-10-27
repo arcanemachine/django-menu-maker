@@ -108,8 +108,9 @@ class RestaurantModelTest(TestCase):
 
     ### METHODS ###
 
-    def test_method___str___returns_restaurant_name(self):
-        self.assertEqual(str(self.test_restaurant), self.test_restaurant.name)
+    def test_method_str(self):
+        self.assertEqual(self.test_restaurant.__str__(),
+                self.test_restaurant.name)
 
     def test_method_get_absolute_url(self):
         expected_url = reverse('restaurants:restaurant_detail',

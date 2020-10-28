@@ -304,7 +304,7 @@ class MenuSectionCreateViewTest(TestCase):
             'menu': self.test_menu.pk,
             'name': 'Test Menu Section'})
 
-        # user should receive HTTP 403
+        # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
 
         # menusection count should be unchanged
@@ -614,12 +614,12 @@ class MenuItemCreateViewTest(TestCase):
                 'name': 'Test Menu Item',
                 'description': 'Test Menu Item Description'})
 
+        # user receives HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
         # menusection count should be unchanged
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
-
-        # user should receive HTTP 403
-        self.assertEqual(self.response.status_code, 403)
 
     def test_post_method_authorized_user(self):
 
@@ -938,14 +938,14 @@ class MenuItemUpdateViewTest(TestCase):
                 'name': new_menuitem_name,
                 'description': new_menuitem_description})
 
+        # user receives HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
         # self.test_menuitem is unchanged
         self.test_menuitem.refresh_from_db()
         self.assertEqual(self.test_menuitem.name, old_menuitem_name)
         self.assertEqual(
             self.test_menuitem.description, old_menuitem_description)
-
-        # user should receive HTTP 403
-        self.assertEqual(self.response.status_code, 403)
 
     def test_post_method_authorized_user(self):
 

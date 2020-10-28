@@ -325,10 +325,6 @@ class MenuSectionCreateViewTest(TestCase):
             'name': new_menusection_name})
         self.html = self.response.content.decode('utf-8')
 
-        # menusection object count increased by 1
-        new_menusection_count = MenuSection.objects.count()
-        self.assertEqual(old_menusection_count + 1, new_menusection_count)
-
         # user is redirected to new menusection_detail
         new_menusection = MenuSection.objects.get(
             menu=self.test_menu,
@@ -347,20 +343,15 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn("This section has no items.", self.html)
 
-    def test_validation_post_method_duplicate_menusection(self):
-
-        # get menusection count before attempting to post data
-        old_menusection_count = MenuSection.objects.count()
-
-        # create new menusection via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menu': self.test_menu.pk,
-                'name': 'Test Menu Section'})
-
         # menusection object count increased by 1
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count + 1, new_menusection_count)
+
+    def test_validation_post_method_duplicate_menusection(self):
+
+        original_menusection = MenuSection.objects.create(
+                menu=self.test_menu,
+                name='Test Menu Section')
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
@@ -368,8 +359,8 @@ class MenuSectionCreateViewTest(TestCase):
         # attempt to create duplicate menusection via POST
         self.response = self.client.post(
             self.current_test_url, {
-                'menu': self.test_menu.pk,
-                'name': 'Test Menu Section'})
+                'menu': original_menusection.menu.pk,
+                'name': original_menusection.name})
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
@@ -646,10 +637,6 @@ class MenuItemCreateViewTest(TestCase):
                 'description': 'Test Menu Item Description'})
         self.html = self.response.content.decode('utf-8')
 
-        # menusection object count increased by 1
-        new_menuitem_count = MenuItem.objects.count()
-        self.assertEqual(old_menuitem_count + 1, new_menuitem_count)
-
         # user is redirected to new menusection_detail
         new_menuitem = MenuItem.objects.get(
             menusection=self.test_menusection,
@@ -670,39 +657,34 @@ class MenuItemCreateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menuitem_detail.html')
         self.assertIn(f"{new_menuitem.description}", self.html)
 
-    # VALIDATION #
-
-    def test_validation_post_method_duplicate_menuitem(self):
-
-        # get menusection count before attempting to post data
-        old_menuitem_count = MenuItem.objects.count()
-
-        # create new menusection via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': self.test_menusection.pk,
-                'name': 'Test Menu Item',
-                'description': 'Test Menu Item Description'})
-
         # menusection object count increased by 1
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count + 1, new_menuitem_count)
 
-        # get menusection count before attempting to post data
+    # VALIDATION #
+
+    def test_validation_post_method_duplicate_menuitem(self):
+
+        original_menuitem = MenuItem.objects.create(
+                menusection=self.test_menusection,
+                name='Test Menu Item',
+                description='Test Menu Description')
+
+        # get menuitem count before attempting to post data
         old_menuitem_count = MenuItem.objects.count()
 
-        # attempt to create duplicate menusection via POST
+        # attempt to create duplicate menuitem via POST
         self.response = self.client.post(
             self.current_test_url, {
-                'menusection': self.test_menusection.pk,
-                'name': 'Test Menu Item',
-                'description': 'Test Menu Item Description'})
+                'menusection': original_menuitem.menusection.pk,
+                'name': original_menuitem.name,
+                'description': original_menuitem.description})
 
-        # returns template for menus:menusection_create, with error message
+        # returns template for menus:menuitem, with error message
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
-        # menusection object count has not changed
+        # menuitem object count has not changed
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
@@ -982,10 +964,6 @@ class MenuItemUpdateViewTest(TestCase):
                 'description': new_menuitem_description})
         self.html = self.response.content.decode('utf-8')
 
-        # menuitem object count has not changed
-        new_menuitem_count = MenuItem.objects.count()
-        self.assertEqual(old_menuitem_count, new_menuitem_count)
-
         # self.test_menuitem has been updated with new values
         self.test_menuitem.refresh_from_db()
         self.assertEqual(self.test_menuitem.name, new_menuitem_name)
@@ -1011,6 +989,10 @@ class MenuItemUpdateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.assertIn(f"{self.test_menuitem.name}", self.html)
         self.assertIn(f"{self.test_menuitem.description}", self.html)
+
+        # menuitem object count has not changed
+        new_menuitem_count = MenuItem.objects.count()
+        self.assertEqual(old_menuitem_count, new_menuitem_count)
 
     def test_validation_duplicate_post_attempt_by_authorized_user(self):
 

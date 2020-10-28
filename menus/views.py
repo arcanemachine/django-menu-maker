@@ -127,7 +127,7 @@ class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
             self.get_object().menusection.menu.restaurant.admin_users.all()
 
 
-class MenuItemDeleteView(DeleteView):
+class MenuItemDeleteView(UserPassesTestMixin, DeleteView):
     model = MenuItem
     success_message = "'%(name)s' has been deleted from the menu."
 
@@ -149,3 +149,7 @@ class MenuItemDeleteView(DeleteView):
 
     def get_success_url(self):
         return self.object.menusection.get_absolute_url()
+
+    def test_func(self):
+        return self.request.user in \
+            self.get_object().menusection.menu.restaurant.admin_users.all()

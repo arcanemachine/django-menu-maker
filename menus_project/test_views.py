@@ -7,7 +7,7 @@ class RootViewTest(TestCase):
     def setUp(self):
         self.response = self.client.get(reverse('root'))
 
-    def test_get(self):
+    def test_get_method_unauthenticated_user(self):
         self.assertTrue(self.response.status_code, 200)
 
     def test_template_name(self):

@@ -1004,7 +1004,7 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menuitem_detail.html')
 
-        # menuitem_detail contains new menuitem values
+        # template contains new menuitem values
         self.html = self.response.content.decode('utf-8')
         self.assertIn(f"{self.test_menuitem.name}", self.html)
         self.assertIn(f"{self.test_menuitem.description}", self.html)

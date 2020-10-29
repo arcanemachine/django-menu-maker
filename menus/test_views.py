@@ -99,10 +99,10 @@ class MenuDetailViewTest(TestCase):
 
     def test_parent_class_name(self):
         self.assertEqual(
-            self.context['view'].__class__.__bases__[0].__name__, 'DetailView')
+            self.view.__class__.__bases__[0].__name__, 'DetailView')
 
     def test_model_name(self):
-        self.assertEqual(self.context['view'].model.__name__, 'Menu')
+        self.assertEqual(self.view.model.__name__, 'Menu')
 
     # request.GET
     def test_get_method_unauthenticated_user(self):
@@ -217,17 +217,17 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_model_name(self):
         self.assertEqual(
-            self.context['view'].model.__name__,
+            self.view.model.__name__,
             'MenuSection')
 
     def test_form_class(self):
         self.assertEqual(
-            self.context['view'].form_class.__name__,
+            self.view.form_class.__name__,
             'MenuSectionCreateForm')
 
     def test_template_name(self):
         self.assertEqual(
-            self.context['view'].template_name,
+            self.view.template_name,
             'menus/menusection_create.html')
 
     # dispatch()
@@ -434,7 +434,7 @@ class MenuSectionDetailViewTest(TestCase):
 
     def test_model_name(self):
         self.assertEqual(
-            self.context['view'].model.__name__, 'MenuSection')
+            self.view.model.__name__, 'MenuSection')
 
     # request.GET
     def test_get_method_unauthenticated_user(self):
@@ -524,11 +524,11 @@ class MenuItemCreateViewTest(TestCase):
 
     def test_model_name(self):
         self.assertEqual(
-            self.context['view'].model.__name__, 'MenuItem')
+            self.view.model.__name__, 'MenuItem')
 
     def test_form_class(self):
         self.assertEqual(
-            self.context['view'].form_class.__name__, 'MenuItemForm')
+            self.view.form_class.__name__, 'MenuItemForm')
 
     # dispatch()
     def test_method_dispatch_self_has_attribute_menusection(self):
@@ -760,7 +760,7 @@ class MenuItemDetailViewTest(TestCase):
             self.view.__class__.__bases__[-1].__name__, 'DetailView')
 
     def test_model_name(self):
-        self.assertEqual(self.context['view'].model.__name__, 'MenuItem')
+        self.assertEqual(self.view.model.__name__, 'MenuItem')
 
     # get_object()
     def test_method_get_object(self):
@@ -849,11 +849,11 @@ class MenuItemUpdateViewTest(TestCase):
 
     def test_model_name(self):
         self.assertEqual(
-            self.context['view'].model.__name__, 'MenuItem')
+            self.view.model.__name__, 'MenuItem')
 
     def test_form_class(self):
         self.assertEqual(
-            self.context['view'].form_class.__name__, 'MenuItemForm')
+            self.view.form_class.__name__, 'MenuItemForm')
 
     # get_context_data()
     def test_context_has_action_verb(self):
@@ -1113,7 +1113,7 @@ class MenuItemDeleteViewTest(TestCase):
     # delete()
     def test_method_delete_contains_proper_success_message(self):
         self.assertEqual(
-            self.context['view'].success_message % self.test_menuitem.__dict__,
+            self.view.success_message % self.test_menuitem.__dict__,
             f"'{self.test_menuitem.name}' has been deleted from the menu.")
 
     # get_object()

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -26,10 +27,12 @@ class MenuDetailView(DetailView):
             slug=self.kwargs['menu_slug'])
 
 
-class MenuSectionCreateView(UserPassesTestMixin, CreateView):
+class MenuSectionCreateView(
+        UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = MenuSection
     form_class = MenuSectionCreateForm
     template_name = 'menus/menusection_create.html'
+    success_message = "Menu Section Created: %(name)s"
 
     def dispatch(self, request, *args, **kwargs):
         self.menu = get_object_or_404(

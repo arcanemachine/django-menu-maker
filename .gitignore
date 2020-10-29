@@ -6,6 +6,7 @@ geckodriver.log
 keys.py
 gunicorn.sh 
 todo
+base_template.html
 
 ## local scripts
 makenmigrate

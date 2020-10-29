@@ -1221,9 +1221,12 @@ class MenuItemDeleteViewTest(TestCase):
     # template
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
+
+    def test_template_contains_proper_confirm_text(self):
         self.assertIn(
             fr"Are you sure you want to delete '{self.test_menuitem.name}' "
-            fr"from '{self.test_menuitem.menusection.name}'?", self.html)
+            f"from the '{self.test_menuitem.menusection.menu.name}: "
+            fr"{self.test_menuitem.menusection.name}' menu?", self.html)
 
     # request.POST
     def test_post_method_unauthenticated_user(self):

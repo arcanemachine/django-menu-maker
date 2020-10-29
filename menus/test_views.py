@@ -104,6 +104,10 @@ class MenuDetailViewTest(TestCase):
     def test_model_name(self):
         self.assertEqual(self.view.model.__name__, 'Menu')
 
+    # get_object()
+    def test_method_get_object(self):
+        self.assertTrue(self.view.get_object(), self.test_menu)
+
     # request.GET
     def test_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
@@ -436,6 +440,10 @@ class MenuSectionDetailViewTest(TestCase):
     def test_model_name(self):
         self.assertEqual(
             self.view.model.__name__, 'MenuSection')
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertTrue(self.view.get_object(), self.test_menu)
 
     # request.GET
     def test_get_method_unauthenticated_user(self):
@@ -872,6 +880,10 @@ class MenuItemUpdateViewTest(TestCase):
     def test_method_get_initial_returns_menusection(self):
         self.assertEqual(
             self.view.get_initial(), {'menusection': self.test_menusection})
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertTrue(self.view.get_object(), self.test_menuitem)
 
     # request.GET
     def test_get_method_unauthenticated_user(self):

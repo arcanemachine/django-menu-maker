@@ -1284,8 +1284,7 @@ class MenuItemDeleteViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn(
-            rf"'{self.test_menuitem.name}' "
-            "has been deleted from the menu.",
+            rf"'{self.test_menuitem.name}' has been deleted from the menu.",
             self.html)
 
         # menusection_detail does not contain test_menuitem.name after refresh

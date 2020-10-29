@@ -1191,8 +1191,8 @@ class MenuItemDeleteViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # menusection_detail contains test_menuitem.name before delete
-        self.response = \
-                self.client.get(self.test_menusection.get_absolute_url())
+        self.response = self.client.get(
+            self.test_menusection.get_absolute_url())
         self.html = self.response.content.decode('utf-8')
         self.assertIn(f"{self.test_menuitem.name}", self.html)
 
@@ -1213,13 +1213,13 @@ class MenuItemDeleteViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn(
-                rf"'{self.test_menuitem.name}' "
-                "has been deleted from the menu.",
-                self.html)
+            rf"'{self.test_menuitem.name}' "
+            "has been deleted from the menu.",
+            self.html)
 
         # menusection_detail does not contain test_menuitem.name after refresh
-        self.response = \
-                self.client.get(self.test_menusection.get_absolute_url())
+        self.response = self.client.get(
+            self.test_menusection.get_absolute_url())
         self.html = self.response.content.decode('utf-8')
         self.assertNotIn(f"{self.test_menuitem.name}", self.html)
 

@@ -876,6 +876,12 @@ class MenuItemUpdateViewTest(TestCase):
     def test_context_has_correct_menusection(self):
         self.assertEqual(self.context['menusection'], self.test_menusection)
 
+    def test_context_has_menuitem(self):
+        self.assertTrue('menuitem' in self.context)
+
+    def test_context_has_correct_menuitem(self):
+        self.assertEqual(self.context['menuitem'], self.test_menuitem)
+
     # get_initial()
     def test_method_get_initial_returns_menusection(self):
         self.assertEqual(

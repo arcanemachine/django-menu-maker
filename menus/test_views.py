@@ -43,8 +43,7 @@ class MenusRootViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertEqual(
             self.response.redirect_chain[0][0],
-            reverse('restaurants:restaurant_detail', kwargs={
-                'restaurant_slug': self.test_restaurant.slug}))
+            self.test_restaurant.get_absolute_url())
 
     # bad kwargs
     def test_get_method_with_bad_kwargs_restaurant_slug(self):
@@ -344,11 +343,7 @@ class MenuSectionCreateViewTest(TestCase):
             menu=self.test_menu,
             slug=new_menusection_slug)
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(self.response.url, reverse(
-            'menus:menusection_detail', kwargs={
-                'restaurant_slug': self.test_restaurant.slug,
-                'menu_slug': self.test_menu.slug,
-                'menusection_slug': new_menusection.slug}))
+        self.assertEqual(self.response.url, new_menusection.get_absolute_url())
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
@@ -1047,11 +1042,8 @@ class MenuItemUpdateViewTest(TestCase):
         # user is redirected to menuitem_detail
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, reverse('menus:menuitem_detail', kwargs={
-                'restaurant_slug': self.test_restaurant.slug,
-                'menu_slug': self.test_menu.slug,
-                'menusection_slug': self.test_menusection.slug,
-                'menuitem_slug': new_menuitem_slug}))
+            self.response.url,
+            self.test_menuitem.get_absolute_url())
 
         # menuitem_detail loads successfully and uses proper template
         self.response = self.client.get(self.response.url)
@@ -1284,10 +1276,7 @@ class MenuItemDeleteViewTest(TestCase):
         # user is redirected to menusection_detail
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, reverse('menus:menusection_detail', kwargs={
-                'restaurant_slug': self.test_restaurant.slug,
-                'menu_slug': self.test_menu.slug,
-                'menusection_slug': self.test_menusection.slug}))
+            self.response.url, self.test_menusection.get_absolute_url())
 
         # menusection_detail loads successfully and contains success message
         self.response = self.client.get(self.response.url)

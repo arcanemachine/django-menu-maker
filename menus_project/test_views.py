@@ -12,3 +12,6 @@ class RootViewTest(TestCase):
 
     def test_template_name(self):
         self.assertTemplateUsed(self.response, 'root.html')
+
+    def test_view_function_name(self):
+        self.assertEqual(self.response.resolver_match.view_name, 'root')

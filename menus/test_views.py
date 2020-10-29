@@ -912,7 +912,8 @@ class MenuItemUpdateViewTest(TestCase):
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertIn(
-            "Please enter the information for your menu item:", self.html)
+            rf"Please enter the information for '{self.test_menuitem.name}'",
+            self.html)
 
     # request.POST
     def test_post_method_unauthenticated_user(self):

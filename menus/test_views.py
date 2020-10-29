@@ -584,6 +584,15 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(
             self.view.get_initial(), {'menusection': self.test_menusection})
 
+    # get_success_url()
+    def test_method_get_success_url(self):
+        self.view.object = self.test_menusection.menuitem_set.create(
+            name='Test Menu Item',
+            description='Test Menu Item Description')
+        self.assertEqual(
+            self.view.get_success_url(),
+            self.view.object.menusection.get_absolute_url())
+
     # request.GET
     def test_get_method_unauthenticated_user(self):
         self.client.logout()
@@ -669,25 +678,20 @@ class MenuItemCreateViewTest(TestCase):
                 'description': 'Test Menu Item Description'})
         self.html = self.response.content.decode('utf-8')
 
-        # user is redirected to new menusection_detail
+        # user is redirected to menusection_detail
         new_menuitem = MenuItem.objects.get(
             menusection=self.test_menusection,
             slug=new_menuitem_slug)
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(
-            self.response.url,
-            reverse('menus:menuitem_detail', kwargs={
-                'restaurant_slug': self.test_restaurant.slug,
-                'menu_slug': self.test_menu.slug,
-                'menusection_slug': self.test_menusection.slug,
-                'menuitem_slug': new_menuitem_slug}))
+        self.assertEqual(self.response.url,
+            new_menuitem.menusection.get_absolute_url())
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
         self.html = self.response.content.decode('utf-8')
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, 'menus/menuitem_detail.html')
-        self.assertIn(f"{new_menuitem.description}", self.html)
+        self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
+        self.assertIn(f"{new_menuitem.name}", self.html)
 
         # template contains success_message
         self.assertIn(

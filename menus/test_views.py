@@ -913,7 +913,10 @@ class MenuItemUpdateViewTest(TestCase):
     # get_initial()
     def test_method_get_initial_returns_menusection(self):
         self.assertEqual(
-            self.view.get_initial(), {'menusection': self.test_menusection})
+            self.view.get_initial(), {
+                'menusection': self.test_menusection,
+                'name': self.test_menuitem.name,
+                'description': self.test_menuitem.description})
 
     # get_object()
     def test_method_get_object(self):
@@ -941,6 +944,14 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertIn(
             rf"Please enter the information for '{self.test_menuitem.name}'",
+            self.html)
+
+    def test_template_form_contains_proper_initial_data_name(self):
+        self.assertIn(rf'value="{self.test_menuitem.name}"', self.html)
+
+    def test_template_form_contains_proper_initial_data_description(self):
+        self.assertIn(
+            rf'value="{self.test_menuitem.description}"',
             self.html)
 
     # request.POST

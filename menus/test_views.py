@@ -216,8 +216,9 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__,
-            'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+        self.assertEqual(
+            self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
     def test_model_name(self):
         self.assertEqual(
@@ -233,6 +234,10 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(
             self.view.template_name,
             'menus/menusection_create.html')
+
+    def test_success_message(self):
+        self.assertEqual(
+            self.view.success_message, "Menu Section Created: %(name)s")
 
     # dispatch()
     def test_method_dispatch_self_has_attribute_menu(self):
@@ -346,6 +351,10 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn("This section has no items.", self.html)
+
+        # template contains success message
+        self.assertIn(
+            f"Menu Section Created: {new_menusection.name}", self.html)
 
         # menusection object count increased by 1
         new_menusection_count = MenuSection.objects.count()
@@ -530,6 +539,8 @@ class MenuItemCreateViewTest(TestCase):
     def test_which_mixins_are_used(self):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+        self.assertEqual(
+            self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
     def test_model_name(self):
         self.assertEqual(
@@ -538,6 +549,10 @@ class MenuItemCreateViewTest(TestCase):
     def test_form_class(self):
         self.assertEqual(
             self.view.form_class.__name__, 'MenuItemForm')
+
+    def test_success_message(self):
+        self.assertEqual(
+            self.view.success_message, "Menu Item Created: %(name)s")
 
     # dispatch()
     def test_method_dispatch_self_has_attribute_menusection(self):
@@ -665,6 +680,10 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menuitem_detail.html')
         self.assertIn(f"{new_menuitem.description}", self.html)
+
+        # template contains success_message
+        self.assertIn(
+            f"Menu Item Created: {new_menuitem_name}", self.html)
 
         # menusection object count increased by 1
         new_menuitem_count = MenuItem.objects.count()
@@ -854,6 +873,8 @@ class MenuItemUpdateViewTest(TestCase):
     def test_which_mixins_are_used(self):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+        self.assertEqual(
+            self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
     def test_model_name(self):
         self.assertEqual(
@@ -862,6 +883,11 @@ class MenuItemUpdateViewTest(TestCase):
     def test_form_class(self):
         self.assertEqual(
             self.view.form_class.__name__, 'MenuItemForm')
+
+    def test_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            "Menu Item Successfully Updated: %(name)s")
 
     # get_context_data()
     def test_context_has_action_verb(self):
@@ -1008,6 +1034,10 @@ class MenuItemUpdateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.assertIn(f"{self.test_menuitem.name}", self.html)
         self.assertIn(f"{self.test_menuitem.description}", self.html)
+
+        # template contains success_message
+        self.assertIn(
+            f"Menu Item Successfully Updated: {new_menuitem_name}", self.html)
 
         # menuitem object count has not changed
         new_menuitem_count = MenuItem.objects.count()

@@ -109,13 +109,14 @@ class MenuItemUpdateView(
         UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = MenuItem
     form_class = MenuItemForm
-    success_message = "Menu Item Successfully Updated"
+    success_message = "Menu Item Successfully Updated: %(name)s"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'action_verb': 'Update',
-            'menusection': self.get_object().menusection})
+            'menusection': self.get_object().menusection,
+            'menuitem': self.get_object()})
         return context
 
     def get_initial(self):

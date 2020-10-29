@@ -347,6 +347,7 @@ class MenuSectionCreateViewTest(TestCase):
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count + 1, new_menusection_count)
 
+    # validation
     def test_validation_post_method_duplicate_menusection(self):
 
         original_menusection = MenuSection.objects.create(
@@ -661,8 +662,7 @@ class MenuItemCreateViewTest(TestCase):
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count + 1, new_menuitem_count)
 
-    # VALIDATION #
-
+    # validation
     def test_validation_post_method_duplicate_menuitem(self):
 
         original_menuitem = MenuItem.objects.create(
@@ -994,6 +994,7 @@ class MenuItemUpdateViewTest(TestCase):
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
+    # validation
     def test_validation_duplicate_post_attempt_by_authorized_user(self):
 
         self.test_menuitem_2 = self.test_menusection.menuitem_set.create(
@@ -1231,6 +1232,7 @@ class MenuItemDeleteViewTest(TestCase):
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count - 1, new_menuitem_count)
 
+    # validation
     def test_validation_post_duplicate_delete_attempt_by_authorized_user(self):
 
         # delete self.test_menuitem

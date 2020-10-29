@@ -214,7 +214,7 @@ class MenuSectionCreateViewTest(TestCase):
             self.view.__class__.__bases__[-1].__name__,
             'CreateView')
 
-    def test_mixins(self):
+    def test_which_mixins_are_used(self):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__,
             'UserPassesTestMixin')
@@ -527,7 +527,7 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'CreateView')
 
-    def test_mixins(self):
+    def test_which_mixins_are_used(self):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
 
@@ -851,7 +851,7 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'UpdateView')
 
-    def test_mixins(self):
+    def test_which_mixins_are_used(self):
         self.assertEqual(
             self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
 

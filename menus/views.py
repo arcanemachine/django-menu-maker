@@ -64,9 +64,11 @@ class MenuSectionDetailView(DetailView):
             slug=self.kwargs['menusection_slug'])
 
 
-class MenuItemCreateView(UserPassesTestMixin, CreateView):
+class MenuItemCreateView(
+        UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = MenuItem
     form_class = MenuItemForm
+    success_message = "Menu Item Created: %(name)s"
 
     def dispatch(self, request, *args, **kwargs):
         self.menusection = get_object_or_404(

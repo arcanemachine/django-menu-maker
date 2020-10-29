@@ -88,6 +88,9 @@ class MenuItemCreateView(
     def get_initial(self):
         return {'menusection': self.menusection}
 
+    def get_success_url(self):
+        return self.object.menusection.get_absolute_url()
+
     def test_func(self):
         return self.request.user in \
             self.menusection.menu.restaurant.admin_users.all()

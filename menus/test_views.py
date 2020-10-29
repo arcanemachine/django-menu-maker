@@ -115,7 +115,9 @@ class MenuDetailViewTest(TestCase):
     def test_unauthenticated_user_cannot_view_link_to_add_section(self):
         self.assertNotIn('Add New Section', self.html)
 
-    # template - authentication-based conditions
+    # TEMPLATE
+
+    # authentication-based conditions
     def test_unprivileged_user_cannot_view_link_to_add_section(self):
         self.client.login(username='test_user', password='password')
 
@@ -277,6 +279,9 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_get_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_contains_proper_form_text(self):
         self.assertIn(
             "Please enter the information for your new menu section:",
             self.html)
@@ -599,6 +604,9 @@ class MenuItemCreateViewTest(TestCase):
 
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_contains_proper_form_text(self):
         self.assertIn(
             "Please enter the information for your menu item:",
             self.html)
@@ -942,6 +950,9 @@ class MenuItemUpdateViewTest(TestCase):
 
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_contains_proper_intro_text(self):
         self.assertIn(
             rf"Please enter the information for '{self.test_menuitem.name}'",
             self.html)
@@ -1207,6 +1218,7 @@ class MenuItemDeleteViewTest(TestCase):
         self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
+    # template
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertIn(

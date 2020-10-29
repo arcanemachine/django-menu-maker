@@ -845,7 +845,9 @@ class MenuItemUpdateViewTest(TestCase):
 
         # create test menuitem
         self.test_menuitem = \
-            self.test_menusection.menuitem_set.create(name='Test Menu Item')
+            self.test_menusection.menuitem_set.create(
+                name='Test Menu Item',
+                description='Test Menu Item Description')
 
         # login as authorized user
         self.client.login(

@@ -5,6 +5,7 @@ data.dump
 geckodriver.log
 keys.py
 gunicorn.sh 
+todo
 
 ## local scripts
 makenmigrate

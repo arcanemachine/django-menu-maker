@@ -25,7 +25,7 @@ class RestaurantListViewTest(TestCase):
         self.context = self.response.context
         self.view = self.context['view']
 
-    def test_view_name(self):
+    def test_view_class_name(self):
         self.assertEqual(self.view.__class__.__name__, 'RestaurantListView')
 
     def test_parent_class_name(self):
@@ -66,7 +66,7 @@ class RestaurantDetailViewTest(TestCase):
         self.view = self.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(self.view.__class__.__name__, 'RestaurantDetailView')
 
     def test_parent_class_name(self):

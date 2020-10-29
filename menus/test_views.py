@@ -25,7 +25,7 @@ class MenusRootViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(self.view.__name__, 'menus_root')
 
     def test_get_arguments(self):
@@ -94,7 +94,7 @@ class MenuDetailViewTest(TestCase):
         self.view = self.response.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(self.view.__class__.__name__, 'MenuDetailView')
 
     def test_parent_class_name(self):
@@ -204,7 +204,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.view = self.response.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(
             self.view.__class__.__name__,
             'MenuSectionCreateView')
@@ -430,7 +430,7 @@ class MenuSectionDetailViewTest(TestCase):
         self.view = self.response.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(self.view.__class__.__name__, 'MenuSectionDetailView')
 
     def test_parent_class_name(self):
@@ -519,7 +519,7 @@ class MenuItemCreateViewTest(TestCase):
         self.view = self.response.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuItemCreateView')
 
@@ -759,7 +759,7 @@ class MenuItemDetailViewTest(TestCase):
         self.view = self.response.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuItemDetailView')
 
@@ -843,7 +843,7 @@ class MenuItemUpdateViewTest(TestCase):
         self.view = self.response.context['view']
 
     # view attributes
-    def test_name(self):
+    def test_view_class_name(self):
         self.assertEqual(
             self.view.__class__.__name__, 'MenuItemUpdateView')
 

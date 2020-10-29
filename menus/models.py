@@ -113,7 +113,7 @@ class MenuItem(models.Model):
                     or menuitems_with_same_slug.last() != self:
                 raise ValidationError(
                     "This name is too similar to one of this menu's "
-                    "existing section names.")
+                    "existing item names.")
 
     def get_absolute_url(self):
         return reverse(

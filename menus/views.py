@@ -105,9 +105,11 @@ class MenuItemDetailView(DetailView):
             slug=self.kwargs['menuitem_slug'])
 
 
-class MenuItemUpdateView(UserPassesTestMixin, UpdateView):
+class MenuItemUpdateView(
+        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = MenuItem
     form_class = MenuItemForm
+    success_message = "Menu Item Successfully Updated"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

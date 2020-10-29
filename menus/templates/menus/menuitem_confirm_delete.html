@@ -3,11 +3,11 @@
 {% block title %}Delete Menu Item - {{ menuitem.menusection.menu.name }} - {{ menuitem.menusection.menu.restaurant.name }}{% endblock %}
 
 {% block body_title %}{{ menuitem.menusection.menu.restaurant.name }} - {{ menuitem.menusection.menu.name }}{% endblock %}
-{% block body_subheading %}Delete '{{ menuitem.name }}'{% endblock %}
+{% block body_subheading %}Delete Menu Item: '{{ menuitem.name }}'{% endblock %}
 
 {% block content %}
 
-<p>Are you sure you want to delete '{{ menuitem.name }}' from '{{ menuitem.menusection.name }}'?</p>
+<p>Are you sure you want to delete '{{ menuitem.name }}' from the '{{ menuitem.menusection.menu.name }}: {{ menuitem.menusection.name }}' menu?</p>
 
 <form method="post">{% csrf_token %}
     {{ form.as_p }}

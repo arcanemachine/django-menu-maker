@@ -3,7 +3,7 @@
 {% block title %}{{ action_verb }} Menu Item - {{ menusection.menu.name }} - {{ menusection.menu.restaurant.name }}{% endblock %}
 
 {% block body_title %}{{ menusection.menu.restaurant.name }} - {{ menusection.menu.name }}{% endblock %}
-{% block body_subheading %}{{ menusection.name }}: {{ action_verb }} Menu Item {% if menuitem %} - '{{ menuitem.name }}'{% endif %}{% endblock %}
+{% block body_subheading %}{{ action_verb }} Menu Item{% if menuitem %}: '{{ menuitem.name }}'{% endif %}{% endblock %}
 
 {% block content %}
 

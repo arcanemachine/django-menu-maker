@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}Menu Item: {{ menuitem.menusection.menu.restaurant.name }} - {{ menuitem.name }}{% endblock %}
+{% block title %}{{ menuitem.menusection.menu.name }} Menu - {{ menuitem.name }} - {{ menuitem.menusection.menu.restaurant.name }}{% endblock %}
 
 {% block body_title %}{{ menuitem.menusection.menu.restaurant.name }}{% endblock %}
-{% block body_subheading %}Item Detail: {{ menuitem.name }}{% endblock %}
+{% block body_subheading %}{{ menuitem.menusection.menu.name }} Menu: '{{ menuitem.name }}'{% endblock %}
 
 {% block content %}
 

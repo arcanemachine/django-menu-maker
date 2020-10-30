@@ -39,9 +39,6 @@ class MenuCreateView(
     def get_initial(self):
         return {'restaurant': self.restaurant}
 
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
     def test_func(self):
         return self.request.user in self.restaurant.admin_users.all()
 

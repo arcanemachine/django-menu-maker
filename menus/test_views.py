@@ -820,8 +820,7 @@ class MenuItemCreateViewTest(TestCase):
     # template
     def test_template_contains_proper_form_text(self):
         self.assertIn(
-            "Please enter the information for your menu item:",
-            self.html)
+            "Please enter the information for your menu item:", self.html)
 
     # request.POST
     def test_post_method_unauthenticated_user(self):

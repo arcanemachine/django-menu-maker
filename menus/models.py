@@ -66,23 +66,23 @@ class MenuSection(models.Model):
     def __str__(self):
         return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
 
+    def clean(self):
+        # do not allow a menu to have duplicate section slugs
+        menusections_with_same_slug = MenuSection.objects.filter(
+            menu=self.menu,
+            slug=slugify(self.name))
+        if menusections_with_same_slug.count():
+            if menusections_with_same_slug.first() != self \
+                    or menusections_with_same_slug.last() != self:
+                raise ValidationError(
+                    "This name is too similar to one of this menu's "
+                    "existing section names.")
+
     def get_absolute_url(self):
         return reverse('menus:menusection_detail', kwargs={
             'restaurant_slug': self.menu.restaurant.slug,
             'menu_slug': self.menu.slug,
             'menusection_slug': self.slug})
-
-    def clean(self):
-        # do not allow a menu to have duplicate section slugs
-        existing_menusections = MenuSection.objects.filter(
-            menu=self.menu,
-            slug=slugify(self.name))
-        if existing_menusections.count():
-            if existing_menusections.first() != self \
-                    or existing_menusections.last() != self:
-                raise ValidationError(
-                    "This name is too similar to one of this menu's "
-                    "existing section names.")
 
     def save(self, *args, **kwargs):
         if not self.slug == slugify(self.name):
@@ -116,12 +116,11 @@ class MenuItem(models.Model):
                     "existing item names.")
 
     def get_absolute_url(self):
-        return reverse(
-            'menus:menuitem_detail', kwargs={
-                'restaurant_slug': self.menusection.menu.restaurant.slug,
-                'menu_slug': self.menusection.menu.slug,
-                'menusection_slug': self.menusection.slug,
-                'menuitem_slug': self.slug})
+        return reverse('menus:menuitem_detail', kwargs={
+            'restaurant_slug': self.menusection.menu.restaurant.slug,
+            'menu_slug': self.menusection.menu.slug,
+            'menusection_slug': self.menusection.slug,
+            'menuitem_slug': self.slug})
 
     def save(self, *args, **kwargs):
         if not self.slug == slugify(self.name):

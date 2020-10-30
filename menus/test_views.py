@@ -217,7 +217,6 @@ class MenuCreateViewTest(TestCase):
     def test_post_method_authorized_user(self):
 
         new_menu_name = 'Test Menu'
-        new_menu_slug = slugify(new_menu_name)
 
         # get menu before attempting to post data
         old_menu_count = Menu.objects.count()
@@ -231,7 +230,7 @@ class MenuCreateViewTest(TestCase):
         # user is redirected to menu_detail
         new_menu = Menu.objects.get(
             restaurant=self.test_restaurant,
-            slug=new_menu_slug)
+            name=new_menu_name)
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
             self.response.url, new_menu.get_absolute_url())
@@ -512,13 +511,15 @@ class MenuSectionCreateViewTest(TestCase):
     def test_post_method_unauthenticated_user(self):
         self.client.logout()
 
+        new_menusection_name = 'Test Menu Section'
+
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
-            'name': 'Test Menu Section'})
+            'name': new_menusection_name})
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -532,13 +533,15 @@ class MenuSectionCreateViewTest(TestCase):
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(username='test_user', password='password')
 
+        new_menusection_name = 'Test Menu Section'
+
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
-            'name': 'Test Menu Section'})
+            'name': new_menusection_name})
 
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
@@ -841,14 +844,17 @@ class MenuItemCreateViewTest(TestCase):
     def test_post_method_unauthenticated_user(self):
         self.client.logout()
 
+        new_menuitem_name = 'Test Menu Item'
+        new_menuitem_description = 'Test Menu Description'
+
         # get menusection count before attempting to post data
         old_menuitem_count = MenuItem.objects.count()
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menusection': self.test_menusection.pk,
-            'name': 'Test Menu Item',
-            'description': 'Test Menu Item Description'})
+            'name': new_menuitem_name,
+            'description': new_menuitem_description})
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -862,14 +868,17 @@ class MenuItemCreateViewTest(TestCase):
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(username='test_user', password='password')
 
+        new_menuitem_name = 'Test Menu Item'
+        new_menuitem_description = 'Test Menu Description'
+
         # get menusection count before attempting to post data
         old_menuitem_count = MenuItem.objects.count()
 
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menusection': self.test_menusection.pk,
-            'name': 'Test Menu Item',
-            'description': 'Test Menu Item Description'})
+            'name': new_menuitem_name,
+            'description': new_menuitem_description})
 
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
@@ -881,7 +890,7 @@ class MenuItemCreateViewTest(TestCase):
     def test_post_method_authorized_user(self):
 
         new_menuitem_name = 'Test Menu Item'
-        new_menuitem_slug = slugify(new_menuitem_name)
+        new_menuitem_description = 'Test Menu Description'
 
         # get menusection count before attempting to post data
         old_menuitem_count = MenuItem.objects.count()
@@ -889,14 +898,14 @@ class MenuItemCreateViewTest(TestCase):
         # create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menusection': self.test_menusection.pk,
-            'name': 'Test Menu Item',
-            'description': 'Test Menu Item Description'})
+            'name': new_menuitem_name,
+            'description': new_menuitem_description})
         self.html = self.response.content.decode('utf-8')
 
         # user is redirected to menusection_detail
         new_menuitem = MenuItem.objects.get(
             menusection=self.test_menusection,
-            slug=new_menuitem_slug)
+            name=new_menuitem_name)
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
             self.response.url, new_menuitem.menusection.get_absolute_url())

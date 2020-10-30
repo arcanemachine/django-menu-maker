@@ -378,7 +378,7 @@ class MenuDetailViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(2):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menu_detail', kwargs={
                 'restaurant_slug':
                     self.test_restaurant.slug if i != 0 else 'bad-slug',
@@ -609,7 +609,7 @@ class MenuSectionCreateViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(2):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse(
                 'menus:menusection_create', kwargs={
                     'restaurant_slug':
@@ -696,7 +696,7 @@ class MenuSectionDetailViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(3):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse(
                 'menus:menusection_detail', kwargs={
                     'restaurant_slug':
@@ -950,7 +950,7 @@ class MenuItemCreateViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(3):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_create', kwargs={
                 'restaurant_slug':
                     self.test_restaurant.slug if i != 0 else 'bad-slug',
@@ -1032,7 +1032,7 @@ class MenuItemDetailViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(4):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_detail', kwargs={
                 'restaurant_slug':
                     self.test_restaurant.slug if i != 0 else 'bad-slug',
@@ -1317,7 +1317,7 @@ class MenuItemUpdateViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(3):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_update', kwargs={
                 'restaurant_slug':
                     self.test_restaurant.slug if i != 0 else 'bad-slug',
@@ -1536,7 +1536,7 @@ class MenuItemDeleteViewTest(TestCase):
 
     # bad kwargs
     def test_bad_kwargs(self):
-        for i in range(3):
+        for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_update', kwargs={
                 'restaurant_slug':
                     self.test_restaurant.slug if i != 0 else 'bad-slug',

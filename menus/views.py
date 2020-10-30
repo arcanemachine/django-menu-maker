@@ -53,6 +53,36 @@ class MenuDetailView(DetailView):
             slug=self.kwargs['menu_slug'])
 
 
+class MenuUpdateView(
+        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+    model = Menu
+    form_class = MenuForm
+    success_message = "Menu Successfully Updated: %(name)s"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action_verb': 'Update',
+            'restaurant': self.get_object().restaurant,
+            'menu': self.get_object()})
+        return context
+
+    def get_initial(self):
+        return {
+            'restaurant': self.get_object().restaurant,
+            'name': self.get_object().name}
+
+    def get_object(self):
+        return get_object_or_404(
+            Menu,
+            restaurant__slug=self.kwargs['restaurant_slug'],
+            slug=self.kwargs['menu_slug'])
+
+    def test_func(self):
+        return self.request.user in \
+            self.get_object().restaurant.admin_users.all()
+
+
 class MenuSectionCreateView(
         UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = MenuSection

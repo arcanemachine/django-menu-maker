@@ -1281,8 +1281,8 @@ class MenuItemUpdateViewTest(TestCase):
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
 
         self.test_menuitem_2 = self.test_menusection.menuitem_set.create(
-                name='New Test Menu Item',
-                description='New Test Menu Description')
+            name='New Test Menu Item',
+            description='New Test Menu Description')
 
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description

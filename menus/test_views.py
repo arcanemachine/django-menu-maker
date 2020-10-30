@@ -617,6 +617,206 @@ class MenuUpdateViewTest(TestCase):
             self.assertEqual(self.response.status_code, 404)
 
 
+class MenuDeleteViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(username='test_user')
+        cls.test_user.set_password('password')
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = \
+            get_user_model().objects.create(username='restaurant_admin_user')
+        cls.restaurant_admin_user.set_password('password')
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+        # create test menu
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+
+    def setUp(self):
+        # login as authorized user
+        self.client.login(
+            username='restaurant_admin_user', password='password')
+
+        self.current_test_url = reverse('menus:menu_delete', kwargs={
+            'restaurant_slug': self.test_restaurant.slug,
+            'menu_slug': self.test_menu.slug})
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = self.response.content.decode('utf-8')
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__name__, 'MenuDeleteView')
+
+    def test_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'DeleteView')
+
+    def test_which_mixins_are_used(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+
+    def test_attribute_model_name(self):
+        self.assertEqual(
+            self.view.model.__name__, 'Menu')
+
+    def test_attribute_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            "The '%(name)s' menu has been deleted.")
+
+    # delete()
+    def test_method_delete_contains_proper_success_message(self):
+        self.assertEqual(
+            self.view.success_message % self.test_menu.__dict__,
+            f"The '{self.test_menu.name}' menu has been deleted.")
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.test_menu)
+
+    # get_success_url()
+    def test_method_get_success_url(self):
+        self.assertEqual(
+            self.view.get_success_url(),
+            self.test_restaurant.get_absolute_url())
+
+    # request.GET
+    def test_get_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # request by unauthenticated user should redirect to login
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+    def test_get_method_authenticated_but_unauthorized_user(self):
+        self.client.login(username='test_user', password='password')
+
+        # request by unauthorized user should return 403
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 403)
+
+    # template
+    def test_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_template_contains_proper_confirm_text(self):
+        self.assertIn(
+            fr"Are you sure you want to delete the "
+            fr"'{self.test_menu.name}' menu?", self.html)
+
+    # request.POST
+    def test_post_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # get menuitem count before attempting to post data
+        old_menu_count = Menu.objects.count()
+
+        # attempt to delete self.test_menu via POST
+        self.response = self.client.post(self.current_test_url)
+
+        # user is redirected to login page
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+        # menu object count has not changed
+        new_menu_count = Menu.objects.count()
+        self.assertEqual(old_menu_count, new_menu_count)
+
+    def test_post_method_authenticated_but_unauthorized_user(self):
+        self.client.login(username='test_user', password='password')
+
+        # get menu count before attempting to post data
+        old_menu = Menu.objects.count()
+
+        # attempt to delete self.test_menu via POST
+        self.response = self.client.post(self.current_test_url)
+
+        # user receives HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
+        # menu object count has not changed
+        new_menu = Menu.objects.count()
+        self.assertEqual(old_menu, new_menu)
+
+    def test_post_method_authorized_user(self):
+        # get menu count before attempting to post data
+        old_menu_count = Menu.objects.count()
+
+        # menu_detail contains test_menu.name before delete
+        self.response = self.client.get(
+            self.test_menu.get_absolute_url())
+        self.html = self.response.content.decode('utf-8')
+        self.assertIn(f"{self.test_menu.name}", self.html)
+
+        # delete self.test_menu via POST
+        self.response = self.client.post(self.current_test_url)
+
+        # user is redirected to restaurant_detail
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(
+            self.response.url, self.test_restaurant.get_absolute_url())
+
+        # restaurant_detail loads successfully and contains success message
+        self.response = self.client.get(self.response.url)
+        self.html = self.response.content.decode('utf-8')
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response,
+            'restaurants/restaurant_detail.html')
+        self.assertIn(
+            rf"The '{self.test_menu.name}' menu has been deleted.",
+            self.html)
+
+        # restaurant_detail does not contain test_menu.name after refresh
+        self.response = self.client.get(
+            self.test_restaurant.get_absolute_url())
+        self.html = self.response.content.decode('utf-8')
+        self.assertNotIn(f"{self.test_menu.name}", self.html)
+
+        # object no longer exists
+        with self.assertRaises(Menu.DoesNotExist):
+            self.test_menu.refresh_from_db()
+
+        # menu object count decreased by 1
+        new_menu_count = Menu.objects.count()
+        self.assertEqual(old_menu_count - 1, new_menu_count)
+
+    # validation
+    def test_validation_post_attempt_duplicate_by_authorized_user(self):
+        # delete self.test_menu
+        self.test_menu.delete()
+
+        # attempt POST request to delete already-deleted menu
+        self.response = self.client.post(self.current_test_url)
+
+        # returns HTTP 404
+        self.assertEqual(self.response.status_code, 404)
+
+    # bad kwargs
+    def test_bad_kwargs(self):
+        for i in range(len(self.view.kwargs)):
+            self.current_test_url = reverse('menus:menu_update', kwargs={
+                'restaurant_slug':
+                    self.test_restaurant.slug if i != 0 else 'bad-slug',
+                'menu_slug':
+                    self.test_menu.slug if i != 1 else 'bad-slug'})
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
+
+
 class MenuSectionCreateViewTest(TestCase):
 
     @classmethod

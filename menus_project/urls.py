@@ -1,5 +1,4 @@
 """
-
 django.contrib.auth views:
     accounts/ register/ [name='register']
     accounts/ login/ [name='login']

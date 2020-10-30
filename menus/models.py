@@ -5,7 +5,6 @@ from django.utils.text import slugify
 
 
 class Menu(models.Model):
-
     THEME_CHOICES = [
         ('default', "Default"),
         ('secondary', "Secondary")]
@@ -57,7 +56,6 @@ class Menu(models.Model):
 
 
 class MenuSection(models.Model):
-
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE)
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
@@ -91,7 +89,6 @@ class MenuSection(models.Model):
 
 
 class MenuItem(models.Model):
-
     menusection = models.ForeignKey('MenuSection', on_delete=models.CASCADE)
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)

@@ -3,7 +3,6 @@ from django.urls import reverse
 
 
 class RootViewTest(TestCase):
-
     def setUp(self):
         self.response = self.client.get(reverse('root'))
 

@@ -8,7 +8,6 @@ from menus_project.constants import RESERVED_KEYWORDS
 
 
 class Restaurant(models.Model):
-
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128, unique=True)
     admin_users = models.ManyToManyField(settings.AUTH_USER_MODEL)
@@ -17,7 +16,6 @@ class Restaurant(models.Model):
         return self.name
 
     def clean(self):
-
         # do not allow slugs to be reserved keywords
         if self.slug in RESERVED_KEYWORDS:
             raise ValidationError(

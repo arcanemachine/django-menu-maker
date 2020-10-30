@@ -10,7 +10,6 @@ class RestaurantModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create test user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -96,7 +95,6 @@ class RestaurantModelTest(TestCase):
         self.assertEqual(related_model, get_user_model())
 
     # VALIDATION #
-
     def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
         with self.assertRaises(ValidationError):
             Restaurant.objects.create(name='all')
@@ -106,7 +104,6 @@ class RestaurantModelTest(TestCase):
             Restaurant.objects.create(name='Test Restaurant')
 
     # METHODS #
-
     def test_method_str(self):
         self.assertEqual(
             self.test_restaurant.__str__(), self.test_restaurant.name)

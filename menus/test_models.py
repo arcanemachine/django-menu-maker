@@ -11,7 +11,6 @@ class MenuModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
@@ -19,7 +18,6 @@ class MenuModelTest(TestCase):
         self.assertEqual(self.test_menu._meta.object_name, 'Menu')
 
     def test_object_content(self):
-
         expected_restaurant = self.test_restaurant
         expected_name = 'Test Menu'
         expected_slug = 'test-menu'
@@ -118,13 +116,11 @@ class MenuModelTest(TestCase):
         self.assertEqual(default_choice, 'default')
 
     # META #
-
     def test_meta_ordering(self):
         ordering = self.test_menu._meta.ordering
         self.assertEqual(ordering, ['name'])
 
     # VALIDATION #
-
     def test_validation_fail_restaurant_makes_two_menus_with_same_slug(self):
         with self.assertRaises(ValidationError):
             self.test_restaurant.menu_set.create(name='Test Menu')
@@ -138,13 +134,10 @@ class MenuModelTest(TestCase):
         self.assertEqual(Menu.objects.count(), 2)
 
     # METHODS #
-
-    # __str__()
     def test_method_str_returns_restaurant_name_and_menu_name(self):
         expected_string = "Test Restaurant - Test Menu"
         self.assertEqual(str(self.test_menu), expected_string)
 
-    # get_absolute_url()
     def test_method_get_absolute_url(self):
         expected_url = reverse('menus:menu_detail', kwargs={
             'restaurant_slug': self.test_menu.restaurant.slug,
@@ -156,7 +149,6 @@ class MenuSectionModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
         cls.test_menusection = cls.test_menu.menusection_set.create(
@@ -167,7 +159,6 @@ class MenuSectionModelTest(TestCase):
                 self.test_menusection._meta.object_name, 'MenuSection')
 
     def test_object_content(self):
-
         expected_menu = self.test_menu
         expected_name = 'Test Menu Section'
         expected_slug = 'test-menu-section'
@@ -238,7 +229,6 @@ class MenuSectionModelTest(TestCase):
         self.assertEqual(max_length, 128)
 
     # VALIDATION #
-
     def test_validation_fail_two_menusections_with_same_slug(self):
         with self.assertRaises(ValidationError):
             self.test_menu.menusection_set.create(
@@ -250,7 +240,6 @@ class MenuSectionModelTest(TestCase):
         self.assertEqual(MenuSection.objects.count(), 2)
 
     # METHODS #
-
     def test_method_str(self):
         self.assertEqual(
             str(self.test_menusection),
@@ -271,7 +260,6 @@ class MenuItemModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
         cls.test_menusection = cls.test_menu.menusection_set.create(
@@ -283,7 +271,6 @@ class MenuItemModelTest(TestCase):
         self.assertEqual(self.test_menuitem._meta.object_name, 'MenuItem')
 
     def test_object_content(self):
-
         expected_menusection = self.test_menusection
         expected_name = 'Test Menu Item'
         expected_slug = 'test-menu-item'
@@ -354,7 +341,6 @@ class MenuItemModelTest(TestCase):
         self.assertEqual(max_length, 128)
 
     # VALIDATION #
-
     def test_validation_fail_two_menuitems_with_same_slug(self):
         with self.assertRaises(ValidationError):
             self.test_menusection.menuitem_set.create(
@@ -367,7 +353,6 @@ class MenuItemModelTest(TestCase):
         self.assertEqual(MenuItem.objects.count(), 2)
 
     # METHODS #
-
     def test_method_str(self):
         self.assertEqual(
             str(self.test_menuitem),

@@ -34,7 +34,6 @@ class MenusRootViewTest(TestCase):
 
     # request.GET
     def test_get_method_unauthenticated_user(self):
-
         # response returns 302 redirect
         self.assertEqual(self.response.status_code, 302)
 
@@ -63,7 +62,6 @@ class MenuCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -81,7 +79,6 @@ class MenuCreateViewTest(TestCase):
         cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
 
     def setUp(self):
-
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
@@ -215,7 +212,6 @@ class MenuCreateViewTest(TestCase):
         self.assertEqual(old_menu_count, new_menu_count)
 
     def test_post_method_authorized_user(self):
-
         new_menu_name = 'Test Menu'
 
         # get menu before attempting to post data
@@ -252,7 +248,6 @@ class MenuCreateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-
         original_menu = Menu.objects.create(
             restaurant=self.test_restaurant,
             name='Test Menu')
@@ -285,7 +280,6 @@ class MenuDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -392,7 +386,6 @@ class MenuSectionCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -413,7 +406,6 @@ class MenuSectionCreateViewTest(TestCase):
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
     def setUp(self):
-
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
@@ -551,7 +543,6 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(old_menusection_count, new_menusection_count)
 
     def test_post_method_authorized_user(self):
-
         new_menusection_name = 'Test Menu Section'
         new_menusection_slug = slugify(new_menusection_name)
 
@@ -588,7 +579,6 @@ class MenuSectionCreateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-
         original_menusection = MenuSection.objects.create(
                 menu=self.test_menu,
                 name='Test Menu Section')
@@ -624,7 +614,6 @@ class MenuSectionDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -649,7 +638,6 @@ class MenuSectionDetailViewTest(TestCase):
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
     def setUp(self):
-
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
@@ -713,7 +701,6 @@ class MenuItemCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -738,7 +725,6 @@ class MenuItemCreateViewTest(TestCase):
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
     def setUp(self):
-
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
@@ -888,7 +874,6 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
     def test_post_method_authorized_user(self):
-
         new_menuitem_name = 'Test Menu Item'
         new_menuitem_description = 'Test Menu Description'
 
@@ -927,7 +912,6 @@ class MenuItemCreateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-
         original_menuitem = MenuItem.objects.create(
                 menusection=self.test_menusection,
                 name='Test Menu Item',
@@ -966,7 +950,6 @@ class MenuItemDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -995,7 +978,6 @@ class MenuItemDetailViewTest(TestCase):
             cls.test_menusection.menuitem_set.create(name='Test Menu Item')
 
     def setUp(self):
-
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
@@ -1050,7 +1032,6 @@ class MenuItemUpdateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -1075,7 +1056,6 @@ class MenuItemUpdateViewTest(TestCase):
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
     def setUp(self):
-
         # create test menuitem
         self.test_menuitem = \
             self.test_menusection.menuitem_set.create(
@@ -1240,7 +1220,6 @@ class MenuItemUpdateViewTest(TestCase):
             self.test_menuitem.description, old_menuitem_description)
 
     def test_post_method_authorized_user(self):
-
         new_menuitem_name = 'New Test Menu Item'
         new_menuitem_description = 'New Test Menu Item Description'
         new_menuitem_slug = slugify(new_menuitem_name)
@@ -1288,7 +1267,6 @@ class MenuItemUpdateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-
         self.test_menuitem_2 = self.test_menusection.menuitem_set.create(
             name='New Test Menu Item',
             description='New Test Menu Description')
@@ -1335,7 +1313,6 @@ class MenuItemDeleteViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         # create unprivileged user
         cls.test_user = get_user_model().objects.create(username='test_user')
         cls.test_user.set_password('password')
@@ -1364,7 +1341,6 @@ class MenuItemDeleteViewTest(TestCase):
             cls.test_menusection.menuitem_set.create(name='Test Menu Item')
 
     def setUp(self):
-
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
@@ -1481,7 +1457,6 @@ class MenuItemDeleteViewTest(TestCase):
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
     def test_post_method_authorized_user(self):
-
         # get menuitem count before attempting to post data
         old_menuitem_count = MenuItem.objects.count()
 
@@ -1524,7 +1499,6 @@ class MenuItemDeleteViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-
         # delete self.test_menuitem
         self.test_menuitem.delete()
 

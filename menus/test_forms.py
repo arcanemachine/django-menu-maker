@@ -17,9 +17,7 @@ class MenuSectionCreateFormTest(SimpleTestCase):
 
     def test_meta_widgets(self):
         self.assertTrue(
-            isinstance(
-                self.form._meta.widgets['menu'], widgets.HiddenInput)
-            )
+            isinstance(self.form._meta.widgets['menu'], widgets.HiddenInput))
 
 
 class MenuItemFormTest(SimpleTestCase):
@@ -37,5 +35,4 @@ class MenuItemFormTest(SimpleTestCase):
     def test_meta_widgets(self):
         self.assertTrue(
             isinstance(
-                self.form._meta.widgets['menusection'], widgets.HiddenInput)
-            )
+                self.form._meta.widgets['menusection'], widgets.HiddenInput))

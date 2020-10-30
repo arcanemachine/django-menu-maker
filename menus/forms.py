@@ -3,15 +3,15 @@ from django.forms import ModelForm
 
 from .models import Menu, MenuSection, MenuItem
 
-class MenuForm(ModelForm):
 
+class MenuForm(ModelForm):
     class Meta:
         model = Menu
         fields = ['restaurant', 'name']
         widgets = {'restaurant': forms.HiddenInput()}
 
-class MenuSectionCreateForm(ModelForm):
 
+class MenuSectionCreateForm(ModelForm):
     class Meta:
         model = MenuSection
         fields = ['menu', 'name']
@@ -19,7 +19,6 @@ class MenuSectionCreateForm(ModelForm):
 
 
 class MenuItemForm(ModelForm):
-
     class Meta:
         model = MenuItem
         fields = ['menusection', 'name', 'description']

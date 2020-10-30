@@ -138,7 +138,7 @@ class MenuCreateViewTest(TestCase):
         self.assertEqual(self.context['restaurant'], self.test_restaurant)
 
     # get_initial()
-    def test_method_get_initial_returns_restaurant(self):
+    def test_method_get_initial(self):
         self.assertEqual(
             self.view.get_initial(), {'restaurant': self.test_restaurant})
 
@@ -469,7 +469,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertEqual(self.context['menu'], self.test_menu)
 
     # get_initial()
-    def test_method_get_initial_returns_menu(self):
+    def test_method_get_initial(self):
         self.assertEqual(self.view.get_initial(), {'menu': self.test_menu})
 
     # request.GET
@@ -786,7 +786,7 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(self.context['menusection'], self.test_menusection)
 
     # get_initial()
-    def test_method_get_initial_returns_menusection(self):
+    def test_method_get_initial(self):
         self.assertEqual(
             self.view.get_initial(), {'menusection': self.test_menusection})
 
@@ -1124,7 +1124,7 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertEqual(self.context['menuitem'], self.test_menuitem)
 
     # get_initial()
-    def test_method_get_initial_returns_menusection(self):
+    def test_method_get_initial(self):
         self.assertEqual(
             self.view.get_initial(), {
                 'menusection': self.test_menusection,

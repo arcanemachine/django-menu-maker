@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
+from menus_project.constants import RESERVED_KEYWORDS
+
 
 class Menu(models.Model):
     THEME_CHOICES = [
@@ -32,6 +34,12 @@ class Menu(models.Model):
         return f"{self.restaurant.name} - {self.name}"
 
     def clean(self):
+        # do not allow slugs to be reserved keywords
+        if self.slug in RESERVED_KEYWORDS:
+            raise ValidationError(
+                "This name is reserved and cannot be used. "
+                "Please choose another name.")
+
         # do not allow a restaurant to have duplicate menu slugs
         menus_with_same_slug = Menu.objects.filter(
             restaurant=self.restaurant,
@@ -64,6 +72,12 @@ class MenuSection(models.Model):
         return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
 
     def clean(self):
+        # do not allow slugs to be reserved keywords
+        if self.slug in RESERVED_KEYWORDS:
+            raise ValidationError(
+                "This name is reserved and cannot be used. "
+                "Please choose another name.")
+
         # do not allow a menu to have duplicate section slugs
         menusections_with_same_slug = MenuSection.objects.filter(
             menu=self.menu,
@@ -100,6 +114,12 @@ class MenuItem(models.Model):
             f"{self.name}"
 
     def clean(self):
+        # do not allow slugs to be reserved keywords
+        if self.slug in RESERVED_KEYWORDS:
+            raise ValidationError(
+                "This name is reserved and cannot be used. "
+                "Please choose another name.")
+
         # do not allow a menusection to have duplicate menuitem slugs
         menuitems_with_same_slug = MenuItem.objects.filter(
             menusection=self.menusection,

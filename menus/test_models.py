@@ -127,6 +127,10 @@ class MenuModelTest(TestCase):
         with self.assertRaises(ValidationError):
             self.test_restaurant.menu_set.create(name='Test--Menu')
 
+    def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
+        with self.assertRaises(ValidationError):
+            self.test_restaurant.menu_set.create(name='all')
+
     def test_validation_pass_two_restaurants_with_same_menu_slug(self):
         test_restaurant_2 = \
             Restaurant.objects.create(name="Test Restaurant 2")
@@ -233,6 +237,10 @@ class MenuSectionModelTest(TestCase):
         with self.assertRaises(ValidationError):
             self.test_menu.menusection_set.create(
                 name=self.test_menusection.name)
+
+    def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
+        with self.assertRaises(ValidationError):
+            self.test_menu.menusection_set.create(name='all')
 
     def test_validation_pass_two_menus_with_same_menusection_slug(self):
         test_menu_2 = self.test_restaurant.menu_set.create(name='Test Menu 2')
@@ -345,6 +353,10 @@ class MenuItemModelTest(TestCase):
         with self.assertRaises(ValidationError):
             self.test_menusection.menuitem_set.create(
                 name=self.test_menuitem.name)
+
+    def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
+        with self.assertRaises(ValidationError):
+            self.test_menusection.menuitem_set.create(name='all')
 
     def test_validation_pass_two_menusections_with_same_menuitem_slug(self):
         test_menusection_2 = self.test_menu.menusection_set.create(

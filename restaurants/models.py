@@ -19,7 +19,7 @@ class Restaurant(models.Model):
         # do not allow slugs to be reserved keywords
         if self.slug in RESERVED_KEYWORDS:
             raise ValidationError(
-                "This restaurant name is reserved and cannot be used. "
+                "This name is reserved and cannot be used. "
                 "Please choose another name.")
 
         # do not allow duplicate restaurant slugs

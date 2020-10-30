@@ -19,7 +19,9 @@
 {% endif %}
 
 {% if user.is_authenticated and user in menu.restaurant.admin_users.all %}
-<p><a href="{% url 'menus:menusection_create' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Add New Section</p>
+<div class="auth-links">
+  <p><a href="{% url 'menus:menusection_create' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Add New Section</p>
+</div>
 {% endif %}
 
 <div id="bottom-links">

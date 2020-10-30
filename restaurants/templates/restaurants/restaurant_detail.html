@@ -18,6 +18,10 @@
 </ul>
   {% endif %}
 
+	{% if user.is_authenticated and user in restaurant.admin_users.all %}
+<p><a href="{% url 'menus:menu_create' restaurant_slug=restaurant.slug %}">Add New Menu</p>
+	{% endif %}
+
 <div id="bottom-links">
   <p><a href="{% url 'restaurants:restaurant_list' %}">Return to Restaurant List</a></p>
 </div>

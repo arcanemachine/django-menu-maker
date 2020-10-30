@@ -12,8 +12,7 @@ class Menu(models.Model):
 
     restaurant = models.ForeignKey(
         'restaurants.Restaurant',
-        on_delete=models.CASCADE,
-        null=True)
+        on_delete=models.CASCADE)
 
     name = models.CharField(
         max_length=128,

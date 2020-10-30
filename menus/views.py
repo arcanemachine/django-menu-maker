@@ -149,9 +149,10 @@ class MenuItemUpdateView(
         return context
 
     def get_initial(self):
-        return {'menusection': self.get_object().menusection,
-                'name': self.get_object().name,
-                'description': self.get_object().description}
+        return {
+            'menusection': self.get_object().menusection,
+            'name': self.get_object().name,
+            'description': self.get_object().description}
 
     def get_object(self):
         return get_object_or_404(

@@ -37,7 +37,7 @@ class Menu(models.Model):
         # do not allow a restaurant to have duplicate menu slugs
         menus_with_same_slug = Menu.objects.filter(
             restaurant=self.restaurant,
-            slug=self.slug)
+            slug=slugify(self.name))
         if menus_with_same_slug.count():
             if menus_with_same_slug.first() != self \
                     or menus_with_same_slug.last() != self:

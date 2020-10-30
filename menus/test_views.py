@@ -181,10 +181,9 @@ class MenuCreateViewTest(TestCase):
         old_menu_count = Menu.objects.count()
 
         # attempt to create new menu via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'restaurant': self.test_restaurant.pk,
-                'name': new_menu_name})
+        self.response = self.client.post(self.current_test_url, {
+            'restaurant': self.test_restaurant.pk,
+            'name': new_menu_name})
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -256,8 +255,8 @@ class MenuCreateViewTest(TestCase):
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
 
         original_menu = Menu.objects.create(
-                restaurant=self.test_restaurant,
-                name='Test Menu')
+            restaurant=self.test_restaurant,
+            name='Test Menu')
 
         # get menu count before attempting to post data
         old_menu_count = Menu.objects.count()
@@ -506,7 +505,7 @@ class MenuSectionCreateViewTest(TestCase):
     # template
     def test_template_contains_proper_form_text(self):
         self.assertIn(
-            "Please enter the information for your new menu section:",
+            "Please enter the information for your menu section:",
             self.html)
 
     # request.POST
@@ -517,7 +516,7 @@ class MenuSectionCreateViewTest(TestCase):
         old_menusection_count = MenuSection.objects.count()
 
         # attempt to create new menusection via POST
-        self.response = self.client.post(self.current_test_url, kwargs={
+        self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
             'name': 'Test Menu Section'})
 
@@ -537,7 +536,7 @@ class MenuSectionCreateViewTest(TestCase):
         old_menusection_count = MenuSection.objects.count()
 
         # attempt to create new menusection via POST
-        self.response = self.client.post(self.current_test_url, kwargs={
+        self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
             'name': 'Test Menu Section'})
 
@@ -595,10 +594,9 @@ class MenuSectionCreateViewTest(TestCase):
         old_menusection_count = MenuSection.objects.count()
 
         # attempt to create duplicate menusection via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menu': original_menusection.menu.pk,
-                'name': original_menusection.name})
+        self.response = self.client.post(self.current_test_url, {
+            'menu': original_menusection.menu.pk,
+            'name': original_menusection.name})
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
@@ -847,7 +845,7 @@ class MenuItemCreateViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # attempt to create new menusection via POST
-        self.response = self.client.post(self.current_test_url, kwargs={
+        self.response = self.client.post(self.current_test_url, {
             'menusection': self.test_menusection.pk,
             'name': 'Test Menu Item',
             'description': 'Test Menu Item Description'})
@@ -868,11 +866,10 @@ class MenuItemCreateViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # attempt to create new menusection via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': self.test_menusection.pk,
-                'name': 'Test Menu Item',
-                'description': 'Test Menu Item Description'})
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': self.test_menusection.pk,
+            'name': 'Test Menu Item',
+            'description': 'Test Menu Item Description'})
 
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
@@ -890,11 +887,10 @@ class MenuItemCreateViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # create new menusection via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': self.test_menusection.pk,
-                'name': 'Test Menu Item',
-                'description': 'Test Menu Item Description'})
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': self.test_menusection.pk,
+            'name': 'Test Menu Item',
+            'description': 'Test Menu Item Description'})
         self.html = self.response.content.decode('utf-8')
 
         # user is redirected to menusection_detail
@@ -932,13 +928,10 @@ class MenuItemCreateViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # attempt to create duplicate menuitem via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': original_menuitem.menusection.pk,
-                'name': original_menuitem.name,
-                'description': original_menuitem.description})
-
-        # returns template for menus:menuitem, with error message
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': original_menuitem.menusection.pk,
+            'name': original_menuitem.name,
+            'description': original_menuitem.description})
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
@@ -1198,11 +1191,10 @@ class MenuItemUpdateViewTest(TestCase):
         new_menuitem_description = 'New Test Menu Item Description'
 
         # attempt to update self.test_menuitem via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': self.test_menuitem.menusection.pk,
-                'name': new_menuitem_name,
-                'description': new_menuitem_description})
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': self.test_menuitem.menusection.pk,
+            'name': new_menuitem_name,
+            'description': new_menuitem_description})
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -1224,11 +1216,10 @@ class MenuItemUpdateViewTest(TestCase):
         new_menuitem_description = 'New Test Menu Item Description'
 
         # attempt to update self.test_menuitem via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': self.test_menuitem.menusection.pk,
-                'name': new_menuitem_name,
-                'description': new_menuitem_description})
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': self.test_menuitem.menusection.pk,
+            'name': new_menuitem_name,
+            'description': new_menuitem_description})
 
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
@@ -1249,11 +1240,10 @@ class MenuItemUpdateViewTest(TestCase):
         old_menuitem_count = MenuItem.objects.count()
 
         # update self.test_menuitem via POST
-        self.response = self.client.post(
-            self.current_test_url, {
-                'menusection': self.test_menuitem.menusection.pk,
-                'name': new_menuitem_name,
-                'description': new_menuitem_description})
+        self.response = self.client.post(self.current_test_url, {
+            'menusection': self.test_menuitem.menusection.pk,
+            'name': new_menuitem_name,
+            'description': new_menuitem_description})
         self.html = self.response.content.decode('utf-8')
 
         # self.test_menuitem has been updated with new values
@@ -1306,8 +1296,6 @@ class MenuItemUpdateViewTest(TestCase):
             'menusection': self.test_menuitem.menusection.pk,
             'name': new_menuitem_name,
             'description': new_menuitem_description})
-
-        # returns template for menus:menuitem_update, with error message
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 

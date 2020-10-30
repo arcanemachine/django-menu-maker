@@ -7,14 +7,43 @@ from django.urls import reverse
 from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
-from .forms import MenuSectionCreateForm, MenuItemForm
+from .forms import MenuForm, MenuSectionCreateForm, MenuItemForm
 from .models import Menu, MenuSection, MenuItem
+from restaurants.models import Restaurant
 
 
 def menus_root(request, restaurant_slug):
     return HttpResponseRedirect(
         reverse('restaurants:restaurant_detail', kwargs={
             'restaurant_slug': restaurant_slug}))
+
+
+class MenuCreateView(
+        UserPassesTestMixin, SuccessMessageMixin, CreateView):
+    model = Menu
+    form_class = MenuForm
+    success_message = "Menu Created: %(name)s"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.restaurant = get_object_or_404(
+            Restaurant, slug=self.kwargs['restaurant_slug'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action_verb': 'Create',
+            'restaurant': self.restaurant})
+        return context
+
+    def get_initial(self):
+        return {'restaurant': self.restaurant}
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+    def test_func(self):
+        return self.request.user in self.restaurant.admin_users.all()
 
 
 class MenuDetailView(DetailView):

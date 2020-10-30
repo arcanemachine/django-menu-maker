@@ -10,6 +10,10 @@ urlpatterns = [
         views.menus_root,
         name='menus_root'),
     path(
+        'new-menu/',
+        views.MenuCreateView.as_view(),
+        name='menu_create'),
+    path(
         '<slug:menu_slug>/',
         views.MenuDetailView.as_view(),
         name='menu_detail'),

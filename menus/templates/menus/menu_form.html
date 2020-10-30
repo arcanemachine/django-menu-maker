@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action_verb }} Menu - {{ restaurant.name }}{% endblock %}
+
+{% block body_title %}{{ restaurant.name }}{% endblock %}
+{% block body_subheading %}{{ action_verb }} Menu {% if menu %}: '{{ menu.name }}'{% endif %}{% endblock %}
+
+{% block content %}
+
+<p>Please enter the information for {% if menu%}'{{ menu.name }}'{% else %}your menu{% endif %}:</p>
+
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<div id="bottom-links">
+      <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=restaurant.slug %}">Return to Restaurant: {{ restaurant.name }}</a></p>
+</div>
+
+{% endblock content %}

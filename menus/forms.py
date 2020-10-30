@@ -1,8 +1,14 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import MenuSection, MenuItem
+from .models import Menu, MenuSection, MenuItem
 
+class MenuForm(ModelForm):
+
+    class Meta:
+        model = Menu
+        fields = ['restaurant', 'name']
+        widgets = {'restaurant': forms.HiddenInput()}
 
 class MenuSectionCreateForm(ModelForm):
 

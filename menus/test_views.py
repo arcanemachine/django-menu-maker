@@ -678,8 +678,8 @@ class MenuItemCreateViewTest(TestCase):
             menusection=self.test_menusection,
             slug=new_menuitem_slug)
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(self.response.url,
-            new_menuitem.menusection.get_absolute_url())
+        self.assertEqual(
+            self.response.url, new_menuitem.menusection.get_absolute_url())
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)

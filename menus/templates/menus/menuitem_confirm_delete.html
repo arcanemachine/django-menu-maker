@@ -10,13 +10,13 @@
 <p>Are you sure you want to delete '{{ menuitem.name }}' from the '{{ menuitem.menusection.menu.name }}: {{ menuitem.menusection.name }}' menu?</p>
 
 <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Delete this item">
-    <a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}"><button type="button">Cancel</button></a>
+  {{ form.as_p }}
+  <input type="submit" value="Delete this item">
+  <a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}"><button type="button">Cancel</button></a>
 </form>
 
 <div id="bottom-links">
-      <p><a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Return to Item: {{ menuitem.name }}</a></p>
+  <p><a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Return to Item: {{ menuitem.name }}</a></p>
 </div>
 
 {% endblock content %}

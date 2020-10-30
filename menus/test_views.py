@@ -38,7 +38,7 @@ class MenusRootViewTest(TestCase):
         # response returns 302 redirect
         self.assertEqual(self.response.status_code, 302)
 
-        # following the redirect will lead to restaurants:restaurant_detail
+        # following the redirect leads to restaurants:restaurant_detail
         self.response = self.client.get(self.current_test_url, follow=True)
         self.assertEqual(self.response.status_code, 200)
         self.assertEqual(

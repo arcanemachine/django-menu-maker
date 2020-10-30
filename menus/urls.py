@@ -22,6 +22,10 @@ urlpatterns = [
         views.MenuUpdateView.as_view(),
         name='menu_update'),
     path(
+        '<slug:menu_slug>/delete/',
+        views.MenuDeleteView.as_view(),
+        name='menu_delete'),
+    path(
         '<slug:menu_slug>/new-section/',
         views.MenuSectionCreateView.as_view(),
         name='menusection_create'),

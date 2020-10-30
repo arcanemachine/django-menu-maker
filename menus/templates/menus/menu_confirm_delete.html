@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Menu - {{ menu.name }} - {{ menu.restaurant.name }}{% endblock %}
+
+{% block body_title %}{{ menu.restaurant.name }} - {{ menu.name }}{% endblock %}
+{% block body_subheading %}Delete Menu: '{{ menu.name }}'{% endblock %}
+
+{% block content %}
+
+<p>Are you sure you want to delete the '{{ menu.name }}' menu?</p>
+
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Delete this item">
+  <a href="{% url 'menus:menu_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}"><button type="button">Cancel</button></a>
+</form>
+
+<div id="bottom-links">
+  <p><a href="{% url 'menus:menu_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Return to Menu: {{ menu.name }}</a></p>
+</div>
+
+{% endblock content %}

@@ -157,7 +157,6 @@ class MenuCreateViewTest(TestCase):
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
     def test_get_method_authorized_user(self):
@@ -487,7 +486,6 @@ class MenuSectionCreateViewTest(TestCase):
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
     def test_get_authorized_user(self):
@@ -814,7 +812,6 @@ class MenuItemCreateViewTest(TestCase):
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
     def test_get_method_authorized_user(self):
@@ -1150,7 +1147,6 @@ class MenuItemUpdateViewTest(TestCase):
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
     def test_get_method_authorized_user(self):
@@ -1408,7 +1404,6 @@ class MenuItemDeleteViewTest(TestCase):
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
         self.assertEqual(self.response.status_code, 403)
 
     # template

@@ -9,10 +9,7 @@
 
 <p>Please enter the information for {% if menu%}'{{ menu.name }}'{% else %}your menu{% endif %}:</p>
 
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+{% include 'base_form.html' %}
 
 <div id="bottom-links">
       <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=restaurant.slug %}">Return to Restaurant: {{ restaurant.name }}</a></p>

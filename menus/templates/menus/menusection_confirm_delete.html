@@ -9,11 +9,9 @@
 
 <p>Are you sure you want to delete '{{ menusection.name }}' from the '{{ menusection.menu.name }}: {{ menusection.name }}' menu?</p>
 
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Delete this item">
-  <a href="{% url 'menus:menusection_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}"><button type="button">Cancel</button></a>
-</form>
+{% with submit_text="Delete" %}
+  {% include 'base_form.html' %}
+{% endwith %}
 
 <div id="bottom-links">
   <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Return to Menu Section: {{ menusection.name }}</a></p>

@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<p>Please enter the information for {% if menuitem %}'{{ menuitem.name }}'{% else %}your menu item{% endif %}:</p>
+{% include 'base_form.html' %}
 
 <form method="post">{% csrf_token %}
     {{ form.as_p }}

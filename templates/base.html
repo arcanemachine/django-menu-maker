@@ -51,8 +51,9 @@
       </ul>
     </nav>
 
-    <h1 id="body-title">{% block body_title %}{% endblock body_title %}</h1>
-    <h2 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h2>
+    <div id="content" class="container">
+      <h1 id="body-title">{% block body_title %}{% endblock body_title %}</h1>
+      <h2 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h2>
 
       {% if messages %}
         {% for message in messages %}
@@ -60,7 +61,6 @@
         {% endfor %}
       {% endif %}
 
-    <div id="content">
       {% block content %}{% endblock content %}
     </div>
 

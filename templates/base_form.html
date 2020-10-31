@@ -3,7 +3,7 @@
 {% csrf_token %}
 {{ form.as_p }}
 
-  <span><button class="btn btn-primary" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
+  <span><button class="btn btn-primary form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
 
 {% if not cancel_url %}
 

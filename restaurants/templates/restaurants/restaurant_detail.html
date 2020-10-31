@@ -5,9 +5,10 @@
 {% block body_title %}{{ restaurant.name }}{% endblock %}
 {% block body_subheading %}Restaurant Detail{% endblock %}
 
+
 {% block content %}
 
-<h3>Menus</h3>
+<h4>Menus</h4>
   {% if not restaurant.menu_set.all %}
 <p>This restaurant does not have any menus.</p>
   {% else %}

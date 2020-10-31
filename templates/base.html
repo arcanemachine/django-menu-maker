@@ -19,15 +19,36 @@
 
 	</head>
 	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #4466FF;">
+			<a class="navbar-brand" href="{% url 'root' %}">Menu Maker</a>
+			<ul class="navbar-nav ml-auto">
 
-    <nav id="top-nav" style="float: right;">
-      {% if not user.is_authenticated %}
-      <span class="top-nav-item"><a href="{% url 'users:register' %}">Register</a></span>
-      <span class="top-nav-item"><a href="{% url 'users:login' %}">Login</a></span>
-      {% else %}
-      <span class="top-nav-item">{{ user.username }}</span>
-      <span class="top-nav-item"><a href="{% url 'users:logout' %}">Logout</a></span>
+		{% if user.is_authenticated %}
+
+				<li class="nav-item active">
+          <a class="nav-link" style="font-weight: normal;" title="{{ user.username }}">{{ user.username }}</a>
+        </li>
+
+				<li class="nav-item active">
+          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:logout' %}">Logout</a>
+        </li>
+
+    {% else %}
+
+      {% if request.path != '/users/login/' and request.path != '/users/register/' %}
+
+        <li class="nav-item active">
+          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}">Login</a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}">Register</a>
+        </li>
+
       {% endif %}
+
+    {% endif %}
+      </ul>
     </nav>
 
     <h1 id="body-title">{% block body_title %}{% endblock body_title %}</h1>

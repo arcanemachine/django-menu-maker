@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Menu Section - {{ menu.name }} - {{ menu.restaurant.name }}{% endblock %}
+{% block title %}{{ action_verb }} Menu Section - {{ menu.name }} - {{ menu.restaurant.name }}{% endblock %}
 
 {% block body_title %}{{ menu.restaurant.name }} - {{ menu.name }}{% endblock %}
-{% block body_subheading %}Create Menu Section{% endblock %}
+{% block body_subheading %}{{ action_verb }} Menu Section{% endblock %}
 
 {% block content %}
 
 <p>Please enter the information for {% if menusection %}'{{ menusection.name }}'{% else %}your menu section{% endif %}:</p>
 
 <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
 </form>
 
 <div id="bottom-links">

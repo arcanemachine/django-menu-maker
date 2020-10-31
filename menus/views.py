@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
-from .forms import MenuForm, MenuSectionCreateForm, MenuItemForm
+from .forms import MenuForm, MenuSectionForm, MenuItemForm
 from .models import Menu, MenuSection, MenuItem
 from restaurants.models import Restaurant
 
@@ -105,11 +105,11 @@ class MenuDeleteView(UserPassesTestMixin, DeleteView):
         return self.request.user in \
             self.get_object().restaurant.admin_users.all()
 
+
 class MenuSectionCreateView(
         UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = MenuSection
-    form_class = MenuSectionCreateForm
-    template_name = 'menus/menusection_create.html'
+    form_class = MenuSectionForm
     success_message = "Menu Section Created: %(name)s"
 
     def dispatch(self, request, *args, **kwargs):
@@ -121,7 +121,9 @@ class MenuSectionCreateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['menu'] = self.menu
+        context.update({
+            'action_verb': 'Create',
+            'menu': self.menu})
         return context
 
     def get_initial(self):

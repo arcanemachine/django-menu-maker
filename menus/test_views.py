@@ -856,13 +856,11 @@ class MenuSectionCreateViewTest(TestCase):
     # view attributes
     def test_view_class_name(self):
         self.assertEqual(
-            self.view.__class__.__name__,
-            'MenuSectionCreateView')
+            self.view.__class__.__name__, 'MenuSectionCreateView')
 
     def test_parent_class_name(self):
         self.assertEqual(
-            self.view.__class__.__bases__[-1].__name__,
-            'CreateView')
+            self.view.__class__.__bases__[-1].__name__, 'CreateView')
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
@@ -872,18 +870,11 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_model_name(self):
         self.assertEqual(
-            self.view.model.__name__,
-            'MenuSection')
+            self.view.model.__name__, 'MenuSection')
 
     def test_form_class(self):
         self.assertEqual(
-            self.view.form_class.__name__,
-            'MenuSectionCreateForm')
-
-    def test_template_name(self):
-        self.assertEqual(
-            self.view.template_name,
-            'menus/menusection_create.html')
+            self.view.form_class.__name__, 'MenuSectionForm')
 
     def test_success_message(self):
         self.assertEqual(
@@ -902,6 +893,12 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_context_contains_correct_menu(self):
         self.assertEqual(self.context['menu'], self.test_menu)
+
+    def test_context_contains_action_verb(self):
+        self.assertTrue('action_verb' in self.context)
+
+    def test_context_contains_correct_action_verb(self):
+        self.assertEqual(self.context['action_verb'], 'Create')
 
     # get_initial()
     def test_method_get_initial(self):

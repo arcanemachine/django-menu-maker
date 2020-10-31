@@ -1,13 +1,13 @@
 from django.forms import widgets
 from django.test import SimpleTestCase
 
-from menus.forms import MenuSectionCreateForm, MenuItemForm
+from menus.forms import MenuSectionForm, MenuItemForm
 
 
-class MenuSectionCreateFormTest(SimpleTestCase):
+class MenuSectionFormTest(SimpleTestCase):
 
     def setUp(self):
-        self.form = MenuSectionCreateForm
+        self.form = MenuSectionForm
 
     def test_meta_model_name(self):
         self.assertEqual(self.form._meta.model.__name__, 'MenuSection')

@@ -26,6 +26,7 @@ urlpatterns = [
     path('restaurant/', include('restaurants.urls')),
     path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
     path('users/', include('users.urls')),
+    path('users/', include('django.contrib.auth.urls')),
 ]
 
 if keys.SERVER_NAME == 'dev':

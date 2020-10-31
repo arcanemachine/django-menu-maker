@@ -144,6 +144,30 @@ class MenuSectionDetailView(DetailView):
             slug=self.kwargs['menusection_slug'])
 
 
+class MenuSectionDeleteView(UserPassesTestMixin, DeleteView):
+    model = MenuSection
+    success_message = "'%(name)s' has been deleted from the menu."
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        messages.success(self.request, self.success_message % obj.__dict__)
+        return super().delete(request, *args, **kwargs)
+
+    def get_object(self):
+        return get_object_or_404(
+            MenuSection,
+            menu__restaurant__slug=self.kwargs['restaurant_slug'],
+            menu__slug=self.kwargs['menu_slug'],
+            slug=self.kwargs['menusection_slug'])
+
+    def get_success_url(self):
+        return self.object.menu.get_absolute_url()
+
+    def test_func(self):
+        return self.request.user in \
+            self.get_object().menu.restaurant.admin_users.all()
+
+
 class MenuItemCreateView(
         UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = MenuItem

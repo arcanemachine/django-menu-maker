@@ -24,6 +24,7 @@
 {% if user.is_authenticated and user in menusection.menu.restaurant.admin_users.all %}
 <div class="auth-links">
   <p><a href="{% url 'menus:menuitem_create' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Add New Menu Item</p>
+  <p><a href="{% url 'menus:menusection_delete' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Delete this Menu Section</p>
 </div>
 {% endif %}
 

@@ -774,8 +774,8 @@ class MenuDeleteViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.html = self.response.content.decode('utf-8')
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response,
-            'restaurants/restaurant_detail.html')
+        self.assertTemplateUsed(
+            self.response, 'restaurants/restaurant_detail.html')
         self.assertIn(
             rf"The '{self.test_menu.name}' menu has been deleted.",
             self.html)
@@ -1363,7 +1363,8 @@ class MenuSectionUpdateViewTest(TestCase):
     # bad kwargs
     def test_bad_kwargs(self):
         for i in range(len(self.view.kwargs)):
-            self.current_test_url = reverse('menus:menusection_update',
+            self.current_test_url = reverse(
+                'menus:menusection_update',
                 kwargs={
                     'restaurant_slug':
                         self.test_restaurant.slug if i != 0 else 'bad-slug',
@@ -1572,7 +1573,8 @@ class MenuSectionDeleteViewTest(TestCase):
     # bad kwargs
     def test_bad_kwargs(self):
         for i in range(len(self.view.kwargs)):
-            self.current_test_url = reverse('menus:menusection_delete',
+            self.current_test_url = reverse(
+                'menus:menusection_delete',
                 kwargs={
                     'restaurant_slug':
                         self.test_restaurant.slug if i != 0 else 'bad-slug',

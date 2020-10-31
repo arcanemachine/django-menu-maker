@@ -31,9 +31,8 @@ class MenuCreateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_verb': 'Create',
-            'restaurant': self.restaurant})
+        context.update({'action_verb': 'Create',
+                        'restaurant': self.restaurant})
         return context
 
     def get_initial(self):
@@ -61,16 +60,14 @@ class MenuUpdateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_verb': 'Update',
-            'restaurant': self.get_object().restaurant,
-            'menu': self.get_object()})
+        context.update({'action_verb': 'Update',
+                        'restaurant': self.get_object().restaurant,
+                        'menu': self.get_object()})
         return context
 
     def get_initial(self):
-        return {
-            'restaurant': self.get_object().restaurant,
-            'name': self.get_object().name}
+        return {'restaurant': self.get_object().restaurant,
+                'name': self.get_object().name}
 
     def get_object(self):
         return get_object_or_404(
@@ -121,9 +118,8 @@ class MenuSectionCreateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_verb': 'Create',
-            'menu': self.menu})
+        context.update({'action_verb': 'Create',
+                        'menu': self.menu})
         return context
 
     def get_initial(self):
@@ -152,16 +148,14 @@ class MenuSectionUpdateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_verb': 'Update',
-            'menu': self.get_object().menu,
-            'menusection': self.get_object()})
+        context.update({'action_verb': 'Update',
+                        'menu': self.get_object().menu,
+                        'menusection': self.get_object()})
         return context
 
     def get_initial(self):
-        return {
-            'menu': self.get_object().menu,
-            'name': self.get_object().name}
+        return {'menu': self.get_object().menu,
+                'name': self.get_object().name}
 
     def get_object(self):
         return get_object_or_404(
@@ -215,9 +209,8 @@ class MenuItemCreateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_verb': 'Create',
-            'menusection': self.menusection})
+        context.update({'action_verb': 'Create',
+                        'menusection': self.menusection})
         return context
 
     def get_initial(self):
@@ -251,17 +244,15 @@ class MenuItemUpdateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_verb': 'Update',
-            'menusection': self.get_object().menusection,
-            'menuitem': self.get_object()})
+        context.update({'action_verb': 'Update',
+                        'menusection': self.get_object().menusection,
+                        'menuitem': self.get_object()})
         return context
 
     def get_initial(self):
-        return {
-            'menusection': self.get_object().menusection,
-            'name': self.get_object().name,
-            'description': self.get_object().description}
+        return {'menusection': self.get_object().menusection,
+                'name': self.get_object().name,
+                'description': self.get_object().description}
 
     def get_object(self):
         return get_object_or_404(

@@ -1,1 +1,2 @@
+PROJECT_NAME = "Menu Maker"
 RESERVED_KEYWORDS = ['all']

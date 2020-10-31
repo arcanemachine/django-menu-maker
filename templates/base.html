@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block style %}{% endblock style %}
 
-    <title>{% block title %}{% endblock title %} - Menu Maker</title>
+    <title>{% block title %}{% endblock title %} - {{ project_name }}</title>
 
     {% block head_script %}{% endblock head_script %}
 
@@ -20,7 +20,7 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #4466FF;">
-			<a class="navbar-brand ml-2" href="{% url 'root' %}">Menu Maker</a>
+      <a class="navbar-brand ml-2" href="{% url 'root' %}">{{ project_name }}</a>
 			<ul class="navbar-nav ml-auto">
 
 		{% if user.is_authenticated %}

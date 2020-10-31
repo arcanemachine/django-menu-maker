@@ -7,12 +7,9 @@
 
 {% block content %}
 
-{% include 'base_form.html' %}
+<p>Please enter the information for {% if menuitem %}'{{ menuitem.name }}'{% else %}your menu item{% endif %}:</p>
 
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+{% include 'base_form.html' %}
 
 <div id="bottom-links">
   <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Return to Section: {{ menusection.name }}</a></p>

@@ -593,7 +593,7 @@ class MenuUpdateViewTest(TestCase):
 
         new_menu_name = self.test_menu_2.name
 
-        # update self.test_menu via POST
+        # attempt to update self.test_menu via POST
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_menu.restaurant.pk,
             'name': new_menu_name})
@@ -1915,7 +1915,7 @@ class MenuItemUpdateViewTest(TestCase):
         new_menuitem_name = self.test_menuitem_2.name
         new_menuitem_description = self.test_menuitem_2.description
 
-        # update self.test_menuitem via POST
+        # attempt to update self.test_menuitem via POST
         self.response = self.client.post(self.current_test_url, {
             'menusection': self.test_menuitem.menusection.pk,
             'name': new_menuitem_name,

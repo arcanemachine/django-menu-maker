@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # local
     'menus.apps.MenusConfig',
     'restaurants.apps.RestaurantsConfig',
+    'users.apps.UsersConfig',
 ]
 
 

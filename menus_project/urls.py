@@ -22,10 +22,11 @@ from . import views
 
 urlpatterns = [
     path('', views.root, name='root'),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('restaurant/', include('restaurants.urls')),
     path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
+    path('users/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
 ]
 
 if keys.SERVER_NAME == 'dev':

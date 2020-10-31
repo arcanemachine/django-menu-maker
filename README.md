@@ -4,9 +4,23 @@
 
 <strong><h3>Note: This project is currently not feature-complete. Please do not attempt to use it for its stated purpose. This notice will be removed when the project is usable to any reasonable capacity.</h3></strong>
 
-Menu Maker is a project that showcases my understanding of best practices using Python, Django and Git. In short, it is a simple CRUD app that showcases Django's utility as a web-first framework. It is intended to serve as a reference guide for best practices when making a basic CRUD app using Django. Only the code needed to perform the desired task is used. There is no useless boilerplate or filler.
+### About
 
-This project allows restaurant owners to register their restaurant and create a customized menu, allowing customers to easily view the restaurant's offerings from a desktop or mobile device.
+Menu Maker is a project that showcases my understanding of best practices using Python, Django and Git. In short, it is a simple CRUD app that highlights Django's utility as a web-first framework, onto which other functionality can be added as needed.
+
+### Who is this for?
+
+It is intended to serve as a reference guide for best practices when making a basic CRUD app using Django. Only the code needed to perform the desired task is used. There is no useless boilerplate or filler. All code in this repo has been created for this project, there is no copy-pasted code here.
+
+The primary goal of this app is to serve as a reference for what a Django codebase should look like. (At least, from my always-learning perspective. Opinions and pull requests are welcome :)
+
+If you are looking for a menu creation utility, there is likely a better service out there. If, however, this app does what you need, you are free to take the software and do whatever you want with it. All I ask is that you credit me, and let me know if this software helps you out at all. This software is CC licensed (see link at the bottom of this README).
+
+### What does Menu Maker do?
+
+This project allows restaurant owners to register their restaurant and create a customized menu. Then, customers can easily view the restaurant's offerings from a desktop or mobile device.
+
+### What technologies are used?
 
 This app is made using Python 3.8.6 and Django 3.1.2, and takes advantage of modern conveniences offered by the software (e.g. Python's f-strings)
 

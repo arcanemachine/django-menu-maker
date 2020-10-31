@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
 
+import html
 from inspect import getfullargspec
 from urllib.parse import urlparse
 
@@ -87,7 +88,7 @@ class MenuCreateViewTest(TestCase):
             'restaurant_slug': self.test_restaurant.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -215,7 +216,7 @@ class MenuCreateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_restaurant.pk,
             'name': new_menu_name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
 
         # user is redirected to menu_detail
         new_menu = Menu.objects.get(
@@ -226,7 +227,7 @@ class MenuCreateViewTest(TestCase):
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menu_detail.html')
         self.assertIn(f"{new_menu.name}", self.html)
@@ -252,7 +253,7 @@ class MenuCreateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_restaurant.pk,
             'name': original_menu.name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
         # menu count should be unchanged
@@ -298,7 +299,7 @@ class MenuDetailViewTest(TestCase):
             'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -409,7 +410,7 @@ class MenuUpdateViewTest(TestCase):
             'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -545,7 +546,7 @@ class MenuUpdateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_menu.restaurant.pk,
             'name': new_menu_name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
 
         # self.test_menu has been updated with new values
         self.test_menu.refresh_from_db()
@@ -562,7 +563,7 @@ class MenuUpdateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menu_detail.html')
 
         # template contains new menu values
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menu.name}", self.html)
 
         # template contains success_message
@@ -587,7 +588,7 @@ class MenuUpdateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_menu.restaurant.pk,
             'name': new_menu_name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
         # self.test_menu still has original values
@@ -640,7 +641,7 @@ class MenuDeleteViewTest(TestCase):
             'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -748,7 +749,7 @@ class MenuDeleteViewTest(TestCase):
         # menu_detail contains test_menu.name before delete
         self.response = self.client.get(
             self.test_menu.get_absolute_url())
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menu.name}", self.html)
 
         # delete self.test_menu via POST
@@ -761,7 +762,7 @@ class MenuDeleteViewTest(TestCase):
 
         # restaurant_detail loads successfully and contains success message
         self.response = self.client.get(self.response.url)
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(
             self.response, 'restaurants/restaurant_detail.html')
@@ -772,7 +773,7 @@ class MenuDeleteViewTest(TestCase):
         # restaurant_detail does not contain test_menu.name after refresh
         self.response = self.client.get(
             self.test_restaurant.get_absolute_url())
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertNotIn(f"{self.test_menu.name}", self.html)
 
         # object no longer exists
@@ -839,7 +840,7 @@ class MenuSectionCreateViewTest(TestCase):
             'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -973,7 +974,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
             'name': new_menusection_name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
 
         # user is redirected to new menusection_detail
         new_menusection = MenuSection.objects.get(
@@ -984,7 +985,7 @@ class MenuSectionCreateViewTest(TestCase):
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn("This section has no items.", self.html)
@@ -1010,7 +1011,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'menu': original_menusection.menu.pk,
             'name': original_menusection.name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
         # menusection count has not changed
@@ -1068,7 +1069,7 @@ class MenuSectionDetailViewTest(TestCase):
             'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -1096,7 +1097,7 @@ class MenuSectionDetailViewTest(TestCase):
         self.client.logout()
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertNotIn('Add New Menu Item', self.html)
 
     def test_template_authorized_user_can_view_link_to_add_menuitem(self):
@@ -1155,7 +1156,7 @@ class MenuSectionUpdateViewTest(TestCase):
             'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -1296,7 +1297,7 @@ class MenuSectionUpdateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menusection.menu.pk,
             'name': new_menusection_name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
 
         # self.test_menusection has been updated with new values
         self.test_menusection.refresh_from_db()
@@ -1314,7 +1315,7 @@ class MenuSectionUpdateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
 
         # template contains new menusection values
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menusection.name}", self.html)
 
         # template contains success_message
@@ -1340,7 +1341,7 @@ class MenuSectionUpdateViewTest(TestCase):
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menusection.menu.pk,
             'name': new_menusection_name})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
         # self.test_menusection still has original values
@@ -1402,7 +1403,7 @@ class MenuSectionDeleteViewTest(TestCase):
             'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -1512,7 +1513,7 @@ class MenuSectionDeleteViewTest(TestCase):
         # menusection_detail contains test_menusection.name before delete
         self.response = self.client.get(
             self.test_menusection.get_absolute_url())
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menusection.name}", self.html)
 
         # delete self.test_menusection via POST
@@ -1524,7 +1525,7 @@ class MenuSectionDeleteViewTest(TestCase):
 
         # menusection_detail loads successfully and contains success message
         self.response = self.client.get(self.response.url)
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menu_detail.html')
         self.assertIn(
@@ -1535,7 +1536,7 @@ class MenuSectionDeleteViewTest(TestCase):
         # menu_detail does not contain menu name after refresh
         self.response = self.client.get(
             self.test_menu.get_absolute_url())
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertNotIn(f"{self.test_menusection.name}", self.html)
 
         # object no longer exists
@@ -1611,7 +1612,7 @@ class MenuItemCreateViewTest(TestCase):
             'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -1759,7 +1760,7 @@ class MenuItemCreateViewTest(TestCase):
             'menusection': self.test_menusection.pk,
             'name': new_menuitem_name,
             'description': new_menuitem_description})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
 
         # user is redirected to menusection_detail
         new_menuitem = MenuItem.objects.get(
@@ -1771,7 +1772,7 @@ class MenuItemCreateViewTest(TestCase):
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn(f"{new_menuitem.name}", self.html)
@@ -1799,7 +1800,7 @@ class MenuItemCreateViewTest(TestCase):
             'menusection': original_menuitem.menusection.pk,
             'name': original_menuitem.name,
             'description': original_menuitem.description})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
         # menuitem count has not changed
@@ -1863,7 +1864,7 @@ class MenuItemDetailViewTest(TestCase):
             'menuitem_slug': self.test_menuitem.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -1947,7 +1948,7 @@ class MenuItemUpdateViewTest(TestCase):
             'menuitem_slug': self.test_menuitem.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -2102,7 +2103,7 @@ class MenuItemUpdateViewTest(TestCase):
             'menusection': self.test_menuitem.menusection.pk,
             'name': new_menuitem_name,
             'description': new_menuitem_description})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
 
         # self.test_menuitem has been updated with new values
         self.test_menuitem.refresh_from_db()
@@ -2122,7 +2123,7 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menuitem_detail.html')
 
         # template contains new menuitem values
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menuitem.name}", self.html)
         self.assertIn(f"{self.test_menuitem.description}", self.html)
 
@@ -2152,7 +2153,7 @@ class MenuItemUpdateViewTest(TestCase):
             'menusection': self.test_menuitem.menusection.pk,
             'name': new_menuitem_name,
             'description': new_menuitem_description})
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
         # self.test_menuitem still has original values
@@ -2221,7 +2222,7 @@ class MenuItemDeleteViewTest(TestCase):
             'menuitem_slug': self.test_menuitem.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -2331,7 +2332,7 @@ class MenuItemDeleteViewTest(TestCase):
         # menusection_detail contains test_menuitem.name before delete
         self.response = self.client.get(
             self.test_menusection.get_absolute_url())
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menuitem.name}", self.html)
 
         # delete self.test_menuitem via POST
@@ -2344,7 +2345,7 @@ class MenuItemDeleteViewTest(TestCase):
 
         # menusection_detail loads successfully and contains success message
         self.response = self.client.get(self.response.url)
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn(
@@ -2354,7 +2355,7 @@ class MenuItemDeleteViewTest(TestCase):
         # menusection_detail does not contain test_menuitem.name after refresh
         self.response = self.client.get(
             self.test_menusection.get_absolute_url())
-        self.html = self.response.content.decode('utf-8')
+        self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertNotIn(f"{self.test_menuitem.name}", self.html)
 
         # object no longer exists

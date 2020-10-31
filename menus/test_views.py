@@ -209,7 +209,7 @@ class MenuCreateViewTest(TestCase):
     def test_post_method_authorized_user(self):
         new_menu_name = 'Test Menu'
 
-        # get menu before attempting to post data
+        # get menu count before POST
         old_menu_count = Menu.objects.count()
 
         # create new menu via POST
@@ -246,7 +246,7 @@ class MenuCreateViewTest(TestCase):
             restaurant=self.test_restaurant,
             name='Test Menu')
 
-        # get menu count before attempting to post data
+        # get menu count before attempting POST
         old_menu_count = Menu.objects.count()
 
         # attempt to create duplicate menu via POST
@@ -539,7 +539,7 @@ class MenuUpdateViewTest(TestCase):
         new_menu_name = 'New Test Menu'
         new_menu_slug = slugify(new_menu_name)
 
-        # get menu count before attempting to post data
+        # get menu count before POST
         old_menu_count = Menu.objects.count()
 
         # update self.test_menu via POST
@@ -711,10 +711,10 @@ class MenuDeleteViewTest(TestCase):
     def test_post_method_unauthenticated_user(self):
         self.client.logout()
 
-        # get menuitem count before attempting to post data
+        # get menu count before POST
         old_menu_count = Menu.objects.count()
 
-        # attempt to delete self.test_menu via POST
+        # attempt to delete self.test_menu
         self.response = self.client.post(self.current_test_url)
 
         # user is redirected to login page
@@ -729,7 +729,7 @@ class MenuDeleteViewTest(TestCase):
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(username='test_user', password='password')
 
-        # get menu count before attempting to post data
+        # get menu count before attempting POST
         old_menu = Menu.objects.count()
 
         # attempt to delete self.test_menu via POST
@@ -743,7 +743,7 @@ class MenuDeleteViewTest(TestCase):
         self.assertEqual(old_menu, new_menu)
 
     def test_post_method_authorized_user(self):
-        # get menu count before attempting to post data
+        # get menu count before attempting POST
         old_menu_count = Menu.objects.count()
 
         # menu_detail contains test_menu.name before delete
@@ -760,7 +760,7 @@ class MenuDeleteViewTest(TestCase):
         self.assertEqual(
             self.response.url, self.test_restaurant.get_absolute_url())
 
-        # restaurant_detail loads successfully and contains success message
+        # restaurant_detail loads successfully and contains success_message
         self.response = self.client.get(self.response.url)
         self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
@@ -770,7 +770,7 @@ class MenuDeleteViewTest(TestCase):
             rf"The '{self.test_menu.name}' menu has been deleted.",
             self.html)
 
-        # restaurant_detail does not contain test_menu.name after refresh
+        # restaurant_detail does not contain menu name after refresh
         self.response = self.client.get(
             self.test_restaurant.get_absolute_url())
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -967,7 +967,7 @@ class MenuSectionCreateViewTest(TestCase):
         new_menusection_name = 'Test Menu Section'
         new_menusection_slug = slugify(new_menusection_name)
 
-        # get menusection count before attempting to post data
+        # get menusection count before attempting POST
         old_menusection_count = MenuSection.objects.count()
 
         # create new menusection via POST
@@ -990,7 +990,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
         self.assertIn("This section has no items.", self.html)
 
-        # template contains success message
+        # template contains success_message
         self.assertIn(
             f"Menu Section Created: {new_menusection.name}", self.html)
 
@@ -1290,7 +1290,7 @@ class MenuSectionUpdateViewTest(TestCase):
         new_menusection_name = 'New Test Menu Section'
         new_menusection_slug = slugify(new_menusection_name)
 
-        # get menusection count before attempting to post data
+        # get menusection count before attempting POST
         old_menusection_count = MenuSection.objects.count()
 
         # update self.test_menusection via POST
@@ -1507,7 +1507,7 @@ class MenuSectionDeleteViewTest(TestCase):
         self.assertEqual(old_menusection_count, new_menusection_count)
 
     def test_post_method_authorized_user(self):
-        # get menusection count before attempting to post data
+        # get menusection count before attempting POST
         old_menusection_count = MenuSection.objects.count()
 
         # menusection_detail contains test_menusection.name before delete
@@ -1523,7 +1523,7 @@ class MenuSectionDeleteViewTest(TestCase):
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, self.test_menu.get_absolute_url())
 
-        # menusection_detail loads successfully and contains success message
+        # menusection_detail loads successfully and contains success_message
         self.response = self.client.get(self.response.url)
         self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
@@ -1532,7 +1532,6 @@ class MenuSectionDeleteViewTest(TestCase):
             rf"'{self.test_menusection.name}' has been deleted from the menu.",
             self.html)
 
-        # TODO: copy line
         # menu_detail does not contain menu name after refresh
         self.response = self.client.get(
             self.test_menu.get_absolute_url())
@@ -1752,7 +1751,7 @@ class MenuItemCreateViewTest(TestCase):
         new_menuitem_name = 'Test Menu Item'
         new_menuitem_description = 'Test Menu Description'
 
-        # get menusection count before attempting to post data
+        # get menusection count before attempting POST
         old_menuitem_count = MenuItem.objects.count()
 
         # create new menusection via POST
@@ -2095,7 +2094,7 @@ class MenuItemUpdateViewTest(TestCase):
         new_menuitem_description = 'New Test Menu Item Description'
         new_menuitem_slug = slugify(new_menuitem_name)
 
-        # get menuitem count before attempting to post data
+        # get menuitem count before attempting POST
         old_menuitem_count = MenuItem.objects.count()
 
         # update self.test_menuitem via POST
@@ -2326,7 +2325,7 @@ class MenuItemDeleteViewTest(TestCase):
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
     def test_post_method_authorized_user(self):
-        # get menuitem count before attempting to post data
+        # get menuitem count before attempting POST
         old_menuitem_count = MenuItem.objects.count()
 
         # menusection_detail contains test_menuitem.name before delete
@@ -2343,7 +2342,7 @@ class MenuItemDeleteViewTest(TestCase):
         self.assertEqual(
             self.response.url, self.test_menusection.get_absolute_url())
 
-        # menusection_detail loads successfully and contains success message
+        # menusection_detail loads successfully and contains success_message
         self.response = self.client.get(self.response.url)
         self.html = html.unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
@@ -2352,7 +2351,7 @@ class MenuItemDeleteViewTest(TestCase):
             rf"'{self.test_menuitem.name}' has been deleted from the menu.",
             self.html)
 
-        # menusection_detail does not contain test_menuitem.name after refresh
+        # menusection_detail does not contain menuitem name after refresh
         self.response = self.client.get(
             self.test_menusection.get_absolute_url())
         self.html = html.unescape(self.response.content.decode('utf-8'))

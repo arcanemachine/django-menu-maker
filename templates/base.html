@@ -58,7 +58,7 @@
 
     {% if messages %}
       {% for message in messages %}
-        <div class="{% if message.tags %}{{ message.tags }} message"{% endif %}><strong>{{ message }}</strong></div>
+        <div class="alert{% if message.tags %} {{ message.tags }}{% endif %}{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %} alert-info{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %} alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} alert-danger{% endif %} message"><strong>{{ message }}</strong></div>
       {% endfor %}
     {% endif %}
 

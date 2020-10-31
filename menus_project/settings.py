@@ -123,4 +123,5 @@ STATIC_ROOT = keys.STATIC_ROOT
 
 # Authentication
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'root'
+LOGOUT_REDIRECT_URL = 'root'

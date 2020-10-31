@@ -1,0 +1,10 @@
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="form-submit-button">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
+</form>
+  {% if cancel_url %}
+  <a href="{{ cancel_url }}"><button>Cancel</button></a>
+  {% else %}
+  <button type="button" onclick="history.go(-1);">{% if cancel_text %}{{ cancel_text }}{% else %}Cancel{% endif %}</button>
+  {% endif %}

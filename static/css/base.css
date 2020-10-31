@@ -2,6 +2,11 @@
   margin-top: 2em;
 }
 
+.form-submit-button {
+  float: left;
+  margin-right: 5px;
+}
+
 .top-nav-item {
   padding: 0 10px;
   font-weight: bold;

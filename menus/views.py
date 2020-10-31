@@ -144,6 +144,37 @@ class MenuSectionDetailView(DetailView):
             slug=self.kwargs['menusection_slug'])
 
 
+class MenuSectionUpdateView(
+        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+    model = MenuSection
+    form_class = MenuSectionForm
+    success_message = "Menu Section Successfully Updated: %(name)s"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action_verb': 'Update',
+            'menu': self.get_object().menu,
+            'menusection': self.get_object()})
+        return context
+
+    def get_initial(self):
+        return {
+            'menu': self.get_object().menu,
+            'name': self.get_object().name}
+
+    def get_object(self):
+        return get_object_or_404(
+            MenuSection,
+            menu__restaurant__slug=self.kwargs['restaurant_slug'],
+            menu__slug=self.kwargs['menu_slug'],
+            slug=self.kwargs['menusection_slug'])
+
+    def test_func(self):
+        return self.request.user in \
+            self.get_object().menu.restaurant.admin_users.all()
+
+
 class MenuSectionDeleteView(UserPassesTestMixin, DeleteView):
     model = MenuSection
     success_message = "'%(name)s' has been deleted from the menu."

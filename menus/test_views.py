@@ -1128,6 +1128,253 @@ class MenuSectionDetailViewTest(TestCase):
             self.assertEqual(self.response.status_code, 404)
 
 
+class MenuSectionUpdateViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(username='test_user')
+        cls.test_user.set_password('password')
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = \
+            get_user_model().objects.create(username='restaurant_admin_user')
+        cls.restaurant_admin_user.set_password('password')
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+        # create test menu
+        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+
+    def setUp(self):
+        # create test menusection
+        self.test_menusection = \
+            self.test_menu.menusection_set.create(name='Test Menu Section')
+
+        # login as authorized user
+        self.client.login(
+            username='restaurant_admin_user', password='password')
+
+        self.current_test_url = reverse('menus:menusection_update', kwargs={
+            'restaurant_slug': self.test_restaurant.slug,
+            'menu_slug': self.test_menu.slug,
+            'menusection_slug': self.test_menusection.slug})
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = self.response.content.decode('utf-8')
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__name__, 'MenuSectionUpdateView')
+
+    def test_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'UpdateView')
+
+    def test_which_mixins_are_used(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+        self.assertEqual(
+            self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
+
+    def test_model_name(self):
+        self.assertEqual(
+            self.view.model.__name__, 'MenuSection')
+
+    def test_form_class(self):
+        self.assertEqual(
+            self.view.form_class.__name__, 'MenuSectionForm')
+
+    def test_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            "Menu Section Successfully Updated: %(name)s")
+
+    # get_context_data()
+    def test_context_has_action_verb(self):
+        self.assertTrue('action_verb' in self.context)
+
+    def test_context_has_correct_action_verb(self):
+        self.assertEqual(self.context['action_verb'], 'Update')
+
+    def test_context_has_menu(self):
+        self.assertTrue('menu' in self.context)
+
+    def test_context_has_correct_menu(self):
+        self.assertEqual(self.context['menu'], self.test_menu)
+
+    def test_context_has_menusection(self):
+        self.assertTrue('menusection' in self.context)
+
+    def test_context_has_correct_menusection(self):
+        self.assertEqual(self.context['menusection'], self.test_menusection)
+
+    # get_initial()
+    def test_method_get_initial(self):
+        self.assertEqual(
+            self.view.get_initial(), {
+                'menu': self.test_menu,
+                'name': self.test_menusection.name})
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.test_menusection)
+
+    # request.GET
+    def test_get_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # request by unauthenticated user should redirect to login
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+    def test_get_method_authenticated_but_unauthorized_user(self):
+        self.client.login(username='test_user', password='password')
+
+        # request by unauthorized user should return 403
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 403)
+
+    def test_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_contains_proper_intro_text(self):
+        self.assertIn(
+            "Please enter the information for "
+            rf"'{self.test_menusection.name}'",
+            self.html)
+
+    def test_template_form_contains_proper_initial_data_name(self):
+        self.assertIn(rf'value="{self.test_menusection.name}"', self.html)
+
+    # request.POST
+    def test_post_method_unauthenticated_user(self):
+        self.client.logout()
+
+        old_menusection_name = self.test_menusection.name
+        new_menusection_name = 'New Test Menu Section'
+
+        # attempt to update self.test_menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+            'menu': self.test_menusection.menu.pk,
+            'name': new_menusection_name})
+
+        # user is redirected to login page
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+        # self.test_menusection is unchanged
+        self.test_menusection.refresh_from_db()
+        self.assertEqual(self.test_menusection.name, old_menusection_name)
+
+    def test_post_method_authenticated_but_unauthorized_user(self):
+        self.client.login(username='test_user', password='password')
+
+        old_menusection_name = self.test_menusection.name
+        new_menusection_name = 'New Test Menu Section'
+
+        # attempt to update self.test_menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+            'menu': self.test_menusection.menu.pk,
+            'name': new_menusection_name})
+
+        # user receives HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
+        # self.test_menusection is unchanged
+        self.test_menusection.refresh_from_db()
+        self.assertEqual(self.test_menusection.name, old_menusection_name)
+
+    def test_post_method_authorized_user(self):
+        new_menusection_name = 'New Test Menu Section'
+        new_menusection_slug = slugify(new_menusection_name)
+
+        # get menusection count before attempting to post data
+        old_menusection_count = MenuSection.objects.count()
+
+        # update self.test_menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+            'menu': self.test_menusection.menu.pk,
+            'name': new_menusection_name})
+        self.html = self.response.content.decode('utf-8')
+
+        # self.test_menusection has been updated with new values
+        self.test_menusection.refresh_from_db()
+        self.assertEqual(self.test_menusection.name, new_menusection_name)
+        self.assertEqual(self.test_menusection.slug, new_menusection_slug)
+
+        # user is redirected to menusection_detail
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(
+            self.response.url,
+            self.test_menusection.get_absolute_url())
+
+        # menusection_detail loads successfully and uses proper template
+        self.response = self.client.get(self.response.url)
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'menus/menusection_detail.html')
+
+        # template contains new menusection values
+        self.html = self.response.content.decode('utf-8')
+        self.assertIn(f"{self.test_menusection.name}", self.html)
+
+        # template contains success_message
+        self.assertIn(
+            f"Menu Section Successfully Updated: {new_menusection_name}",
+            self.html)
+
+        # menusection object count has not changed
+        new_menusection_count = MenuSection.objects.count()
+        self.assertEqual(old_menusection_count, new_menusection_count)
+
+    # validation
+    def test_validation_post_attempt_duplicate_by_authorized_user(self):
+        self.test_menusection_2 = self.test_menu.menusection_set.create(
+            name='New Test Menu Section')
+
+        old_menusection_name = self.test_menusection.name
+        old_menusection_slug = self.test_menusection.slug
+
+        new_menusection_name = self.test_menusection_2.name
+
+        # attempt to update self.test_menusection via POST
+        self.response = self.client.post(self.current_test_url, {
+            'menu': self.test_menusection.menu.pk,
+            'name': new_menusection_name})
+        self.html = self.response.content.decode('utf-8')
+        self.assertIn("This name is too similar", self.html)
+
+        # self.test_menusection still has original values
+        self.test_menusection.refresh_from_db()
+        self.assertEqual(self.test_menusection.name, old_menusection_name)
+        self.assertEqual(self.test_menusection.slug, old_menusection_slug)
+
+    # bad kwargs
+    def test_bad_kwargs(self):
+        for i in range(len(self.view.kwargs)):
+            self.current_test_url = reverse('menus:menusection_update',
+                kwargs={
+                    'restaurant_slug':
+                        self.test_restaurant.slug if i != 0 else 'bad-slug',
+                    'menu_slug':
+                        self.test_menu.slug if i != 1 else 'bad-slug',
+                    'menusection_slug':
+                        self.test_menusection.slug if i != 2 else 'bad-slug'})
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
+
+
 class MenuSectionDeleteViewTest(TestCase):
 
     @classmethod

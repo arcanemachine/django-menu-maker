@@ -92,8 +92,7 @@ class MenuCreateViewTest(TestCase):
 
     # view attributes
     def test_view_class_name(self):
-        self.assertEqual(
-            self.view.__class__.__name__, 'MenuCreateView')
+        self.assertEqual(self.view.__class__.__name__, 'MenuCreateView')
 
     def test_parent_class_name(self):
         self.assertEqual(
@@ -106,16 +105,13 @@ class MenuCreateViewTest(TestCase):
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
     def test_model_name(self):
-        self.assertEqual(
-            self.view.model.__name__, 'Menu')
+        self.assertEqual(self.view.model.__name__, 'Menu')
 
     def test_form_class(self):
-        self.assertEqual(
-            self.view.form_class.__name__, 'MenuForm')
+        self.assertEqual(self.view.form_class.__name__, 'MenuForm')
 
     def test_success_message(self):
-        self.assertEqual(
-            self.view.success_message, "Menu Created: %(name)s")
+        self.assertEqual(self.view.success_message, "Menu Created: %(name)s")
 
     # dispatch()
     def test_method_dispatch_self_has_attribute_restaurant(self):
@@ -164,8 +160,7 @@ class MenuCreateViewTest(TestCase):
 
     # template
     def test_template_contains_proper_form_text(self):
-        self.assertIn(
-            "Please enter the information for your menu:", self.html)
+        self.assertIn("Please enter the information for your menu:", self.html)
 
     # request.POST
     def test_post_method_unauthenticated_user(self):
@@ -227,8 +222,7 @@ class MenuCreateViewTest(TestCase):
             restaurant=self.test_restaurant,
             name=new_menu_name)
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(
-            self.response.url, new_menu.get_absolute_url())
+        self.assertEqual(self.response.url, new_menu.get_absolute_url())
 
         # page loads successfully and uses proper template and expected text
         self.response = self.client.get(self.response.url)
@@ -420,8 +414,7 @@ class MenuUpdateViewTest(TestCase):
 
     # view attributes
     def test_view_class_name(self):
-        self.assertEqual(
-            self.view.__class__.__name__, 'MenuUpdateView')
+        self.assertEqual(self.view.__class__.__name__, 'MenuUpdateView')
 
     def test_parent_class_name(self):
         self.assertEqual(
@@ -434,17 +427,14 @@ class MenuUpdateViewTest(TestCase):
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
     def test_model_name(self):
-        self.assertEqual(
-            self.view.model.__name__, 'Menu')
+        self.assertEqual(self.view.model.__name__, 'Menu')
 
     def test_form_class(self):
-        self.assertEqual(
-            self.view.form_class.__name__, 'MenuForm')
+        self.assertEqual(self.view.form_class.__name__, 'MenuForm')
 
     def test_success_message(self):
         self.assertEqual(
-            self.view.success_message,
-            "Menu Successfully Updated: %(name)s")
+            self.view.success_message, "Menu Successfully Updated: %(name)s")
 
     # get_context_data()
     def test_context_has_action_verb(self):
@@ -672,8 +662,7 @@ class MenuDeleteViewTest(TestCase):
 
     def test_attribute_success_message(self):
         self.assertEqual(
-            self.view.success_message,
-            "The '%(name)s' menu has been deleted.")
+            self.view.success_message, "The '%(name)s' menu has been deleted.")
 
     # delete()
     def test_method_delete_contains_proper_success_message(self):
@@ -1317,8 +1306,7 @@ class MenuSectionUpdateViewTest(TestCase):
         # user is redirected to menusection_detail
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url,
-            self.test_menusection.get_absolute_url())
+            self.response.url, self.test_menusection.get_absolute_url())
 
         # menusection_detail loads successfully and uses proper template
         self.response = self.client.get(self.response.url)
@@ -1532,8 +1520,7 @@ class MenuSectionDeleteViewTest(TestCase):
 
         # user is redirected to menu_detail
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(
-            self.response.url, self.test_menu.get_absolute_url())
+        self.assertEqual(self.response.url, self.test_menu.get_absolute_url())
 
         # menusection_detail loads successfully and contains success message
         self.response = self.client.get(self.response.url)
@@ -1979,12 +1966,10 @@ class MenuItemUpdateViewTest(TestCase):
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
     def test_model_name(self):
-        self.assertEqual(
-            self.view.model.__name__, 'MenuItem')
+        self.assertEqual(self.view.model.__name__, 'MenuItem')
 
     def test_form_class(self):
-        self.assertEqual(
-            self.view.form_class.__name__, 'MenuItemForm')
+        self.assertEqual(self.view.form_class.__name__, 'MenuItemForm')
 
     def test_success_message(self):
         self.assertEqual(
@@ -2053,8 +2038,7 @@ class MenuItemUpdateViewTest(TestCase):
 
     def test_template_form_contains_proper_initial_data_description(self):
         self.assertIn(
-            rf'value="{self.test_menuitem.description}"',
-            self.html)
+            rf'value="{self.test_menuitem.description}"', self.html)
 
     # request.POST
     def test_post_method_unauthenticated_user(self):
@@ -2130,8 +2114,7 @@ class MenuItemUpdateViewTest(TestCase):
         # user is redirected to menuitem_detail
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url,
-            self.test_menuitem.get_absolute_url())
+            self.response.url, self.test_menuitem.get_absolute_url())
 
         # menuitem_detail loads successfully and uses proper template
         self.response = self.client.get(self.response.url)

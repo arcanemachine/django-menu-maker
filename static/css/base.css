@@ -2,6 +2,15 @@
   margin-top: 2em;
 }
 
+.form {
+	margin-top: 2em;
+}
+
+.form-buttons {
+	margin-top: 1.5em;
+	margin-bottom: 2em;
+}
+
 .message {
   margin-bottom: 1.5em;
   border-radius: 7px;

@@ -20,8 +20,8 @@ Menu Maker makes use of many of Django's primary features:
     - This project uses SQLite for maximum portability and ease of setup
 - Whenever possible, Class-Based Views (CBVs) are used, in order to take advantage of the features that are built into Django's CBVs (e.g. easy paging).
 - Django's built-in test runner:
-    - To the best of my knowledge, all statements in the code have been properly tested (Coverage is currently at 94%).
-    - Due to how Python's Coverage module detects code coverage, the number is a bit short of 100%. My goal is not to ensure that the badge says 100%, but to ensure that the codebase is sound.
+    - To the best of my knowledge, all statements in the code have been properly tested (Coverage is currently at 99%).
+    - Due to how Python's Coverage module detects code coverage, the number is a bit short of 100%. My goal is not to ensure that the badge says 100%, but to ensure that the codebase is fully tested (to a reasonable degree).
     - All efforts have been made to ensure that the tests cover all expected circumstances.
 
 This project also represents an effort to implement proper Git best practices, including:

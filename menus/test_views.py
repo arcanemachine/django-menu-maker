@@ -235,7 +235,7 @@ class MenuCreateViewTest(TestCase):
         self.assertIn(
             f"Menu Created: {new_menu_name}", self.html)
 
-        # menu object count increased by 1
+        # menu count increased by 1
         new_menu_count = Menu.objects.count()
         self.assertEqual(old_menu_count + 1, new_menu_count)
 
@@ -569,7 +569,7 @@ class MenuUpdateViewTest(TestCase):
         self.assertIn(
             f"Menu Successfully Updated: {new_menu_name}", self.html)
 
-        # menu object count has not changed
+        # menu count has not changed
         new_menu_count = Menu.objects.count()
         self.assertEqual(old_menu_count, new_menu_count)
 
@@ -721,7 +721,7 @@ class MenuDeleteViewTest(TestCase):
         redirect_url = urlparse(self.response.url)[2]
         self.assertEqual(redirect_url, reverse('login'))
 
-        # menu object count has not changed
+        # menu count has not changed
         new_menu_count = Menu.objects.count()
         self.assertEqual(old_menu_count, new_menu_count)
 
@@ -737,7 +737,7 @@ class MenuDeleteViewTest(TestCase):
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
 
-        # menu object count has not changed
+        # menu count has not changed
         new_menu = Menu.objects.count()
         self.assertEqual(old_menu, new_menu)
 
@@ -779,7 +779,7 @@ class MenuDeleteViewTest(TestCase):
         with self.assertRaises(Menu.DoesNotExist):
             self.test_menu.refresh_from_db()
 
-        # menu object count decreased by 1
+        # menu count decreased by 1
         new_menu_count = Menu.objects.count()
         self.assertEqual(old_menu_count - 1, new_menu_count)
 
@@ -993,7 +993,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.assertIn(
             f"Menu Section Created: {new_menusection.name}", self.html)
 
-        # menusection object count increased by 1
+        # menusection count increased by 1
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count + 1, new_menusection_count)
 
@@ -1013,7 +1013,7 @@ class MenuSectionCreateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
-        # menusection object count has not changed
+        # menusection count has not changed
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
 
@@ -1322,7 +1322,7 @@ class MenuSectionUpdateViewTest(TestCase):
             f"Menu Section Successfully Updated: {new_menusection_name}",
             self.html)
 
-        # menusection object count has not changed
+        # menusection count has not changed
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
 
@@ -1485,7 +1485,7 @@ class MenuSectionDeleteViewTest(TestCase):
         redirect_url = urlparse(self.response.url)[2]
         self.assertEqual(redirect_url, reverse('login'))
 
-        # menusection object count has not changed
+        # menusection count has not changed
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
 
@@ -1501,7 +1501,7 @@ class MenuSectionDeleteViewTest(TestCase):
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
 
-        # menusection object count has not changed
+        # menusection count has not changed
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count, new_menusection_count)
 
@@ -1542,7 +1542,7 @@ class MenuSectionDeleteViewTest(TestCase):
         with self.assertRaises(MenuSection.DoesNotExist):
             self.test_menusection.refresh_from_db()
 
-        # menusection object count decreased by 1
+        # menusection count decreased by 1
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count - 1, new_menusection_count)
 
@@ -1780,7 +1780,7 @@ class MenuItemCreateViewTest(TestCase):
         self.assertIn(
             f"Menu Item Created: {new_menuitem_name}", self.html)
 
-        # menusection object count increased by 1
+        # menusection count increased by 1
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count + 1, new_menuitem_count)
 
@@ -1802,7 +1802,7 @@ class MenuItemCreateViewTest(TestCase):
         self.html = self.response.content.decode('utf-8')
         self.assertIn("This name is too similar", self.html)
 
-        # menuitem object count has not changed
+        # menuitem count has not changed
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
@@ -2130,7 +2130,7 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertIn(
             f"Menu Item Successfully Updated: {new_menuitem_name}", self.html)
 
-        # menuitem object count has not changed
+        # menuitem count has not changed
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
@@ -2304,7 +2304,7 @@ class MenuItemDeleteViewTest(TestCase):
         redirect_url = urlparse(self.response.url)[2]
         self.assertEqual(redirect_url, reverse('login'))
 
-        # menuitem object count has not changed
+        # menuitem count has not changed
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
@@ -2320,7 +2320,7 @@ class MenuItemDeleteViewTest(TestCase):
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
 
-        # menuitem object count has not changed
+        # menuitem count has not changed
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
@@ -2361,7 +2361,7 @@ class MenuItemDeleteViewTest(TestCase):
         with self.assertRaises(MenuItem.DoesNotExist):
             self.test_menuitem.refresh_from_db()
 
-        # menuitem object count decreased by 1
+        # menuitem count decreased by 1
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count - 1, new_menuitem_count)
 

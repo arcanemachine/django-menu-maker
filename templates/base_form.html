@@ -1,22 +1,25 @@
-<form method="post">
+<form class="form" method="post">
 
 {% csrf_token %}
 {{ form.as_p }}
 
-  <span><button class="btn btn-success form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
+  <div class="form-buttons">
+    <span><button class="btn btn-success form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
 
 {% if not cancel_url %}
 
-  <a class="btn btn-secondary" href="{{ cancel_url }}">
-    Cancel
-  </a></span>
+    <a class="btn btn-secondary" href="{{ cancel_url }}">
+      Cancel
+    </a></span>
 
 {% else %}
 
-  <a class="btn btn-secondary" type="button" onclick="history.go(-1);">
-    {% if cancel_text %}{{ cancel_text }}{% else %}Cancel{% endif %}
-  </a></span>
+    <a class="btn btn-secondary" type="button" onclick="history.go(-1);">
+      {% if cancel_text %}{{ cancel_text }}{% else %}Cancel{% endif %}
+    </a></span>
 
 {% endif %}
+
+  </div>
 
 </form>

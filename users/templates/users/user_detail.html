@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }} - Your Account{% endblock %}
+
+{% block body_title %}Your Account{% endblock %}
+{% block body_subheading %}{% endblock %}
+
+{% block content %}
+
+<p>Username: <strong>{{ user.username }}</strong></p>
+<p>Name: <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}Not assigned{% endif %}</strong></p>
+<p>Email: <strong>{% if user.email %}{{ user.email }}{% else %}Not assigned{% endif %}</strong></p>
+
+<h4 class="mt-4">Restaurants</h4>
+{% if user.restaurant_set.count %}
+<ul>
+    {% for restaurant in user.restaurant_set.all %}
+    <li><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=restaurant.slug %}">{{ restaurant }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You have not registered any restaurants.</p>
+{% endif %}
+
+{% endblock content %}

@@ -94,6 +94,11 @@ class RestaurantModelTest(TestCase):
             self.test_restaurant._meta.get_field('admin_users').related_model
         self.assertEqual(related_model, get_user_model())
 
+    # META #
+    def test_meta_ordering(self):
+        ordering = self.test_restaurant._meta.ordering
+        self.assertEqual(ordering, ['name'])
+
     # VALIDATION #
     def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
         with self.assertRaises(ValidationError):

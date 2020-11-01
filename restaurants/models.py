@@ -12,6 +12,9 @@ class Restaurant(models.Model):
     slug = models.SlugField(max_length=128, unique=True)
     admin_users = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 

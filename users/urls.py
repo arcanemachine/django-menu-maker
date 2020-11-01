@@ -21,13 +21,15 @@ from . import views
 app_name = 'users'
 
 urlpatterns = [
+    # django.contrib.auth.views
     path(
         'login/',
         auth_views.LoginView.as_view(),
         name='login'),
+    # users.views
     path(
         'logout/',
-        auth_views.LogoutView.as_view(),
+        views.UserLogoutView.as_view(),
         name='logout'),
     path(
         'register/',

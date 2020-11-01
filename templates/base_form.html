@@ -6,7 +6,7 @@
   <div class="form-buttons">
     <span><button class="btn btn-success form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
 
-{% if not cancel_url %}
+{% if cancel_url %}
 
     <a class="btn btn-secondary" href="{{ cancel_url }}">
       Cancel

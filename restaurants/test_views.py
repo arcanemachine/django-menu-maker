@@ -19,8 +19,10 @@ class RestaurantListViewTest(TestCase):
         cls.test_restaurant.admin_users.set([cls.test_user])
         cls.test_restaurant.save()
 
+        cls.current_test_url = reverse('restaurants:restaurant_list')
+
     def setUp(self):
-        self.response = self.client.get(reverse('restaurants:restaurant_list'))
+        self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.view = self.context['view']
 
@@ -56,10 +58,12 @@ class RestaurantDetailViewTest(TestCase):
         cls.test_restaurant.admin_users.set([cls.test_user])
         cls.test_restaurant.save()
 
+        cls.current_test_url = reverse(
+            'restaurants:restaurant_detail',
+            kwargs={'restaurant_slug': cls.test_restaurant.slug})
+
     def setUp(self):
-        self.response = self.client.get(
-            reverse('restaurants:restaurant_detail', kwargs={
-                'restaurant_slug': self.test_restaurant.slug}))
+        self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.view = self.context['view']
 

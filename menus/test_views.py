@@ -18,11 +18,11 @@ class MenusRootViewTest(TestCase):
     def setUpTestData(cls):
         cls.test_restaurant = \
             Restaurant.objects.create(name='Test Restaurant')
+        cls.current_test_url = reverse('menus:menus_root', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug})
 
     def setUp(self):
         self.view = views.menus_root
-        self.current_test_url = reverse('menus:menus_root', kwargs={
-            'restaurant_slug': self.test_restaurant.slug})
         self.response = self.client.get(self.current_test_url)
 
     # view attributes
@@ -79,13 +79,14 @@ class MenuCreateViewTest(TestCase):
             Restaurant.objects.create(name='Test Restaurant')
         cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
 
+        cls.current_test_url = reverse('menus:menu_create', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menu_create', kwargs={
-            'restaurant_slug': self.test_restaurant.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -293,10 +294,11 @@ class MenuDetailViewTest(TestCase):
         # create test menu
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
+        cls.current_test_url = reverse('menus:menu_detail', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug})
+
     def setUp(self):
-        self.current_test_url = reverse('menus:menu_detail', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -631,14 +633,15 @@ class MenuDeleteViewTest(TestCase):
         # create test menu
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
+        cls.current_test_url = reverse('menus:menu_delete', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menu_delete', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -830,14 +833,15 @@ class MenuSectionCreateViewTest(TestCase):
         # create test menu
         cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
 
+        cls.current_test_url = reverse('menus:menusection_create', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menusection_create', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -1058,15 +1062,16 @@ class MenuSectionDetailViewTest(TestCase):
         cls.test_menusection = \
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
+        cls.current_test_url = reverse('menus:menusection_detail', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug,
+            'menusection_slug': cls.test_menusection.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menusection_detail', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
-            'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -1392,15 +1397,16 @@ class MenuSectionDeleteViewTest(TestCase):
         cls.test_menusection = \
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
+        cls.current_test_url = reverse('menus:menusection_delete', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug,
+            'menusection_slug': cls.test_menusection.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menusection_delete', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
-            'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -1600,15 +1606,16 @@ class MenuItemCreateViewTest(TestCase):
         cls.test_menusection = \
             cls.test_menu.menusection_set.create(name='Test Menu Section')
 
+        cls.current_test_url = reverse('menus:menuitem_create', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug,
+            'menusection_slug': cls.test_menusection.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menuitem_create', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
-            'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -1851,16 +1858,17 @@ class MenuItemDetailViewTest(TestCase):
         cls.test_menuitem = \
             cls.test_menusection.menuitem_set.create(name='Test Menu Item')
 
+        cls.current_test_url = reverse('menus:menuitem_detail', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug,
+            'menusection_slug': cls.test_menusection.slug,
+            'menuitem_slug': cls.test_menuitem.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menuitem_detail', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
-            'menusection_slug': self.test_menusection.slug,
-            'menuitem_slug': self.test_menuitem.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -1945,6 +1953,7 @@ class MenuItemUpdateViewTest(TestCase):
             'menu_slug': self.test_menu.slug,
             'menusection_slug': self.test_menusection.slug,
             'menuitem_slug': self.test_menuitem.slug})
+
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))
@@ -2209,16 +2218,17 @@ class MenuItemDeleteViewTest(TestCase):
         cls.test_menuitem = \
             cls.test_menusection.menuitem_set.create(name='Test Menu Item')
 
+        cls.current_test_url = reverse('menus:menuitem_delete', kwargs={
+            'restaurant_slug': cls.test_restaurant.slug,
+            'menu_slug': cls.test_menu.slug,
+            'menusection_slug': cls.test_menusection.slug,
+            'menuitem_slug': cls.test_menuitem.slug})
+
     def setUp(self):
         # login as authorized user
         self.client.login(
             username='restaurant_admin_user', password='password')
 
-        self.current_test_url = reverse('menus:menuitem_delete', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
-            'menusection_slug': self.test_menusection.slug,
-            'menuitem_slug': self.test_menuitem.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = html.unescape(self.response.content.decode('utf-8'))

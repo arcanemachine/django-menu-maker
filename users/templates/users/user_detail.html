@@ -14,9 +14,9 @@
 <h4 class="mt-4">Restaurants</h4>
 {% if user.restaurant_set.count %}
 <ul>
-    {% for restaurant in user.restaurant_set.all %}
-    <li><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=restaurant.slug %}">{{ restaurant }}</a></li>
-    {% endfor %}
+  {% for restaurant in user.restaurant_set.all %}
+  <li><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=restaurant.slug %}">{{ restaurant }}</a></li>
+  {% endfor %}
 </ul>
 {% else %}
 <p>You have not registered any restaurants.</p>

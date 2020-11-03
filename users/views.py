@@ -8,9 +8,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
-User = get_user_model()
-
-
 class RegisterView(SuccessMessageMixin, CreateView):
     form_class = UserCreationForm
     template_name = 'users/register.html'
@@ -18,7 +15,7 @@ class RegisterView(SuccessMessageMixin, CreateView):
     success_message = "Account successfully registered"
 
 class UserDetailView(LoginRequiredMixin, DetailView):
-    model = User
+    model = get_user_model()
     template_name = 'users/user_detail.html'
 
     def get_object(self):

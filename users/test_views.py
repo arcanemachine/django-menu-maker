@@ -6,18 +6,28 @@ from django.urls import reverse
 
 import html
 
-from . import views
+from urllib.parse import urlparse
 
+from . import views
+from restaurants.models import Restaurant
+from menus.models import MenuSection
+
+test_user_username = 'test_user'
+test_user_password = 'test_user_password'
+restaurant_admin_user_username = 'restaurant_admin'
+restaurant_admin_user_password = 'restaurant_admin_password'
+test_restaurant_name = 'Test Restaurant'
+test_menu_name = 'Test Menu'
+test_menusection_name = 'Test Menu Section'
 
 class UserLogoutViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.current_test_url = reverse('users:logout')
 
-        cls.test_user_username = 'test_user'
-        cls.test_user_password = 'test_password'
+        cls.test_user_username = test_user_username
+        cls.test_user_password = test_user_password
 
         cls.test_user = get_user_model().objects.create(
             username=cls.test_user_username)

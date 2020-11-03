@@ -8,8 +8,8 @@
 {% block content %}
 
 <p>Username: <strong>{{ user.username }}</strong></p>
-<p>Name: <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}Not assigned{% endif %}</strong></p>
-<p>Email: <strong>{% if user.email %}{{ user.email }}{% else %}Not assigned{% endif %}</strong></p>
+<p>Name: <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}N/A{% endif %}</strong></p>
+<p>Email: <strong>{% if user.email %}{{ user.email }}{% else %}N/A{% endif %}</strong></p>
 
 <h4 class="mt-4">Restaurants</h4>
 {% if user.restaurant_set.count %}

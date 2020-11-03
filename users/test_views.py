@@ -1,7 +1,8 @@
 from django.contrib.messages import get_messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.views import LoginView
 from django.conf import settings
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
 
 import html
@@ -80,6 +81,16 @@ class RegisterViewTest(TestCase):
         new_user_count = get_user_model().objects.count()
         self.assertEqual(old_user_count + 1, new_user_count)
 
+class LoginViewTest(SimpleTestCase):
+
+    def setUp(self):
+        self.current_test_url = reverse('users:login')
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.view = self.response.context['view']
+
+    def test_template_name(self):
+        self.assertTrue(self.view.template_name, 'users/login.html')
 
 class UserDetailViewTest(TestCase):
 
@@ -145,7 +156,7 @@ class UserDetailViewTest(TestCase):
         self.assertTrue(redirect_url, reverse('users:login'))
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, 'registration/login.html')
+        self.assertTemplateUsed(self.response, 'users/login.html')
 
     def test_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)

@@ -37,6 +37,6 @@ urlpatterns = [
     # django.contrib.auth.views
     path(
         'login/',
-        auth_views.LoginView.as_view(),
+        auth_views.LoginView.as_view(template_name='users/login.html'),
         name='login'),
     ]

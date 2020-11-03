@@ -21,22 +21,22 @@ from . import views
 app_name = 'users'
 
 urlpatterns = [
-    # django.contrib.auth.views
-    path(
-        'login/',
-        auth_views.LoginView.as_view(),
-        name='login'),
     # users.views
     path(
-        'logout/',
-        views.UserLogoutView.as_view(),
-        name='logout'),
+        'register/',
+        views.RegisterView.as_view(),
+        name='register'),
     path(
         'me/',
         views.UserDetailView.as_view(),
         name='user_detail'),
     path(
-        'register/',
-        views.RegisterView.as_view(),
-        name='register'),
+        'logout/',
+        views.UserLogoutView.as_view(),
+        name='logout'),
+    # django.contrib.auth.views
+    path(
+        'login/',
+        auth_views.LoginView.as_view(),
+        name='login'),
     ]

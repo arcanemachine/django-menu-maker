@@ -10,13 +10,12 @@ from django.views.generic import CreateView, DetailView
 
 User = get_user_model()
 
-class UserLogoutView(LogoutView):
-    success_message = "You have successfully logged out."
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            messages.info(request, self.success_message)
-        return super().dispatch(request, *args, **kwargs)
+class RegisterView(SuccessMessageMixin, CreateView):
+    form_class = UserCreationForm
+    template_name = 'users/register.html'
+    success_url = reverse_lazy(settings.LOGIN_URL)
+    success_message = "Account successfully registered"
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
@@ -25,8 +24,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_object(self):
         return self.request.user
 
-class RegisterView(SuccessMessageMixin, CreateView):
-    form_class = UserCreationForm
-    template_name = 'users/register.html'
-    success_url = reverse_lazy(settings.LOGIN_URL)
-    success_message = "Account successfully registered"
+class UserLogoutView(LogoutView):
+    success_message = "You have successfully logged out."
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            messages.info(request, self.success_message)
+        return super().dispatch(request, *args, **kwargs)

@@ -4,18 +4,23 @@ from django.urls import reverse
 
 from .models import Restaurant
 
+test_user_username = 'test_user'
+test_user_password = 'test_user_password'
+test_restaurant_name = 'Test Restaurant'
 
 class RestaurantListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         # create test user
-        cls.test_user = get_user_model().objects.create(username='test_user')
-        cls.test_user.set_password('password')
+        cls.test_user = \
+                get_user_model().objects.create(username=test_user_username)
+        cls.test_user.set_password(test_user_password)
         cls.test_user.save()
 
         # create test restaurant
-        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant = \
+            Restaurant.objects.create(name=test_restaurant_name)
         cls.test_restaurant.admin_users.set([cls.test_user])
         cls.test_restaurant.save()
 
@@ -31,7 +36,7 @@ class RestaurantListViewTest(TestCase):
 
     def test_parent_class_name(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'ListView')
+            self.view.__class__.__bases__[-1].__name__, 'ListView')
 
     def test_model(self):
         self.assertEqual(self.view.model.__name__, 'Restaurant')
@@ -49,17 +54,18 @@ class RestaurantDetailViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # create test user
-        cls.test_user = get_user_model().objects.create(username='test_user')
-        cls.test_user.set_password('password')
+        cls.test_user = get_user_model().objects.create(
+                username=test_user_username)
+        cls.test_user.set_password(test_user_password)
         cls.test_user.save()
 
         # create test restaurant
-        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant = Restaurant.objects.create(
+            name=test_restaurant_name)
         cls.test_restaurant.admin_users.set([cls.test_user])
         cls.test_restaurant.save()
 
-        cls.current_test_url = reverse(
-            'restaurants:restaurant_detail',
+        cls.current_test_url = reverse('restaurants:restaurant_detail',
             kwargs={'restaurant_slug': cls.test_restaurant.slug})
 
     def setUp(self):
@@ -73,7 +79,7 @@ class RestaurantDetailViewTest(TestCase):
 
     def test_parent_class_name(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, "DetailView")
+            self.view.__class__.__bases__[-1].__name__, "DetailView")
 
     def test_model_name(self):
         self.assertEqual(self.view.model.__name__, 'Restaurant')
@@ -81,6 +87,12 @@ class RestaurantDetailViewTest(TestCase):
     # request.GET
     def test_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_shows_add_menu_link(self):
+        # TODO: finish
+        #self.assertNot
+        pass
 
     # bad kwargs
     def test_bad_kwargs(self):

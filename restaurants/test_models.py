@@ -2,34 +2,40 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.text import slugify
 
 from .models import Restaurant
 
+test_user_username = 'test_user'
+test_user_password = 'test_password'
+test_restaurant_name = 'Test Restaurant'
 
 class RestaurantModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         # create test user
-        cls.test_user = get_user_model().objects.create(username='test_user')
-        cls.test_user.set_password('password')
+        cls.test_user = \
+            get_user_model().objects.create(username=test_user_username)
+        cls.test_user.set_password(test_user_password)
         cls.test_user.save()
 
         # create test_restaurant
-        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
+        cls.test_restaurant = \
+            Restaurant.objects.create(name=test_restaurant_name)
         cls.test_restaurant.admin_users.add(cls.test_user)
 
     def test_object_name(self):
         self.assertEqual(self.test_restaurant._meta.object_name, 'Restaurant')
 
     def test_object_content(self):
-        expected_name = 'Test Restaurant'
-        expected_slug = 'test-restaurant'
+        expected_name = test_restaurant_name
         expected_admin_users = \
             get_user_model().objects.filter(pk=self.test_user.pk)
 
         self.assertEqual(self.test_restaurant.name, expected_name)
-        self.assertEqual(self.test_restaurant.slug, expected_slug)
+        self.assertEqual(
+            self.test_restaurant.slug, slugify(self.test_restaurant.name))
         self.assertEqual(
             set(self.test_restaurant.admin_users.all()),
             set(expected_admin_users))

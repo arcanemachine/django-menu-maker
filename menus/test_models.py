@@ -2,25 +2,32 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.text import slugify
 
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
+test_restaurant_name = 'Test Restaurant'
+test_menu_name = 'Test Menu'
+test_menusection_name = 'Test Menu Section'
+test_menuitem_name = 'Test Menu Item'
 
 class MenuModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
-        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+        cls.test_restaurant = \
+            Restaurant.objects.create(name=test_restaurant_name)
+        cls.test_menu = \
+            cls.test_restaurant.menu_set.create(name=test_menu_name)
 
     def test_object_name(self):
         self.assertEqual(self.test_menu._meta.object_name, 'Menu')
 
     def test_object_content(self):
         expected_restaurant = self.test_restaurant
-        expected_name = 'Test Menu'
-        expected_slug = 'test-menu'
+        expected_name = test_menu_name
+        expected_slug = slugify(expected_name)
 
         self.assertEqual(self.test_menu.restaurant, expected_restaurant)
         self.assertEqual(self.test_menu.name, expected_name)
@@ -123,9 +130,7 @@ class MenuModelTest(TestCase):
     # VALIDATION #
     def test_validation_fail_restaurant_makes_two_menus_with_same_slug(self):
         with self.assertRaises(ValidationError):
-            self.test_restaurant.menu_set.create(name='Test Menu')
-        with self.assertRaises(ValidationError):
-            self.test_restaurant.menu_set.create(name='Test--Menu')
+            self.test_restaurant.menu_set.create(name=f"{self.test_menu.name}")
 
     def test_validation_do_not_allow_slug_if_it_is_a_reserved_keyword(self):
         with self.assertRaises(ValidationError):
@@ -133,13 +138,14 @@ class MenuModelTest(TestCase):
 
     def test_validation_pass_two_restaurants_with_same_menu_slug(self):
         test_restaurant_2 = \
-            Restaurant.objects.create(name="Test Restaurant 2")
-        test_restaurant_2.menu_set.create(name='Test Menu')
+            Restaurant.objects.create(name=f"{self.test_restaurant.name} 2")
+        test_restaurant_2.menu_set.create(name=self.test_menu.name)
         self.assertEqual(Menu.objects.count(), 2)
 
     # METHODS #
     def test_method_str_returns_restaurant_name_and_menu_name(self):
-        expected_string = "Test Restaurant - Test Menu"
+        expected_string = \
+            f"{self.test_restaurant.name} - {self.test_menu.name}"
         self.assertEqual(str(self.test_menu), expected_string)
 
     def test_method_get_absolute_url(self):
@@ -153,10 +159,12 @@ class MenuSectionModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
-        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+        cls.test_restaurant = \
+            Restaurant.objects.create(name=test_restaurant_name)
+        cls.test_menu = \
+            cls.test_restaurant.menu_set.create(name=test_menu_name)
         cls.test_menusection = cls.test_menu.menusection_set.create(
-            name='Test Menu Section')
+            name=test_menusection_name)
 
     def test_object_name(self):
         self.assertEqual(
@@ -164,8 +172,8 @@ class MenuSectionModelTest(TestCase):
 
     def test_object_content(self):
         expected_menu = self.test_menu
-        expected_name = 'Test Menu Section'
-        expected_slug = 'test-menu-section'
+        expected_name = self.test_menusection.name
+        expected_slug = slugify(expected_name)
 
         self.assertEqual(self.test_menusection.menu, expected_menu)
         self.assertEqual(self.test_menusection.name, expected_name)
@@ -243,7 +251,8 @@ class MenuSectionModelTest(TestCase):
             self.test_menu.menusection_set.create(name='all')
 
     def test_validation_pass_two_menus_with_same_menusection_slug(self):
-        test_menu_2 = self.test_restaurant.menu_set.create(name='Test Menu 2')
+        test_menu_2 = self.test_restaurant.menu_set.create(
+            name=f'{self.test_menu.name} 2')
         test_menu_2.menusection_set.create(name=self.test_menusection.name)
         self.assertEqual(MenuSection.objects.count(), 2)
 
@@ -268,20 +277,22 @@ class MenuItemModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.test_restaurant = Restaurant.objects.create(name='Test Restaurant')
-        cls.test_menu = cls.test_restaurant.menu_set.create(name='Test Menu')
+        cls.test_restaurant = \
+            Restaurant.objects.create(name=test_restaurant_name)
+        cls.test_menu = \
+            cls.test_restaurant.menu_set.create(name=test_menu_name)
         cls.test_menusection = cls.test_menu.menusection_set.create(
-            name='Test Menu Section')
+            name=test_menusection_name)
         cls.test_menuitem = cls.test_menusection.menuitem_set.create(
-            name='Test Menu Item')
+            name=test_menuitem_name)
 
     def test_object_name(self):
         self.assertEqual(self.test_menuitem._meta.object_name, 'MenuItem')
 
     def test_object_content(self):
         expected_menusection = self.test_menusection
-        expected_name = 'Test Menu Item'
-        expected_slug = 'test-menu-item'
+        expected_name = test_menuitem_name
+        expected_slug = slugify(expected_name)
 
         self.assertEqual(self.test_menuitem.menusection, expected_menusection)
         self.assertEqual(self.test_menuitem.name, expected_name)
@@ -360,7 +371,7 @@ class MenuItemModelTest(TestCase):
 
     def test_validation_pass_two_menusections_with_same_menuitem_slug(self):
         test_menusection_2 = self.test_menu.menusection_set.create(
-            name='Test Menu Section 2')
+            name='{self.test_menusection.name} 2')
         test_menusection_2.menuitem_set.create(name=self.test_menuitem.name)
         self.assertEqual(MenuItem.objects.count(), 2)
 

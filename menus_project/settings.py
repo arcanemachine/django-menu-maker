@@ -128,3 +128,7 @@ STATIC_ROOT = keys.STATIC_ROOT
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'root'
 LOGOUT_REDIRECT_URL = 'root'
+
+# Email
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

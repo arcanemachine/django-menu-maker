@@ -13,6 +13,7 @@ from restaurants.models import Restaurant
 from menus.models import MenuSection
 
 test_user_username = 'test_user'
+test_user_email = 'test_user@email.com'
 test_user_password = 'test_user_password'
 restaurant_admin_user_username = 'restaurant_admin'
 restaurant_admin_user_password = 'restaurant_admin_password'
@@ -39,7 +40,7 @@ class RegisterViewTest(TestCase):
             self.view.__class__.__bases__[-1].__name__, 'CreateView')
 
     def test_form_class(self):
-        self.assertEqual(self.view.form_class.__name__, 'UserCreationForm')
+        self.assertEqual(self.view.form_class.__name__, 'NewUserCreationForm')
 
     def test_success_url(self):
         self.assertEqual(self.view.success_url, reverse('users:login'))
@@ -55,12 +56,12 @@ class RegisterViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_post_method_register_new_user(self):
-
         # get user count before POST
         old_user_count = get_user_model().objects.count()
 
         self.response = self.client.post(self.current_test_url, {
             'username': test_user_username,
+            'email': test_user_email,
             'password1': test_user_password,
             'password2': test_user_password})
 

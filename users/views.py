@@ -1,15 +1,16 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
+from .forms import NewUserCreationForm
+
 class RegisterView(SuccessMessageMixin, CreateView):
-    form_class = UserCreationForm
+    form_class = NewUserCreationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy(settings.LOGIN_URL)
     success_message = "Account successfully registered"

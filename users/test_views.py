@@ -220,7 +220,6 @@ class UserLogoutViewTest(TestCase):
             self.view.__class__.__bases__[-1].__name__, 'LogoutView')
 
     def test_get_method_unauthenticated_user(self):
-
         self.client.logout()
         self.response = self.client.get(self.current_test_url)
 
@@ -239,7 +238,6 @@ class UserLogoutViewTest(TestCase):
         self.assertEqual(len(self.response.context['messages']), 0)
 
     def test_get_method_authenticated_user(self):
-
         self.response = self.client.get(self.current_test_url)
 
         # redirect to settings.LOGIN_REDIRECT_URL
@@ -257,7 +255,6 @@ class UserLogoutViewTest(TestCase):
         self.assertEqual(len(self.response.context['messages']), 1)
 
     def test_post_method_unauthenticated_user(self):
-
         self.client.logout()
         self.response = self.client.post(self.current_test_url)
 
@@ -276,7 +273,6 @@ class UserLogoutViewTest(TestCase):
         self.assertEqual(len(self.response.context['messages']), 0)
 
     def test_post_method_authenticated_user(self):
-
         self.response = self.client.post(self.current_test_url)
 
         # redirect to settings.LOGIN_REDIRECT_URL

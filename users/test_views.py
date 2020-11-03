@@ -202,7 +202,7 @@ class UserLogoutViewTest(TestCase):
 
         # login as test_user
         self.client.login(
-            username=self.test_user_username, password=self.test_user_password)
+            username=self.test_user_username, password=test_user_password)
         self.response = self.client.get(self.current_test_url)
 
         self.request = RequestFactory().get(self.current_test_url)

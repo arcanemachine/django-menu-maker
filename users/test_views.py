@@ -20,6 +20,111 @@ test_restaurant_name = 'Test Restaurant'
 test_menu_name = 'Test Menu'
 test_menusection_name = 'Test Menu Section'
 
+
+class UserDetailViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # create unprivileged user
+        cls.test_user = \
+            get_user_model().objects.create(username=test_user_username)
+        cls.test_user.set_password(test_user_password)
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = get_user_model().objects.create(
+            username=restaurant_admin_user_username)
+        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurants = []
+        for i in range(2):
+            cls.test_restaurants.append(
+                Restaurant.objects.create(
+                    name=f"{test_restaurant_name} {i+1}"))
+
+        cls.current_test_url = reverse('users:user_detail')
+
+    def setUp(self):
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=restaurant_admin_user_password)
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_class_name(self):
+        self.assertEqual(self.view.__class__.__name__, 'UserDetailView')
+
+    def test_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'DetailView')
+
+    def test_which_mixins_are_used(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'LoginRequiredMixin')
+
+    def test_model_name(self):
+        self.assertEqual(self.view.model.__name__, 'User')
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.restaurant_admin_user)
+
+    # request.GET
+    def test_get_method_unauthenticated_user(self):
+        self.client.logout()
+        self.response = self.client.get(self.current_test_url)
+
+        # redirect to users:login
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertTrue(redirect_url, reverse('users:login'))
+        self.response = self.client.get(self.response.url)
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'registration/login.html')
+
+    def test_get_method_authenticated_user(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, self.view.template_name)
+
+    # TEMPLATE
+
+    # template
+    def test_template_shows_restaurants(self):
+        # 0 restaurants
+        self.assertIn("You have not registered any restaurants.", self.html)
+
+        # 1 restaurant
+        self.test_restaurants[0].admin_users.add(self.restaurant_admin_user)
+        self.client.get(self.current_test_url)
+        self.response = self.client.get(self.current_test_url)
+        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.assertIn(f"{self.test_restaurants[0].name}", self.html)
+
+        # 2 restaurants
+        self.test_restaurants[1].admin_users.add(self.restaurant_admin_user)
+        self.client.get(self.current_test_url)
+        self.response = self.client.get(self.current_test_url)
+        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.assertIn(f"{self.test_restaurants[0].name}", self.html)
+        self.assertIn(f"{self.test_restaurants[1].name}", self.html)
+
+    # bad kwargs
+    def test_bad_kwargs(self):
+        for i in range(len(self.view.kwargs)):
+            self.current_test_url = reverse('menus:menu_detail', kwargs={
+                'restaurant_slug':
+                    self.test_restaurant.slug if i != 0 else 'bad-slug',
+                'menu_slug':
+                    self.test_menu.slug if i != 1 else 'bad-slug'})
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)
+
+
 class UserLogoutViewTest(TestCase):
 
     @classmethod

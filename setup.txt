@@ -1,0 +1,9 @@
+Setup Guide (Not complete):
+
+- Setup Django
+    - pipenv shell
+        - pip3 install pipenv
+- Setup email backend
+    - default: console backend
+    - choices:
+        - blah blah blah

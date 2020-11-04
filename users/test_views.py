@@ -96,6 +96,45 @@ class LoginViewTest(SimpleTestCase):
         self.assertTrue(self.view.template_name, 'users/login.html')
 
 
+class PasswordChangeViewTest(TestCase):
+
+    def setUp(self):
+        self.test_user = \
+            get_user_model().objects.create(username=test_user_username)
+        self.test_user.set_password(test_user_password)
+        self.test_user.save()
+
+        self.client.login(
+            username=self.test_user.username, password=test_user_password)
+
+        self.current_test_url = reverse('users:password_change')
+        self.response = self.client.get(self.current_test_url)
+        self.view = self.response.context['view']
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_template_name(self):
+        self.assertTrue(
+            self.view.template_name, 'users/password_change_form.html')
+
+
+class PasswordResetViewTest(SimpleTestCase):
+
+    def setUp(self):
+        self.current_test_url = reverse('users:password_reset')
+        self.response = self.client.get(self.current_test_url)
+        self.view = self.response.context['view']
+
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_template_name(self):
+        self.assertTrue(
+            self.view.template_name, 'users/password_reset_form.html')
+
+
 class UserDetailViewTest(TestCase):
 
     @classmethod

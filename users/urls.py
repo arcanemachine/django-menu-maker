@@ -43,4 +43,14 @@ urlpatterns = [
         'login/',
         auth_views.LoginView.as_view(template_name='users/login.html'),
         name='login'),
+    path(
+        'me/change-password/',
+        auth_views.PasswordChangeView.as_view(
+            template_name='users/password_change_form.html'),
+        name='password_change'),
+    path(
+        'forgot-password/',
+        auth_views.PasswordResetView.as_view(
+            template_name='users/password_reset_form.html'),
+        name='password_reset'),
     ]

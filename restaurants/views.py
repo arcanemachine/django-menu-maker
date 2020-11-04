@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, DetailView, ListView
 
@@ -31,8 +30,8 @@ class RestaurantCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save()
         self.object.admin_users.add(self.request.user)
-        messages.success(self.request,
-            self.success_message % self.object.__dict__)
+        messages.success(
+            self.request, self.success_message % self.object.__dict__)
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):

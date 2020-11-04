@@ -55,6 +55,7 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     def get_object(self):
         return self.request.user
 
+
 class UserLogoutView(LogoutView):
     success_message = "You have successfully logged out."
 

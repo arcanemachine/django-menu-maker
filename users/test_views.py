@@ -3,8 +3,6 @@ from django.conf import settings
 from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
 
-import html
-
 from html import unescape
 from urllib.parse import urlparse
 
@@ -57,6 +55,7 @@ class RegisterViewTest(TestCase):
             self.view.success_message,
             "Your account has been successfully registered.")
 
+    # request.GET
     def test_get_method(self):
         self.assertEqual(self.response.status_code, 200)
 
@@ -275,8 +274,7 @@ class UserUpdateViewTest(TestCase):
     # template
     def test_template_contains_proper_intro_text(self):
         self.assertIn(
-            rf"Enter the details of your personal information here:",
-            self.html)
+            "Enter the details of your personal information here:", self.html)
 
     def test_template_form_contains_proper_initial_data_name(self):
         for key, value in self.view.get_initial().items():
@@ -372,7 +370,7 @@ class UserDeleteViewTest(TestCase):
 
     def test_template_contains_proper_confirm_text(self):
         self.assertIn(
-            fr"Are you sure you want to delete your account?", self.html)
+            "Are you sure you want to delete your account?", self.html)
 
     # request.POST
     def test_post_method(self):
@@ -390,7 +388,7 @@ class UserDeleteViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
-        self.assertIn(rf"Your account has been deleted.", self.html)
+        self.assertIn("Your account has been deleted.", self.html)
 
         # object no longer exists
         with self.assertRaises(get_user_model().DoesNotExist):
@@ -399,6 +397,7 @@ class UserDeleteViewTest(TestCase):
         # user count decreased by 1
         new_user_count = get_user_model().objects.count()
         self.assertEqual(old_user_count - 1, new_user_count)
+
 
 class UserLogoutViewTest(TestCase):
 
@@ -435,6 +434,7 @@ class UserLogoutViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'LogoutView')
 
+    # request.GET
     def test_get_method_unauthenticated_user(self):
         self.client.logout()
         self.response = self.client.get(self.current_test_url)

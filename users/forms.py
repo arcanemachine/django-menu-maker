@@ -13,6 +13,7 @@ class NewUserCreationForm(UserCreationForm):
         self.fields['email'].required = True
 
     def clean_email(self):
+        # do not allow duplicate email addresses
         email = self.cleaned_data['email']
         if get_user_model().objects.filter(email=email).exists():
             raise ValidationError("This email address is already in use.")

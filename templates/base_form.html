@@ -35,4 +35,13 @@
 
   </div>
 
+<script>
+document.addEventListener("keydown", function(event) {
+  const key = event.key;
+  if (key === "Escape") {
+    history.go(-1);
+  }
+});
+</script>
+
 </form>

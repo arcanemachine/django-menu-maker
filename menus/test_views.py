@@ -12,17 +12,17 @@ from .models import Menu, MenuSection, MenuItem
 from menus_project import constants
 from restaurants.models import Restaurant
 
-test_user_username = constants.test_user_username
-test_user_password = constants.test_user_password
+test_user_username = constants.TEST_USER_USERNAME
+test_user_password = constants.TEST_USER_PASSWORD
 
-restaurant_admin_user_username = constants.restaurant_admin_user_username
-restaurant_admin_user_password = constants.restaurant_admin_user_password
+restaurant_admin_user_username = constants.RESTAURANT_ADMIN_USER_USERNAME
+restaurant_admin_user_password = constants.RESTAURANT_ADMIN_USER_PASSWORD
 
-test_restaurant_name = constants.test_restaurant_name
-test_menu_name = constants.test_menu_name
-test_menusection_name = constants.test_menusection_name
-test_menuitem_name = constants.test_menuitem_name
-test_menuitem_description = constants.test_menuitem_description
+test_restaurant_name = constants.TEST_RESTAURANT_NAME
+test_menu_name = constants.TEST_MENU_NAME
+test_menusection_name = constants.TEST_MENUSECTION_NAME
+test_menuitem_name = constants.TEST_MENUITEM_NAME
+test_menuitem_description = constants.TEST_MENUITEM_DESCRIPTION
 
 
 class MenusRootViewTest(TestCase):

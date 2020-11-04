@@ -4,9 +4,9 @@ from django.test import TestCase
 from .forms import NewUserCreationForm
 from menus_project import constants
 
-test_user_username = constants.test_user_username
-test_user_email = constants.test_user_email
-test_user_password = constants.test_user_password
+test_user_username = constants.TEST_USER_USERNAME
+test_user_email = constants.TEST_USER_EMAIL
+test_user_password = constants.TEST_USER_PASSWORD
 
 class NewUserCreationFormTest(TestCase):
 

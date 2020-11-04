@@ -7,9 +7,9 @@ from html import unescape
 from .models import Restaurant
 from menus_project import constants
 
-test_user_username = constants.test_user_username
-test_user_password = constants.test_user_password
-test_restaurant_name = constants.test_restaurant_name
+test_user_username = constants.TEST_USER_USERNAME
+test_user_password = constants.TEST_USER_PASSWORD
+test_restaurant_name = constants.TEST_RESTAURANT_NAME
 
 
 class RestaurantListViewTest(TestCase):

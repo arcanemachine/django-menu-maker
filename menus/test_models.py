@@ -4,13 +4,14 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
 
+from menus_project import constants
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
-test_restaurant_name = 'Test Restaurant'
-test_menu_name = 'Test Menu'
-test_menusection_name = 'Test Menu Section'
-test_menuitem_name = 'Test Menu Item'
+test_restaurant_name = constants.TEST_RESTAURANT_NAME
+test_menu_name = constants.TEST_MENU_NAME
+test_menusection_name = constants.TEST_MENUSECTION_NAME
+test_menuitem_name = constants.TEST_MENUITEM_NAME
 
 class MenuModelTest(TestCase):
 

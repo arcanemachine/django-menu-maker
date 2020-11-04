@@ -5,10 +5,11 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from .models import Restaurant
+from menus_project import constants
 
-test_user_username = 'test_user'
-test_user_password = 'test_password'
-test_restaurant_name = 'Test Restaurant'
+test_user_username = constants.TEST_USER_USERNAME
+test_user_password = constants.TEST_USER_PASSWORD
+test_restaurant_name = constants.TEST_RESTAURANT_NAME
 
 class RestaurantModelTest(TestCase):
 

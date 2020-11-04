@@ -26,7 +26,7 @@ class RegisterViewTest(TestCase):
         self.current_test_url = reverse('users:register')
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -69,7 +69,7 @@ class RegisterViewTest(TestCase):
 
         self.response = self.client.get(self.response.url)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
 
         # template contains success_message
         self.assertIn(self.view.success_message, self.html)
@@ -121,7 +121,7 @@ class UserDetailViewTest(TestCase):
             password=restaurant_admin_user_password)
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
         self.view = self.response.context['view']
 
     # view attributes
@@ -171,14 +171,14 @@ class UserDetailViewTest(TestCase):
         self.test_restaurants[0].admin_users.add(self.restaurant_admin_user)
         self.client.get(self.current_test_url)
         self.response = self.client.get(self.current_test_url)
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_restaurants[0].name}", self.html)
 
         # 2 restaurants
         self.test_restaurants[1].admin_users.add(self.restaurant_admin_user)
         self.client.get(self.current_test_url)
         self.response = self.client.get(self.current_test_url)
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_restaurants[0].name}", self.html)
         self.assertIn(f"{self.test_restaurants[1].name}", self.html)
 
@@ -241,7 +241,7 @@ class UserLogoutViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
 
         # messages does not contain success_message
         self.assertNotIn(self.view.success_message, self.html)
@@ -258,7 +258,7 @@ class UserLogoutViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
 
         # messages contains success_message
         self.assertIn(self.view.success_message, self.html)
@@ -276,7 +276,7 @@ class UserLogoutViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
 
         # messages does not contain success_message
         self.assertNotIn(self.view.success_message, self.html)
@@ -293,7 +293,7 @@ class UserLogoutViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
         self.context = self.response.context
-        self.html = html.unescape(self.response.content.decode('utf-8'))
+        self.html = unescape(self.response.content.decode('utf-8'))
 
         # template contains 1 message
         self.assertEqual(len(self.response.context['messages']), 1)

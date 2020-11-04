@@ -18,3 +18,8 @@ TEST_MENU_NAME = 'Test Menu'
 TEST_MENUSECTION_NAME = 'Test Menu Section'
 TEST_MENUITEM_NAME = 'Test Menu Item'
 TEST_MENUITEM_DESCRIPTION = 'Test Menu Item Description'
+
+# validation
+
+RESERVED_KEYWORD_ERROR_STRING = \
+    "This name is reserved and cannot be used. Please choose another name."

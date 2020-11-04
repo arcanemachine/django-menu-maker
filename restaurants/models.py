@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from menus_project.constants import RESERVED_KEYWORDS
+from menus_project import constants
 
 
 class Restaurant(models.Model):
@@ -20,10 +20,8 @@ class Restaurant(models.Model):
 
     def clean(self):
         # do not allow slugs to be reserved keywords
-        if self.slug in RESERVED_KEYWORDS:
-            raise ValidationError(
-                "This name is reserved and cannot be used. "
-                "Please choose another name.")
+        if self.slug in constants.RESERVED_KEYWORDS:
+            raise ValidationError(constants.RESERVED_KEYWORD_ERROR_STRING)
 
         # do not allow duplicate restaurant slugs
         restaurants_with_same_slug = \
@@ -31,8 +29,8 @@ class Restaurant(models.Model):
         if restaurants_with_same_slug.exists() \
             and restaurants_with_same_slug.first() != self \
                 and restaurants_with_same_slug.last() != self:
-            raise ValidationError("This name is too similar to an existing "
-                "restaurant name.")
+            raise ValidationError(
+                "This name is too similar to an existing restaurant name.")
 
     def get_absolute_url(self):
         return reverse('restaurants:restaurant_detail', kwargs={

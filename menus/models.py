@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from menus_project.constants import RESERVED_KEYWORDS
+from menus_project import constants
 
 
 class Menu(models.Model):
@@ -35,10 +35,8 @@ class Menu(models.Model):
 
     def clean(self):
         # do not allow slugs to be reserved keywords
-        if self.slug in RESERVED_KEYWORDS:
-            raise ValidationError(
-                "This name is reserved and cannot be used. "
-                "Please choose another name.")
+        if self.slug in constants.RESERVED_KEYWORDS:
+            raise ValidationError(constants.RESERVED_KEYWORD_ERROR_STRING)
 
         # do not allow a restaurant to have duplicate menu slugs
         menus_with_same_slug = Menu.objects.filter(
@@ -73,10 +71,8 @@ class MenuSection(models.Model):
 
     def clean(self):
         # do not allow slugs to be reserved keywords
-        if self.slug in RESERVED_KEYWORDS:
-            raise ValidationError(
-                "This name is reserved and cannot be used. "
-                "Please choose another name.")
+        if self.slug in constants.RESERVED_KEYWORDS:
+            raise ValidationError(constants.RESERVED_KEYWORD_ERROR_STRING)
 
         # do not allow a menu to have duplicate section slugs
         menusections_with_same_slug = MenuSection.objects.filter(
@@ -115,10 +111,8 @@ class MenuItem(models.Model):
 
     def clean(self):
         # do not allow slugs to be reserved keywords
-        if self.slug in RESERVED_KEYWORDS:
-            raise ValidationError(
-                "This name is reserved and cannot be used. "
-                "Please choose another name.")
+        if self.slug in constants.RESERVED_KEYWORDS:
+            raise ValidationError(constants.RESERVED_KEYWORD_ERROR_STRING)
 
         # do not allow a menusection to have duplicate menuitem slugs
         menuitems_with_same_slug = MenuItem.objects.filter(

@@ -6,6 +6,7 @@ from django.contrib.auth.views import LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
+from django.views.generic.edit import UpdateView
 
 from .forms import NewUserCreationForm
 
@@ -24,6 +25,21 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_object(self):
         return self.request.user
 
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = get_user_model()
+    template_name = 'users/user_update.html'
+    fields = ('first_name', 'last_name', 'email')
+    success_message = "You have updated your personal information."
+    success_url = reverse_lazy('users:user_detail')
+
+    def get_object(self):
+        return self.request.user
+
+    def get_initial(self):
+        return {'first_name': self.request.user.first_name,
+                'last_name': self.request.user.last_name,
+                'email': self.request.user.email}
 
 class UserLogoutView(LogoutView):
     success_message = "You have successfully logged out."

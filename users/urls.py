@@ -31,6 +31,10 @@ urlpatterns = [
         views.UserDetailView.as_view(),
         name='user_detail'),
     path(
+        'me/edit/',
+        views.UserUpdateView.as_view(),
+        name='user_update'),
+    path(
         'logout/',
         views.UserLogoutView.as_view(),
         name='logout'),

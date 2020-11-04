@@ -5,6 +5,7 @@ from django.urls import reverse
 
 import html
 
+from html import unescape
 from urllib.parse import urlparse
 
 from . import views
@@ -12,10 +13,14 @@ from menus_project import constants
 from restaurants.models import Restaurant
 
 test_user_username = constants.test_user_username
+test_user_first_name = constants.test_user_first_name
+test_user_last_name = constants.test_user_last_name
 test_user_email = constants.test_user_email
 test_user_password = constants.test_user_password
+
 restaurant_admin_user_username = constants.restaurant_admin_user_username
 restaurant_admin_user_password = constants.restaurant_admin_user_password
+
 test_restaurant_name = constants.test_restaurant_name
 test_menu_name = constants.test_menu_name
 test_menusection_name = constants.test_menusection_name
@@ -194,6 +199,111 @@ class UserDetailViewTest(TestCase):
             self.response = self.client.get(self.current_test_url)
             self.assertEqual(self.response.status_code, 404)
 
+
+class UserUpdateViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # create unprivileged user
+        cls.test_user = get_user_model().objects.create(
+            username=test_user_username,
+            first_name=test_user_first_name,
+            last_name=test_user_last_name,
+            email=test_user_email)
+        cls.test_user.set_password(test_user_password)
+        cls.test_user.save()
+
+    def setUp(self):
+
+        # login as user
+        self.client.login(
+            username=self.test_user.username, password=test_user_password)
+
+        self.current_test_url = reverse('users:user_update')
+        self.response = self.client.get(self.current_test_url)
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_class_name(self):
+        self.assertEqual(self.view.__class__.__name__, 'UserUpdateView')
+
+    def test_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'UpdateView')
+
+    def test_which_mixins_are_used(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'LoginRequiredMixin')
+
+    def test_model(self):
+        self.assertEqual(self.view.model, get_user_model())
+
+    def test_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            "You have updated your personal information.")
+
+    # get_initial()
+    def test_method_get_initial(self):
+        self.assertEqual(
+            self.view.get_initial(), {
+                'first_name': self.test_user.first_name,
+                'last_name': self.test_user.last_name,
+                'email': self.test_user.email})
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.test_user)
+
+    # request.GET
+    def test_get_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # request by unauthenticated user should redirect to login
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+    def test_get_method_authenticated_user(self):
+        self.client.login(
+            username=self.test_user.username, password=test_user_password)
+        self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_contains_proper_intro_text(self):
+        self.assertIn(
+            rf"Enter the details of your personal information here:",
+            self.html)
+
+    def test_template_form_contains_proper_initial_data_name(self):
+        for key, value in self.view.get_initial().items():
+            self.assertIn(rf'value="{value}"', self.html)
+
+    # request.POST
+    def test_post_method(self):
+        updated_user_first_name = f"{self.test_user.first_name}y"
+        updated_user_last_name = f"{self.test_user.last_name}son"
+
+        # update self.test_user via POST
+        self.response = self.client.post(self.current_test_url, {
+            'first_name': updated_user_first_name,
+            'last_name': updated_user_last_name,
+            'email': self.test_user.email})
+        self.html = unescape(self.response.content.decode('utf-8'))
+
+        # user is redirected to users:user_detail
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.url, reverse('users:user_detail'))
+        self.response = self.client.get(self.response.url)
+        self.assertEqual(self.response.status_code, 200)
+
+        # template contains updated user information
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertIn(f"{self.test_user.first_name}", self.html)
+        self.assertIn(f"{self.test_user.last_name}", self.html)
+        self.assertIn(f"{self.test_user.email}", self.html)
 
 class UserLogoutViewTest(TestCase):
 

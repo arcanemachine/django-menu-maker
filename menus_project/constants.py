@@ -6,6 +6,8 @@ RESERVED_KEYWORDS = ['all']
 # testing
 
 test_user_username = 'test_user'
+test_user_first_name = 'Test'
+test_user_last_name = 'User'
 test_user_email = 'test_user@email.com'
 test_user_password = 'test_user_password'
 restaurant_admin_user_username = 'restaurant_admin'

@@ -35,8 +35,6 @@
 
     {% else %}
 
-      {% if request.path != '/users/login/' and request.path != '/users/register/' %}
-
         <li class="nav-item active mr-2">
           <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}">Register</a>
         </li>
@@ -44,8 +42,6 @@
         <li class="nav-item active mr-2">
           <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}">Login</a>
         </li>
-
-      {% endif %}
 
     {% endif %}
       </ul>

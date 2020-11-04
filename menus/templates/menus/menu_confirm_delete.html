@@ -9,7 +9,7 @@
 
 <p>Are you sure you want to delete the '{{ menu.name }}' menu?</p>
 
-{% with submit_text="Delete" %}
+{% with submit_text="Delete" submit_button_class="danger" %}
   {% include 'base_form.html' %}
 {% endwith %}
 

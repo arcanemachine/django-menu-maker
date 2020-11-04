@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.test import SimpleTestCase
 
 from users.forms import NewUserCreationForm
+
 
 class NewUserCreationFormTest(SimpleTestCase):
 

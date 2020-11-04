@@ -9,11 +9,13 @@ from django.views.generic import CreateView, DetailView
 
 from .forms import NewUserCreationForm
 
+
 class RegisterView(SuccessMessageMixin, CreateView):
     form_class = NewUserCreationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy(settings.LOGIN_URL)
     success_message = "Account successfully registered"
+
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = get_user_model()
@@ -21,6 +23,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user
+
 
 class UserLogoutView(LogoutView):
     success_message = "You have successfully logged out."

@@ -17,7 +17,7 @@
 {% endcomment %}
 
   <div class="form-buttons">
-    <span><button class="btn btn-success form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
+    <span><button class="btn btn-{% if submit_button_class %}{{ submit_button_class }}{% else %}success{% endif %} form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>
 
 {% if cancel_url %}
 

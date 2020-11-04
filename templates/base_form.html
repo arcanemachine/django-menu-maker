@@ -6,15 +6,8 @@
   {% for field in form %}
   <div class="fieldWrapper">
     <p>{{ field|as_crispy_field }}</p>
-		{% comment %}
-    <p>{{ field.label_tag }} {{ field }}{% if field.help_text %} &nbsp;{{ field.help_text }}{% endif %}</p>
-		{% endcomment %}
   </div>
   {% endfor %}
-
-{% comment %}
-{{ form|crispy }}
-{% endcomment %}
 
   <div class="form-buttons">
     <span><button class="btn btn-{% if submit_button_class %}{{ submit_button_class }}{% else %}success{% endif %} form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>

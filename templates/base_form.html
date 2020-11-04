@@ -1,12 +1,20 @@
+{% load crispy_forms_tags %}
 <form class="form" method="post">
 
 {% csrf_token %}
 
   {% for field in form %}
   <div class="fieldWrapper">
-    <p>{{ field.label_tag }} {{ field }}{% if field.help_text %} &nbsp;{{ field.help_text|safe }}{% endif %}</p>
+    <p>{{ field|as_crispy_field }}</p>
+		{% comment %}
+    <p>{{ field.label_tag }} {{ field }}{% if field.help_text %} &nbsp;{{ field.help_text }}{% endif %}</p>
+		{% endcomment %}
   </div>
   {% endfor %}
+
+{% comment %}
+{{ form|crispy }}
+{% endcomment %}
 
   <div class="form-buttons">
     <span><button class="btn btn-success form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>

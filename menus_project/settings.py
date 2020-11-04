@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'menus.apps.MenusConfig',
     'restaurants.apps.RestaurantsConfig',
     'users.apps.UsersConfig',
+    # third-party
+    'crispy_forms',
 ]
 
 
@@ -132,3 +134,7 @@ LOGOUT_REDIRECT_URL = 'root'
 # Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Forms
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

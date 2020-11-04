@@ -54,7 +54,8 @@ class RegisterViewTest(TestCase):
 
     def test_success_message(self):
         self.assertEqual(
-            self.view.success_message, "Account successfully registered")
+            self.view.success_message,
+            "Your account has been successfully registered.")
 
     def test_get_method(self):
         self.assertEqual(self.response.status_code, 200)

@@ -15,7 +15,7 @@ class RegisterView(SuccessMessageMixin, CreateView):
     form_class = NewUserCreationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy(settings.LOGIN_URL)
-    success_message = "Account successfully registered"
+    success_message = "Your account has been successfully registered."
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

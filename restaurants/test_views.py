@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from html import unescape
+
 from .models import Restaurant
 
 test_user_username = 'test_user'
@@ -71,6 +73,7 @@ class RestaurantDetailViewTest(TestCase):
     def setUp(self):
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
+        self.html = unescape(self.response.content.decode('utf-8'))
         self.view = self.context['view']
 
     # view attributes
@@ -89,10 +92,16 @@ class RestaurantDetailViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     # template
-    def test_template_shows_add_menu_link(self):
-        # TODO: finish
-        #self.assertNot
-        pass
+    def test_template_unauthorized_user_cannot_view_auth_links(self):
+        self.assertNotIn('Add New Menu', self.html)
+
+    def test_template_authorized_user_can_view_auth_links(self):
+        self.client.login(
+            username=self.test_user.username,
+            password=test_user_password)
+        self.setUp()
+        self.assertIn('Add New Menu', self.html)
+
 
     # bad kwargs
     def test_bad_kwargs(self):

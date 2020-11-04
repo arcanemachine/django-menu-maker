@@ -9,11 +9,9 @@
 
 <p>Are you sure you want to delete the '{{ menu.name }}' menu?</p>
 
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Delete this item">
-  <a href="{% url 'menus:menu_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}"><button type="button">Cancel</button></a>
-</form>
+{% with submit_text="Delete" %}
+  {% include 'base_form.html' %}
+{% endwith %}
 
 <div id="bottom-links">
   <p><a href="{% url 'menus:menu_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Return to Menu: {{ menu.name }}</a></p>

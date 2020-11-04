@@ -5,10 +5,12 @@ from django.urls import reverse
 from html import unescape
 
 from .models import Restaurant
+from menus_project import constants
 
-test_user_username = 'test_user'
-test_user_password = 'test_user_password'
-test_restaurant_name = 'Test Restaurant'
+test_user_username = constants.test_user_username
+test_user_password = constants.test_user_password
+test_restaurant_name = constants.test_restaurant_name
+
 
 class RestaurantListViewTest(TestCase):
 
@@ -67,8 +69,9 @@ class RestaurantDetailViewTest(TestCase):
         cls.test_restaurant.admin_users.set([cls.test_user])
         cls.test_restaurant.save()
 
-        cls.current_test_url = reverse('restaurants:restaurant_detail',
-            kwargs={'restaurant_slug': cls.test_restaurant.slug})
+        cls.current_test_url = reverse(
+            'restaurants:restaurant_detail', kwargs={
+                'restaurant_slug': cls.test_restaurant.slug})
 
     def setUp(self):
         self.response = self.client.get(self.current_test_url)
@@ -101,7 +104,6 @@ class RestaurantDetailViewTest(TestCase):
             password=test_user_password)
         self.setUp()
         self.assertIn('Add New Menu', self.html)
-
 
     # bad kwargs
     def test_bad_kwargs(self):

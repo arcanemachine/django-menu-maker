@@ -8,16 +8,17 @@ import html
 from urllib.parse import urlparse
 
 from . import views
+from menus_project import constants
 from restaurants.models import Restaurant
 
-test_user_username = 'test_user'
-test_user_email = 'test_user@email.com'
-test_user_password = 'test_user_password'
-restaurant_admin_user_username = 'restaurant_admin'
-restaurant_admin_user_password = 'restaurant_admin_password'
-test_restaurant_name = 'Test Restaurant'
-test_menu_name = 'Test Menu'
-test_menusection_name = 'Test Menu Section'
+test_user_username = constants.test_user_username
+test_user_email = constants.test_user_email
+test_user_password = constants.test_user_password
+restaurant_admin_user_username = constants.restaurant_admin_user_username
+restaurant_admin_user_password = constants.restaurant_admin_user_password
+test_restaurant_name = constants.test_restaurant_name
+test_menu_name = constants.test_menu_name
+test_menusection_name = constants.test_menusection_name
 
 
 class RegisterViewTest(TestCase):

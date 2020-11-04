@@ -19,6 +19,10 @@
   margin-right: 5px;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
 #body-title {
   margin-bottom: 0;
 }

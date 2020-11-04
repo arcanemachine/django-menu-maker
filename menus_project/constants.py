@@ -1,7 +1,8 @@
 # misc
 
 PROJECT_NAME = "Menu Maker"
-RESERVED_KEYWORDS = ['all']
+RESERVED_KEYWORDS = ['add-new-restaurant', 'all', 'delete', 'edit', 'new-item',
+    'new-section']
 
 # testing
 

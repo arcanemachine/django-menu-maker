@@ -1,7 +1,12 @@
 <form class="form" method="post">
 
 {% csrf_token %}
-{{ form.as_p }}
+
+  {% for field in form %}
+  <div class="fieldWrapper">
+    <p>{{ field.label_tag }} {{ field }}{% if field.help_text %} &nbsp;{{ field.help_text|safe }}{% endif %}</p>
+  </div>
+  {% endfor %}
 
   <div class="form-buttons">
     <span><button class="btn btn-success form-submit-button" type="submit">{% if submit_text %}{{ submit_text }}{% else %}Submit{% endif %}</button>

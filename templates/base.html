@@ -56,6 +56,14 @@
       <h2 id="body-title">{% block body_title %}{% endblock body_title %}</h2>
       <h3 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h3>
 
+    {% if form.errors %}
+      {% for error_field, error_message in form.errors.items %}
+      <div class="alert alert-danger mb-4">
+        <strong>Error: {{ error_message.0 }}</strong>
+      </div>
+      {% endfor %}
+    {% endif %}
+
     {% if messages %}
       {% for message in messages %}
         <div class="alert{% if message.tags %} {{ message.tags }}{% endif %}{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %} alert-info{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %} alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} alert-danger{% endif %} message mb-4"><strong>{{ message }}</strong></div>

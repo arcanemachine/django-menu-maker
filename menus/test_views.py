@@ -176,6 +176,20 @@ class MenuCreateViewTest(TestCase):
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
     # template
     def test_template_contains_proper_form_text(self):
         self.assertIn("Please enter the information for your menu:", self.html)
@@ -513,6 +527,20 @@ class MenuUpdateViewTest(TestCase):
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
     # template
     def test_template_contains_proper_intro_text(self):
         self.assertIn(
@@ -730,10 +758,24 @@ class MenuDeleteViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 403)
 
-    # template
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
+    # template
     def test_template_contains_proper_confirm_text(self):
         self.assertIn(
             fr"Are you sure you want to delete the "
@@ -949,7 +991,21 @@ class MenuSectionCreateViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 403)
 
-    def test_get_authorized_user(self):
+    def test_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -1278,6 +1334,20 @@ class MenuSectionUpdateViewTest(TestCase):
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
     # template
     def test_template_contains_proper_intro_text(self):
         self.assertIn(
@@ -1508,10 +1578,24 @@ class MenuSectionDeleteViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 403)
 
-    # template
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
+    # template
     def test_template_contains_proper_confirm_text(self):
         self.assertIn(
             fr"Are you sure you want to delete '{self.test_menusection.name}' "
@@ -1746,6 +1830,20 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(self.response.status_code, 403)
 
     def test_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -2072,6 +2170,20 @@ class MenuItemUpdateViewTest(TestCase):
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
     # template
     def test_template_contains_proper_intro_text(self):
         self.assertIn(
@@ -2331,10 +2443,24 @@ class MenuItemDeleteViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 403)
 
-    # template
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
     def test_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
+    # template
     def test_template_contains_proper_confirm_text(self):
         self.assertIn(
             fr"Are you sure you want to delete '{self.test_menuitem.name}' "

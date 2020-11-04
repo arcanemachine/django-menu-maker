@@ -92,6 +92,10 @@ class LoginViewTest(SimpleTestCase):
         self.response = self.client.get(self.current_test_url)
         self.view = self.response.context['view']
 
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
+
     def test_template_name(self):
         self.assertTrue(self.view.template_name, 'users/login.html')
 

@@ -1,6 +1,4 @@
-from django.contrib.messages import get_messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.views import LoginView
 from django.conf import settings
 from django.test import RequestFactory, SimpleTestCase, TestCase
 from django.urls import reverse
@@ -11,7 +9,6 @@ from urllib.parse import urlparse
 
 from . import views
 from restaurants.models import Restaurant
-from menus.models import MenuSection
 
 test_user_username = 'test_user'
 test_user_email = 'test_user@email.com'
@@ -81,16 +78,17 @@ class RegisterViewTest(TestCase):
         new_user_count = get_user_model().objects.count()
         self.assertEqual(old_user_count + 1, new_user_count)
 
+
 class LoginViewTest(SimpleTestCase):
 
     def setUp(self):
         self.current_test_url = reverse('users:login')
         self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
         self.view = self.response.context['view']
 
     def test_template_name(self):
         self.assertTrue(self.view.template_name, 'users/login.html')
+
 
 class UserDetailViewTest(TestCase):
 

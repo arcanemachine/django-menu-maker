@@ -11,4 +11,8 @@ Enter the details of your personal information here:
 
 {% include 'base_form.html' %}
 
+<div id="bottom-links">
+  <p><a class="text-danger underline" href="{% url 'users:user_delete' %}">Delete my account</a></p>
+</div>
+
 {% endblock content %}

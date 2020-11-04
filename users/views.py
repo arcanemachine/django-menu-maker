@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
 from .forms import NewUserCreationForm
@@ -40,6 +40,20 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return {'first_name': self.request.user.first_name,
                 'last_name': self.request.user.last_name,
                 'email': self.request.user.email}
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = get_user_model()
+    template_name = 'users/user_confirm_delete.html'
+    success_message = "Your account has been deleted."
+    success_url = reverse_lazy('root')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super().delete(request, *args, **kwargs)
+
+    def get_object(self):
+        return self.request.user
 
 class UserLogoutView(LogoutView):
     success_message = "You have successfully logged out."

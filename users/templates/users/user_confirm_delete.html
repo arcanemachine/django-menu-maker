@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete User Account - {{ user.username }}{% endblock %}
+
+{% block body_title %}Delete User Account{% endblock %}
+{% block body_subheading %}{{ user.username }}{% endblock %}
+
+{% block content %}
+
+<p>Are you sure you want to delete your account? Any restaurants, menus, etc. that you have made will be deleted.</p>
+
+{% with submit_text="Delete" submit_button_class="danger" confirm_text="Yes, I want to delete my account." %}
+  {% include 'base_form.html' %}
+{% endwith %}
+
+<div id="bottom-links">
+  <p><a href="{% url 'users:user_detail' %}">Go back</a></p>
+</div>
+
+{% endblock content %}

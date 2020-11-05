@@ -17,8 +17,10 @@
 </ul>
 {% endif %}
 
-<div id="bottom-links">
+{% if user.is_authenticated %}
+<div class="auth-links">
   <p><a href="{% url 'restaurants:restaurant_create' %}">Register a new restaurant</a></p>
 </div>
+{% endif %}
 
 {% endblock content %}

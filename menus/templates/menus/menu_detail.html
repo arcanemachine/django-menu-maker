@@ -20,10 +20,10 @@
 
 {% if user.is_authenticated and user in menu.restaurant.admin_users.all %}
 <div class="auth-links">
-  <p><a href="{% url 'menus:menusection_create' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Add New Section</p>
+  <p><a href="{% url 'menus:menusection_create' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Add new section</p>
   <br>
-  <p><a href="{% url 'menus:menu_update' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Edit this Menu</p>
-  <p><a class="text-danger" href="{% url 'menus:menu_delete' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Delete this Menu</p>
+  <p><a href="{% url 'menus:menu_update' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Edit this menu</p>
+  <p><a class="text-danger" href="{% url 'menus:menu_delete' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Delete this menu</p>
 </div>
 {% endif %}
 

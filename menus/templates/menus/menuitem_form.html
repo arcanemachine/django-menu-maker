@@ -12,7 +12,7 @@
 {% include 'base_form.html' %}
 
 <div id="bottom-links">
-  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Return to Section: {{ menusection.name }}</a></p>
+  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Return to menu section: {{ menusection.name }}</a></p>
 </div>
 
 {% endblock content %}

@@ -7,3 +7,5 @@ Setup Guide (Not complete):
     - default: console backend
     - choices:
         - blah blah blah
+- constants
+    - max_restaurants_per_user

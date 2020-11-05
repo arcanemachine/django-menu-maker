@@ -17,4 +17,8 @@ urlpatterns = [
         '<slug:restaurant_slug>/',
         views.RestaurantDetailView.as_view(),
         name='restaurant_detail'),
+    path(
+        '<slug:restaurant_slug>/edit/',
+        views.RestaurantUpdateView.as_view(),
+        name='restaurant_update'),
     ]

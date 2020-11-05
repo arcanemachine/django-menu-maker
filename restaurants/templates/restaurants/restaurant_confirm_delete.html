@@ -9,7 +9,7 @@
 
 <p>Are you sure you want to delete the '{{ restaurant.name }}' restaurant?</p>
 
-{% with submit_text="Delete" submit_button_class="danger" confirm_text="Yes, I want to delete this restaurant." %}
+{% with submit_text="Delete" submit_button_class="danger" confirm_text="Yes, I want to permanently delete this restaurant." %}
   {% include 'base_form.html' %}
 {% endwith %}
 

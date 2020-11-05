@@ -18,7 +18,7 @@
 {% if user.is_authenticated and user in menuitem.menusection.menu.restaurant.admin_users.all %}
 <div class="auth-links">
   <p><a href="{% url 'menus:menuitem_update' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Edit This Item</p>
-  <p><a href="{% url 'menus:menuitem_delete' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Delete This Item</p>
+  <p><a class="text-danger" href="{% url 'menus:menuitem_delete' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Delete This Item</p>
 </div>
 {% endif %}
 

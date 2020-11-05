@@ -23,7 +23,7 @@
   <p><a href="{% url 'menus:menusection_create' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Add New Section</p>
   <br>
   <p><a href="{% url 'menus:menu_update' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Edit this Menu</p>
-  <p><a href="{% url 'menus:menu_delete' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Delete this Menu</p>
+  <p><a class="text-danger" href="{% url 'menus:menu_delete' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug %}">Delete this Menu</p>
 </div>
 {% endif %}
 

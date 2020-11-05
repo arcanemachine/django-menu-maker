@@ -26,7 +26,7 @@
   <p><a href="{% url 'menus:menuitem_create' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Add New Menu Item</p>
   <br>
   <p><a href="{% url 'menus:menusection_update' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Edit this Menu Section</p>
-  <p><a href="{% url 'menus:menusection_delete' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Delete this Menu Section</p>
+  <p><a class="text-danger" href="{% url 'menus:menusection_delete' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug menusection_slug=menusection.slug %}">Delete this Menu Section</p>
 </div>
 {% endif %}
 

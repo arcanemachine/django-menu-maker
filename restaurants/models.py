@@ -30,7 +30,7 @@ class Restaurant(models.Model):
             and restaurants_with_same_slug.first() != self \
                 and restaurants_with_same_slug.last() != self:
             raise ValidationError(
-                "This name is too similar to an existing restaurant name.")
+                constants.RESTAURANT_DUPLICATE_SLUG_ERROR_STRING)
 
     def get_absolute_url(self):
         return reverse('restaurants:restaurant_detail', kwargs={

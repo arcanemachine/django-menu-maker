@@ -555,7 +555,7 @@ class MenuUpdateViewTest(TestCase):
         self.client.logout()
 
         old_menu_name = self.test_menu.name
-        updated_menu_name = 'Updated Test Menu'
+        updated_menu_name = f'Updated {self.test_menu}'
 
         # attempt to update self.test_menu via POST
         self.response = self.client.post(self.current_test_url, {
@@ -576,7 +576,7 @@ class MenuUpdateViewTest(TestCase):
             username=self.test_user.username, password=test_user_password)
 
         old_menu_name = self.test_menu.name
-        updated_menu_name = 'Updated Test Menu'
+        updated_menu_name = f'Updated {self.test_menu}'
 
         # attempt to update self.test_menu via POST
         self.response = self.client.post(self.current_test_url, {
@@ -591,7 +591,7 @@ class MenuUpdateViewTest(TestCase):
         self.assertEqual(self.test_menu.name, old_menu_name)
 
     def test_post_method_authorized_user(self):
-        updated_menu_name = 'Updated Test Menu'
+        updated_menu_name = f'Updated {self.test_menu}'
         updated_menu_slug = slugify(updated_menu_name)
 
         # get menu count before POST
@@ -1363,7 +1363,7 @@ class MenuSectionUpdateViewTest(TestCase):
         self.client.logout()
 
         old_menusection_name = self.test_menusection.name
-        updated_menusection_name = 'New Test Menu Section'
+        updated_menusection_name = f'New {self.test_menusection.name}'
 
         # attempt to update self.test_menusection via POST
         self.response = self.client.post(self.current_test_url, {
@@ -1384,7 +1384,7 @@ class MenuSectionUpdateViewTest(TestCase):
             username=self.test_user.username, password=test_user_password)
 
         old_menusection_name = self.test_menusection.name
-        updated_menusection_name = 'New Test Menu Section'
+        updated_menusection_name = f'New {self.test_menusection.name}'
 
         # attempt to update self.test_menusection via POST
         self.response = self.client.post(self.current_test_url, {
@@ -1399,7 +1399,7 @@ class MenuSectionUpdateViewTest(TestCase):
         self.assertEqual(self.test_menusection.name, old_menusection_name)
 
     def test_post_method_authorized_user(self):
-        updated_menusection_name = 'New Test Menu Section'
+        updated_menusection_name = f'New {self.test_menusection.name}'
 
         # get menusection count before attempting POST
         old_menusection_count = MenuSection.objects.count()
@@ -1442,7 +1442,7 @@ class MenuSectionUpdateViewTest(TestCase):
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
         self.test_menusection_2 = self.test_menu.menusection_set.create(
-            name='New Test Menu Section')
+            name=f'New {self.test_menusection.name}')
 
         old_menusection_name = self.test_menusection.name
         old_menusection_slug = self.test_menusection.slug
@@ -2203,8 +2203,9 @@ class MenuItemUpdateViewTest(TestCase):
 
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description
-        updated_menuitem_name = 'Updated Test Menu Item'
-        updated_menuitem_description = 'Updated Test Menu Item Description'
+        updated_menuitem_name = f'Updated {self.test_menuitem.name}'
+        updated_menuitem_description = \
+            f'Updated {self.test_menuitem.description}'
 
         # attempt to update self.test_menuitem via POST
         self.response = self.client.post(self.current_test_url, {
@@ -2229,8 +2230,9 @@ class MenuItemUpdateViewTest(TestCase):
 
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description
-        updated_menuitem_name = 'Updated Test Menu Item'
-        updated_menuitem_description = 'Updated Test Menu Item Description'
+        updated_menuitem_name = f'Updated {self.test_menuitem.name}'
+        updated_menuitem_description = \
+            f'Updated {self.test_menuitem.description}'
 
         # attempt to update self.test_menuitem via POST
         self.response = self.client.post(self.current_test_url, {
@@ -2248,8 +2250,9 @@ class MenuItemUpdateViewTest(TestCase):
             self.test_menuitem.description, old_menuitem_description)
 
     def test_post_method_authorized_user(self):
-        updated_menuitem_name = 'Updated Test Menu Item'
-        updated_menuitem_description = 'Updated Test Menu Item Description'
+        updated_menuitem_name = f'Updated {self.test_menuitem.name}'
+        updated_menuitem_description = \
+            f'Updated {self.test_menuitem.description}'
 
         # get menuitem count before attempting POST
         old_menuitem_count = MenuItem.objects.count()
@@ -2296,8 +2299,8 @@ class MenuItemUpdateViewTest(TestCase):
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
         self.test_menuitem_2 = self.test_menusection.menuitem_set.create(
-            name='Updated Test Menu Item',
-            description='Updated Test Menu Description')
+            name=f'Updated {self.test_menuitem.name}',
+            description=f'Updated {self.test_menuitem.description}')
 
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description

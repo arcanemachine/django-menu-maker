@@ -8,6 +8,7 @@ test_user_username = constants.TEST_USER_USERNAME
 test_user_email = constants.TEST_USER_EMAIL
 test_user_password = constants.TEST_USER_PASSWORD
 
+
 class NewUserCreationFormTest(TestCase):
 
     def setUp(self):

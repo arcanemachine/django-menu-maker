@@ -13,6 +13,7 @@ test_menu_name = constants.TEST_MENU_NAME
 test_menusection_name = constants.TEST_MENUSECTION_NAME
 test_menuitem_name = constants.TEST_MENUITEM_NAME
 
+
 class MenuModelTest(TestCase):
 
     @classmethod

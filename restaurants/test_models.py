@@ -11,6 +11,7 @@ test_user_username = constants.TEST_USER_USERNAME
 test_user_password = constants.TEST_USER_PASSWORD
 test_restaurant_name = constants.TEST_RESTAURANT_NAME
 
+
 class RestaurantModelTest(TestCase):
 
     @classmethod

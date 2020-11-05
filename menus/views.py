@@ -39,6 +39,8 @@ class MenuCreateView(
         return {'restaurant': self.restaurant}
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in self.restaurant.admin_users.all()
 
 
@@ -76,6 +78,8 @@ class MenuUpdateView(
             slug=self.kwargs['menu_slug'])
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.get_object().restaurant.admin_users.all()
 
@@ -99,6 +103,8 @@ class MenuDeleteView(UserPassesTestMixin, DeleteView):
         return self.object.restaurant.get_absolute_url()
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.get_object().restaurant.admin_users.all()
 
@@ -126,6 +132,8 @@ class MenuSectionCreateView(
         return {'menu': self.menu}
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in self.menu.restaurant.admin_users.all()
 
 
@@ -165,6 +173,8 @@ class MenuSectionUpdateView(
             slug=self.kwargs['menusection_slug'])
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.get_object().menu.restaurant.admin_users.all()
 
@@ -189,6 +199,8 @@ class MenuSectionDeleteView(UserPassesTestMixin, DeleteView):
         return self.object.menu.get_absolute_url()
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.get_object().menu.restaurant.admin_users.all()
 
@@ -220,6 +232,8 @@ class MenuItemCreateView(
         return self.object.menusection.get_absolute_url()
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.menusection.menu.restaurant.admin_users.all()
 
@@ -263,6 +277,8 @@ class MenuItemUpdateView(
             slug=self.kwargs['menuitem_slug'])
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.get_object().menusection.menu.restaurant.admin_users.all()
 
@@ -288,5 +304,7 @@ class MenuItemDeleteView(UserPassesTestMixin, DeleteView):
         return self.object.menusection.get_absolute_url()
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         return self.request.user in \
             self.get_object().menusection.menu.restaurant.admin_users.all()

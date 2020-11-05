@@ -870,7 +870,7 @@ class MenuDeleteViewTest(TestCase):
     # bad kwargs
     def test_bad_kwargs(self):
         for i in range(len(self.view.kwargs)):
-            self.current_test_url = reverse('menus:menu_update', kwargs={
+            self.current_test_url = reverse('menus:menu_delete', kwargs={
                 'restaurant_slug':
                     self.test_restaurant.slug if i != 0 else 'bad-slug',
                 'menu_slug':

@@ -11,7 +11,7 @@
 <p>Name: <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}N/A{% endif %}</strong></p>
 <p>Email: <strong>{% if user.email %}{{ user.email }}{% else %}N/A{% endif %}</strong></p>
 
-<h4 class="mt-4">Restaurants</h4>
+<h4 class="mt-4">Your Restaurants</h4>
 {% if user.restaurant_set.count %}
 <ul>
   {% for restaurant in user.restaurant_set.all %}

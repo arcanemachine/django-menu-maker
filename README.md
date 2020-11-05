@@ -48,9 +48,8 @@ Menu Maker makes use of many of Django's features:
 
 This project also represents an effort to implement proper Git best practices, including:
 
-- use of branches for separation of concerns (feature/test/main)
-- small, incremental commits
-- concise and accurate descriptions of each commit
+- Small, incremental commits
+- Concise and accurate descriptions of each commit
 
 <br>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="margin-left: auto; margin-right: auto; border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>

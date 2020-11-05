@@ -23,8 +23,8 @@ from . import views
 urlpatterns = [
     path('', views.root, name='root'),
     path('admin/', admin.site.urls),
-    path('restaurant/', include('restaurants.urls')),
-    path('restaurant/<slug:restaurant_slug>/menu/', include('menus.urls')),
+    path('restaurants/', include('restaurants.urls')),
+    path('restaurants/<slug:restaurant_slug>/menu/', include('menus.urls')),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
 ]

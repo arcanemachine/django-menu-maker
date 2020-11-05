@@ -351,26 +351,23 @@ class MenuDetailViewTest(TestCase):
     def test_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_unauthenticated_user_cannot_view_link_to_add_section(self):
-        self.assertNotIn('Add New Section', self.html)
-
     # TEMPLATE
 
-    # authentication-based conditions
-    def test_unprivileged_user_cannot_view_link_to_add_section(self):
+    # auth-links
+    def test_unprivileged_user_cannot_view_auth_links(self):
         self.client.login(
             username=self.test_user.username, password=test_user_password)
 
         self.setUp()  # reload the page
-        self.assertNotIn('Add New Section', self.html)
+        self.assertNotIn('auth-links', self.html)
 
-    def test_restaurant_admin_user_can_view_link_to_add_section(self):
+    def test_restaurant_admin_user_can_view_auth_links(self):
         self.client.login(
             username=self.restaurant_admin_user.username,
             password=restaurant_admin_user_password)
 
         self.setUp()  # reload the page
-        self.assertIn('Add New Section', self.html)
+        self.assertIn('auth-links', self.html)
 
     # template - menusection count
     def test_template_with_0_menusections(self):
@@ -1185,15 +1182,15 @@ class MenuSectionDetailViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     # template
-    def test_template_unauthorized_user_cannot_view_link_to_add_menuitem(self):
+    def test_template_unauthorized_user_cannot_view_auth_links(self):
         self.client.logout()
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = unescape(self.response.content.decode('utf-8'))
-        self.assertNotIn('Add New Menu Item', self.html)
+        self.assertNotIn('auth-links', self.html)
 
-    def test_template_authorized_user_can_view_link_to_add_menuitem(self):
-        self.assertIn('Add New Menu Item', self.html)
+    def test_template_authorized_user_can_view_auth_links(self):
+        self.assertIn('auth-links', self.html)
 
     # bad kwargs
     def test_bad_kwargs(self):

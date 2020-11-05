@@ -137,7 +137,7 @@ class RestaurantCreateViewTest(TestCase):
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertIn(f"{new_restaurant.name}", self.html)
-        self.assertIn("Add New Menu", self.html)
+        self.assertIn("auth-links", self.html)
 
         # template contains success_message
         self.assertIn(
@@ -237,14 +237,14 @@ class RestaurantDetailViewTest(TestCase):
 
     # template
     def test_template_unauthorized_user_cannot_view_auth_links(self):
-        self.assertNotIn('Add New Menu', self.html)
+        self.assertNotIn('auth-links', self.html)
 
     def test_template_authorized_user_can_view_auth_links(self):
         self.client.login(
             username=self.test_user.username,
             password=test_user_password)
         self.setUp()
-        self.assertIn('Add New Menu', self.html)
+        self.assertIn('auth-links', self.html)
 
     # bad kwargs
     def test_bad_kwargs(self):

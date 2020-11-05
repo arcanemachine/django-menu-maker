@@ -9,7 +9,7 @@
 
 <p>Are you sure you want to delete '{{ menuitem.name }}' from the '{{ menuitem.menusection.menu.name }}: {{ menuitem.menusection.name }}' menu?</p>
 
-{% with submit_text="Delete" submit_button_class="danger" %}
+{% with submit_text="Delete" submit_button_class="danger" confirm_text="Yes, I want to permanently delete this menu item." %}
   {% include 'base_form.html' %}
 {% endwith %}
 

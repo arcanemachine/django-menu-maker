@@ -811,8 +811,8 @@ class MenuDeleteViewTest(TestCase):
         self.assertEqual(self.response.status_code, 403)
 
         # menu count has not changed
-        new_menu = Menu.objects.count()
-        self.assertEqual(old_menu, new_menu)
+        new_menu_count = Menu.objects.count()
+        self.assertEqual(old_menu_count, new_menu_count)
 
     def test_post_method_authorized_user(self):
         # get menu count before attempting POST

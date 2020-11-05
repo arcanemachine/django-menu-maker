@@ -484,3 +484,215 @@ class RestaurantUpdateViewTest(TestCase):
                         self.test_restaurant.slug if i != 0 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
             self.assertEqual(self.response.status_code, 404)
+
+
+class RestaurantDeleteViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # create unprivileged user
+        cls.test_user = \
+            get_user_model().objects.create(username=test_user_username)
+        cls.test_user.set_password(test_user_password)
+        cls.test_user.save()
+
+        # create restaurant admin user
+        cls.restaurant_admin_user = get_user_model().objects.create(
+            username=restaurant_admin_user_username)
+        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
+        cls.restaurant_admin_user.save()
+
+        # create test restaurant
+        cls.test_restaurant = \
+            Restaurant.objects.create(name=test_restaurant_name)
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+
+        cls.current_test_url = reverse(
+            'restaurants:restaurant_delete', kwargs={
+                'restaurant_slug': cls.test_restaurant.slug})
+
+    def setUp(self):
+        # login as authorized user
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=restaurant_admin_user_password)
+
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__name__, 'RestaurantDeleteView')
+
+    def test_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'DeleteView')
+
+    def test_which_mixins_are_used(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+
+    def test_attribute_model_name(self):
+        self.assertEqual(
+            self.view.model.__name__, 'Restaurant')
+
+    def test_attribute_success_message(self):
+        self.assertEqual(
+            self.view.success_message,
+            "The '%(name)s' restaurant has been deleted.")
+
+    def test_attribute_success_url(self):
+        self.assertEqual(
+            self.view.success_url, reverse('users:user_detail'))
+
+    # delete()
+    def test_method_delete_contains_proper_success_message(self):
+        self.assertEqual(
+            self.view.success_message % self.test_restaurant.__dict__,
+            f"The '{self.test_restaurant.name}' restaurant has been deleted.")
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.test_restaurant)
+
+    # request.GET
+    def test_get_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # request by unauthenticated user should redirect to login
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+    def test_get_method_authenticated_but_unauthorized_user(self):
+        self.client.login(
+            username=self.test_user.username, password=test_user_password)
+
+        # request by unauthorized user should return 403
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 403)
+
+    def test_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_get_method_staff_user(self):
+        # give staff privileges to self.test_user
+        self.test_user.is_staff = True
+        self.test_user.save()
+
+        # reload the page
+        self.response = self.client.get(self.current_test_url)
+
+        # remove staff privileges from self.test_user
+        self.test_user.is_staff = False
+        self.test_user.save()
+
+        self.assertEqual(self.response.status_code, 200)
+
+    # template
+    def test_template_contains_proper_confirm_text(self):
+        self.assertIn(
+            fr"Are you sure you want to delete the "
+            fr"'{self.test_restaurant.name}' restaurant?", self.html)
+
+    # request.POST
+    def test_post_method_unauthenticated_user(self):
+        self.client.logout()
+
+        # get restaurant count before POST
+        old_restaurant_count = Restaurant.objects.count()
+
+        # attempt to delete self.test_restaurant
+        self.response = self.client.post(self.current_test_url)
+
+        # user is redirected to login page
+        self.assertEqual(self.response.status_code, 302)
+        redirect_url = urlparse(self.response.url)[2]
+        self.assertEqual(redirect_url, reverse('login'))
+
+        # restaurant count has not changed
+        new_restaurant_count = Restaurant.objects.count()
+        self.assertEqual(old_restaurant_count, new_restaurant_count)
+
+    def test_post_method_authenticated_but_unauthorized_user(self):
+        self.client.login(
+            username=self.test_user.username, password=test_user_password)
+
+        # get restaurant count before attempting POST
+        old_restaurant_count = Restaurant.objects.count()
+
+        # attempt to delete self.test_restaurant via POST
+        self.response = self.client.post(self.current_test_url)
+
+        # user receives HTTP 403
+        self.assertEqual(self.response.status_code, 403)
+
+        # restaurant count has not changed
+        new_restaurant_count = Restaurant.objects.count()
+        self.assertEqual(old_restaurant_count, new_restaurant_count)
+
+    def test_post_method_authorized_user(self):
+        # get restaurant count before attempting POST
+        old_restaurant_count = Restaurant.objects.count()
+
+        # restaurant_detail contains test_restaurant.name before delete
+        self.response = self.client.get(
+            self.test_restaurant.get_absolute_url())
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertIn(f"{self.test_restaurant.name}", self.html)
+
+        # delete self.test_restaurant via POST
+        self.response = self.client.post(self.current_test_url)
+
+        # user is redirected to users:user_detail
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(
+            self.response.url, reverse('users:user_detail'))
+
+        # user_detail loads successfully and contains success_message
+        self.response = self.client.get(self.response.url)
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(
+            self.response, 'users/user_detail.html')
+        self.assertIn(
+            rf"The '{self.test_restaurant.name}' restaurant has been deleted.",
+            self.html)
+
+        # user_detail does not contain restaurant name after refresh
+        self.response = self.client.get(reverse('users:user_detail'))
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertNotIn(f"{self.test_restaurant.name}", self.html)
+
+        # object no longer exists
+        with self.assertRaises(Restaurant.DoesNotExist):
+            self.test_restaurant.refresh_from_db()
+
+        # restaurant count decreased by 1
+        new_restaurant_count = Restaurant.objects.count()
+        self.assertEqual(old_restaurant_count - 1, new_restaurant_count)
+
+    # validation
+    def test_validation_post_attempt_duplicate_by_authorized_user(self):
+        # delete self.test_restaurant
+        self.test_restaurant.delete()
+
+        # attempt POST request to delete already-deleted restaurant
+        self.response = self.client.post(self.current_test_url)
+
+        # returns HTTP 404
+        self.assertEqual(self.response.status_code, 404)
+
+    # bad kwargs
+    def test_bad_kwargs(self):
+        for i in range(len(self.view.kwargs)):
+            self.current_test_url = \
+                reverse('restaurants:restaurant_delete', kwargs={
+                    'restaurant_slug':
+                        self.test_restaurant.slug if i != 0 else 'bad-slug'})
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 404)

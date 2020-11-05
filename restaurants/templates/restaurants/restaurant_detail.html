@@ -23,6 +23,7 @@
 <div class="auth-links">
   <p><a href="{% url 'menus:menu_create' restaurant_slug=restaurant.slug %}">Add new menu</a></p>
   <p class="pt-3"><a href="{% url 'restaurants:restaurant_update' restaurant_slug=restaurant.slug %}">Update this restaurant's information</a></p>
+  <p><a class="text-danger" href="{% url 'restaurants:restaurant_delete' restaurant_slug=restaurant.slug %}">Delete this restaurant</a></p>
 </div>
   {% endif %}
 

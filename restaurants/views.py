@@ -3,7 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.views.generic import CreateView, DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import UpdateView
 
 from .models import Restaurant
@@ -71,3 +72,24 @@ class RestaurantUpdateView(
 class RestaurantDetailView(DetailView):
     model = Restaurant
     slug_url_kwarg = 'restaurant_slug'
+
+
+class RestaurantDeleteView(UserPassesTestMixin, DeleteView):
+    model = Restaurant
+    success_message = "The '%(name)s' restaurant has been deleted."
+    success_url = reverse_lazy('users:user_detail')
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        messages.success(self.request, self.success_message % obj.__dict__)
+        return super().delete(request, *args, **kwargs)
+
+    def get_object(self):
+        return get_object_or_404(
+            Restaurant, slug=self.kwargs['restaurant_slug'])
+
+    def test_func(self):
+        if self.request.user.is_staff:
+            return True
+        return self.request.user in \
+            self.get_object().admin_users.all()

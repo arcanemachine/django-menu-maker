@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Restaurant - {{ restaurant.name }}{% endblock %}
+
+{% block body_title %}{{ restaurant.name }}{% endblock %}
+{% block body_subheading %}Delete Restaurant: '{{ restaurant.name }}'{% endblock %}
+
+{% block content %}
+
+<p>Are you sure you want to delete the '{{ restaurant.name }}' restaurant?</p>
+
+{% with submit_text="Delete" submit_button_class="danger" confirm_text="Yes, I want to delete this restaurant." %}
+  {% include 'base_form.html' %}
+{% endwith %}
+
+<div id="bottom-links">
+  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=restaurant.slug %}">Return to restaurant: {{ restaurant.name }}</a></p>
+</div>
+
+{% endblock content %}

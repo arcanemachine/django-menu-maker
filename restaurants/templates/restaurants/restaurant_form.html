@@ -11,4 +11,10 @@
 
 {% include 'base_form.html' %}
 
+{% if user.restaurant_set.count %}
+<div id="bottom-links">
+  <p><a href="{% url 'users:user_detail' %}">View my restaurants</a></p>
+</div>
+{% endif %}
+
 {% endblock content %}

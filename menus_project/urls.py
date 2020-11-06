@@ -23,6 +23,7 @@ from . import views
 urlpatterns = [
     path('', views.root, name='root'),
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
     path('captcha/', include('captcha.urls')),
     path('restaurants/', include('restaurants.urls')),
     path('restaurants/<slug:restaurant_slug>/menu/', include('menus.urls')),

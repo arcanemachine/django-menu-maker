@@ -10,6 +10,7 @@ Pillow = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 django-simple-captcha = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

@@ -9,6 +9,7 @@ ipython = "*"
 Pillow = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
+django-simple-captcha = "*"
 
 [dev-packages]
 

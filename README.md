@@ -48,6 +48,12 @@ Menu Maker makes use of many of Django's features:
     - All efforts have been made to ensure that the tests cover all expected circumstances.
 - Custom context processor (albeit a simple one)
 
+In addition, the following third-party Django packages are of significant importance to this project:
+
+- Crispy Forms
+- Django Rest Framework
+- Django Simple Captcha
+
 This project also represents an effort to implement proper Git best practices, including:
 
 - Small, incremental commits

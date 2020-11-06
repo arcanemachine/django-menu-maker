@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
 
 from captcha.fields import CaptchaField
@@ -24,3 +24,8 @@ class NewUserCreationForm(UserCreationForm):
         if get_user_model().objects.filter(email=email).exists():
             raise ValidationError("This email address is already in use.")
         return email
+
+class UserAuthenticationForm(AuthenticationForm):
+
+    captcha = CaptchaField(
+        help_text="Please enter the letters you see in the image above.")

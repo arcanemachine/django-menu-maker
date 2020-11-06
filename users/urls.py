@@ -17,6 +17,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views
+from .forms import UserAuthenticationForm
 
 app_name = 'users'
 
@@ -45,7 +46,9 @@ urlpatterns = [
     # django.contrib.auth.views
     path(
         'login/',
-        auth_views.LoginView.as_view(template_name='users/login.html'),
+        auth_views.LoginView.as_view(
+            template_name='users/login.html',
+            form_class=UserAuthenticationForm),
         name='login'),
     path(
         'me/change-password/',

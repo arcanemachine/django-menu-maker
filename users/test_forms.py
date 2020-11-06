@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
 
-from .forms import NewUserCreationForm
+from .forms import NewUserCreationForm, UserAuthenticationForm
 from menus_project import constants
 
 test_user_username = constants.TEST_USER_USERNAME
@@ -64,3 +64,23 @@ class NewUserCreationFormTest(TestCase):
         self.assertEqual(
             self.form_instance.errors,
             {'email': ['This email address is already in use.']})
+
+
+class UserAuthenticationFormTest(SimpleTestCase):
+
+    def setUp(self):
+        self.form = UserAuthenticationForm
+        self.form_instance = UserAuthenticationForm()
+
+    def test_field_captcha_exists(self):
+        self.assertTrue('captcha' in self.form_instance.fields)
+
+    def test_field_captcha_field_type(self):
+        self.assertEqual(
+            self.form_instance.fields['captcha'].__class__.__name__,
+            'CaptchaField')
+
+    def test_field_captcha_help_text(self):
+        self.assertEqual(
+            self.form_instance.fields['captcha'].help_text,
+            "Please enter the letters you see in the image above.")

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from html import unescape
@@ -87,7 +87,7 @@ class RegisterViewTest(TestCase):
         self.assertEqual(old_user_count + 1, new_user_count)
 
 
-class LoginViewTest(SimpleTestCase):
+class LoginViewTest(TestCase):
 
     def setUp(self):
         self.current_test_url = reverse('users:login')
@@ -126,7 +126,7 @@ class PasswordChangeViewTest(TestCase):
             self.view.template_name, 'users/password_change_form.html')
 
 
-class PasswordResetViewTest(SimpleTestCase):
+class PasswordResetViewTest(TestCase):
 
     def setUp(self):
         self.current_test_url = reverse('users:password_reset')

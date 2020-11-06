@@ -2,7 +2,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
+from captcha.fields import CaptchaField
+
+
 class NewUserCreationForm(UserCreationForm):
+
+    captcha = CaptchaField(
+        help_text="Please enter the letters you see in the image above.")
 
     class Meta:
         model = get_user_model()

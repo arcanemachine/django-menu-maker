@@ -67,7 +67,9 @@ class RegisterViewTest(TestCase):
             'username': test_user_username,
             'email': test_user_email,
             'password1': test_user_password,
-            'password2': test_user_password})
+            'password2': test_user_password,
+            'captcha_0': 'test',
+            'captcha_1': 'PASSED'})
 
         # user is redirected to users:login
         self.assertEqual(self.response.status_code, 302)

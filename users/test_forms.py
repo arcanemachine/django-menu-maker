@@ -39,5 +39,12 @@ class NewUserCreationFormTest(TestCase):
             username=test_user_username,
             email=test_user_email)
         self.form_instance = \
-            NewUserCreationForm(data={'email': self.test_user.email})
+            NewUserCreationForm(data={
+                'username': f'new_{self.test_user.username}',
+                'email': self.test_user.email,
+                'password1': test_user_password,
+                'password2': test_user_password})
         self.assertFalse(self.form_instance.is_valid())
+        self.assertEqual(
+            self.form_instance.errors,
+            {'email': ['This email address is already in use.']})

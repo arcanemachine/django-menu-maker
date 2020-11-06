@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # local
+    'api.apps.ApiConfig',
     'menus.apps.MenusConfig',
     'restaurants.apps.RestaurantsConfig',
     'users.apps.UsersConfig',

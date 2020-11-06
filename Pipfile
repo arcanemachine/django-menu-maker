@@ -11,6 +11,7 @@ gunicorn = "*"
 django-crispy-forms = "*"
 django-simple-captcha = "*"
 djangorestframework = "*"
+factory-boy = "*"
 
 [dev-packages]
 

@@ -802,7 +802,7 @@ class MenuDeleteViewTest(TestCase):
             username=self.test_user.username, password=test_user_password)
 
         # get menu count before attempting POST
-        old_menu = Menu.objects.count()
+        old_menu_count = Menu.objects.count()
 
         # attempt to delete self.test_menu via POST
         self.response = self.client.post(self.current_test_url)

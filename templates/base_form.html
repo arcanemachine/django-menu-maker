@@ -10,7 +10,7 @@
   {% endfor %}
 
   {% if confirm_text %}
-  <div class="mt-3 {% if confirm_tags %}{{ confirm_tags }}{% else %}alert alert-info{% endif %}" role="alert">
+  <div class="mt-3 alert alert-{% if confirm_text_class %}{{ confirm_text_class }}{% else %}info{% endif %}" role="alert">
     <label class="mb-0"><input type="checkbox" id="confirm_checkbox" name="confirm_checkbox" value="1" required>&nbsp;&nbsp;{{ confirm_text|safe }}</label>
   </div>
   {% endif %}

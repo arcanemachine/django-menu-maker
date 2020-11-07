@@ -123,3 +123,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': validation_string + 'MinimumLengthValidator'},
     {'NAME': validation_string + 'CommonPasswordValidator'},
     {'NAME': validation_string + 'NumericPasswordValidator'}]
+
+# rest framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}

@@ -9,3 +9,14 @@ class RestaurantSerializer(serializers.ModelSerializer):
         model = Restaurant
         fields = ['id', 'name', 'admin_users', 'menu_set']
         read_only_fields = ['admin_users', 'menu_set']
+
+class MenuSerializer(serializers.ModelSerializer):
+
+    restaurant_slug = serializers.ReadOnlyField(source='restaurant.slug')
+    menusections = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field='slug')
+
+    class Meta:
+        model = Menu
+        fields = ['id', 'slug', 'restaurant_slug', 'name', 'menusections']
+        read_only_fields = ['name', 'restaurant_slug', 'menusections']

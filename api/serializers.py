@@ -23,3 +23,13 @@ class MenuSerializer(serializers.ModelSerializer):
         read_only_fields = ['restaurant', 'menusection_set']
 
 
+class MenuSectionSerializer(serializers.ModelSerializer):
+
+    restaurant_name = \
+        serializers.ReadOnlyField(source='menu.restaurant.name')
+    menu_name = serializers.ReadOnlyField(source='menu.name')
+
+    class Meta:
+        model = MenuSection
+        fields = ['id', 'restaurant_name', 'menu_name', 'name', 'menuitem_set']
+        read_only_fields = ['menuitem_set']

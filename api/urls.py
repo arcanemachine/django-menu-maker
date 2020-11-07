@@ -7,5 +7,6 @@ app_name = 'api'
 router = SimpleRouter()
 router.register('r', views.RestaurantViewSet, basename='restaurants')
 router.register('m', views.MenuViewSet, basename='menus')
+router.register('ms', views.MenuSectionViewSet, basename='menusections')
 
 urlpatterns = router.urls

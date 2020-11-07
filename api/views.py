@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from . import serializers
 from .permissions import HasRestaurantPermissionsOrReadOnly
 from restaurants.models import Restaurant
-from menus.models import Menu, MenuSection
+from menus.models import Menu, MenuSection, MenuItem
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -27,4 +27,9 @@ class MenuViewSet(viewsets.ModelViewSet):
 class MenuSectionViewSet(viewsets.ModelViewSet):
     queryset = MenuSection.objects.all()
     serializer_class = serializers.MenuSectionSerializer
+
+
+class MenuItemViewSet(viewsets.ModelViewSet):
+    queryset = MenuItem.objects.all()
+    serializer_class = serializers.MenuItemSerializer
     permission_classes = [HasRestaurantPermissionsOrReadOnly]

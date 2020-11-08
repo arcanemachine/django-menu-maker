@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 
 import factory
 
+from menus_project.constants import TEST_USER_PASSWORD
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
@@ -21,6 +22,8 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@email.com')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
+    password = factory.PostGenerationMethodCall(
+        'set_password', TEST_USER_PASSWORD)
 
 
 class AdminUserFactory(UserFactory):

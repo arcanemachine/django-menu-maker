@@ -11,6 +11,15 @@ class RestaurantSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'admin_users', 'menu_set']
         read_only_fields = ['admin_users', 'menu_set']
 
+    def create(self, validated_data):
+        """
+        Create a new restaurant and add the creator to admin_users.
+        """
+        self.user = self.context['request'].user
+        restaurant = Restaurant.objects.create(**validated_data)
+        restaurant.admin_users.add(self.user)
+        return restaurant
+
 
 class MenuSerializer(serializers.ModelSerializer):
 

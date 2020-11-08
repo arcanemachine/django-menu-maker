@@ -12,9 +12,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
         read_only_fields = ['admin_users', 'menu_set']
 
     def create(self, validated_data):
-        """
-        Create a new restaurant and add the creator to admin_users.
-        """
         self.user = self.context['request'].user
         restaurant = Restaurant.objects.create(**validated_data)
         restaurant.admin_users.add(self.user)
@@ -31,6 +28,17 @@ class MenuSerializer(serializers.ModelSerializer):
             'menusection_set']
         read_only_fields = ['restaurant', 'menusection_set']
 
+    def __init__(self, *args, **kwargs):
+        if kwargs['context'].get('restaurant_pk', None):
+            self.restaurant = \
+                Restaurant.objects.get(pk=kwargs['context']['restaurant_pk'])
+        super().__init__(*args, **kwargs)
+
+    def create(self, validated_data):
+        menu = Menu.objects.create(
+            restaurant=self.restaurant, **validated_data)
+        return menu
+
 
 class MenuSectionSerializer(serializers.ModelSerializer):
 
@@ -42,6 +50,17 @@ class MenuSectionSerializer(serializers.ModelSerializer):
         model = MenuSection
         fields = ['id', 'restaurant_name', 'menu_name', 'name', 'menuitem_set']
         read_only_fields = ['menuitem_set']
+
+    def __init__(self, *args, **kwargs):
+        if kwargs['context'].get('menu_pk', None):
+            self.menu = Menu.objects.get(pk=kwargs['context']['menu_pk'])
+        super().__init__(*args, **kwargs)
+
+    def create(self, validated_data):
+        menusection = MenuSection.objects.create(
+            menu=self.menu, **validated_data)
+        return menusection
+
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -55,3 +74,14 @@ class MenuItemSerializer(serializers.ModelSerializer):
         model = MenuItem
         fields = ['id', 'restaurant_name', 'menu_name', 'menusection_name',
             'name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        if kwargs['context'].get('menusection_pk', None):
+            self.menusection = \
+                MenuSection.objects.get(pk=kwargs['context']['menusection_pk'])
+        super().__init__(*args, **kwargs)
+
+    def create(self, validated_data):
+        menuitem = MenuItem.objects.create(
+            menusection=self.menusection, **validated_data)
+        return menuitem

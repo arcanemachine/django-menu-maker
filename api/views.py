@@ -23,6 +23,14 @@ class MenuList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
     serializer_class = serializers.MenuSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['restaurant_pk'] = self.kwargs['restaurant_pk']
+        return context
+
+    def get_queryset(self):
+        return Menu.objects.filter(restaurant__pk=self.kwargs['restaurant_pk'])
+
 
 class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
@@ -35,6 +43,14 @@ class MenuSectionList(generics.ListCreateAPIView):
     queryset = MenuSection.objects.all()
     serializer_class = serializers.MenuSectionSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['menu_pk'] = self.kwargs['menu_pk']
+        return context
+
+    def get_queryset(self):
+        return MenuSection.objects.filter(menu__pk=self.kwargs['menu_pk'])
+
 
 class MenuSectionDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
@@ -46,6 +62,15 @@ class MenuItemList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
     queryset = MenuItem.objects.all()
     serializer_class = serializers.MenuItemSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['menusection_pk'] = self.kwargs['menusection_pk']
+        return context
+
+    def get_queryset(self):
+        return MenuItem.objects.filter(
+            menusection=self.kwargs['menusection_pk'])
 
 
 class MenuItemDetail(generics.RetrieveUpdateDestroyAPIView):

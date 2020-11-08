@@ -1,3 +1,4 @@
+from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
 from . import views
@@ -10,4 +11,10 @@ router.register('m', views.MenuViewSet, basename='menus')
 router.register('ms', views.MenuSectionViewSet, basename='menusections')
 router.register('mi', views.MenuItemViewSet, basename='menuitems')
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('m/', views.MenuViewSet.as_view({'get': 'list'})),
+    path('ms/', views.MenuSectionViewSet.as_view({'get': 'list'})),
+    path('mi/', views.MenuItemViewSet.as_view({'get': 'list'})),
+    ]
+
+urlpatterns += router.urls

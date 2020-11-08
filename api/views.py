@@ -27,6 +27,7 @@ class MenuViewSet(viewsets.ModelViewSet):
 class MenuSectionViewSet(viewsets.ModelViewSet):
     queryset = MenuSection.objects.all()
     serializer_class = serializers.MenuSectionSerializer
+    permission_classes = [HasRestaurantPermissionsOrReadOnly]
 
 
 class MenuItemViewSet(viewsets.ModelViewSet):

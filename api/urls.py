@@ -1,20 +1,26 @@
-from django.urls import include, path
-from rest_framework.routers import SimpleRouter
+from django.urls import path
 
 from . import views
 
 app_name = 'api'
 
-router = SimpleRouter()
-router.register('r', views.RestaurantViewSet, basename='restaurants')
-router.register('m', views.MenuViewSet, basename='menus')
-router.register('ms', views.MenuSectionViewSet, basename='menusections')
-router.register('mi', views.MenuItemViewSet, basename='menuitems')
-
 urlpatterns = [
-    path('m/', views.MenuViewSet.as_view({'get': 'list'})),
-    path('ms/', views.MenuSectionViewSet.as_view({'get': 'list'})),
-    path('mi/', views.MenuItemViewSet.as_view({'get': 'list'})),
+    path('',
+         views.RestaurantList.as_view()),
+    path('<pk>/',
+         views.RestaurantDetail.as_view()),
+    path('<int:restaurant_pk>/menus/',
+         views.MenuList.as_view()),
+    path('<int:restaurant_pk>/menus/<pk>/',
+         views.MenuDetail.as_view()),
+    path('<int:restaurant_pk>/menus/<int:menu_pk>/sections/',
+         views.MenuSectionList.as_view()),
+    path('<int:restaurant_pk>/menus/<int:menu_pk>/sections/<pk>/',
+         views.MenuSectionDetail.as_view()),
+    path('<int:restaurant_pk>/menus/<int:menu_pk>/sections/'
+         '<int:menusection_pk>/items/',
+         views.MenuItemList.as_view()),
+    path('<int:restaurant_pk>/menus/<int:menu_pk>/sections/'
+         '<int:menuitem_pk>/items/<pk>/',
+         views.MenuItemDetail.as_view()),
     ]
-
-urlpatterns += router.urls

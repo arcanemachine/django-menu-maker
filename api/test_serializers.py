@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.urls import reverse
-
 from rest_framework.test import APIClient  # , APIRequestFactory
 
 import factories
@@ -39,7 +38,7 @@ class RestaurantSerializerTest(TestCase):
                          ['admin_users', 'menu_set'])
 
     def test_method_create_adds_registrant_to_admin_users(self):
-        self.current_test_url = reverse('api:restaurant_list_create')
+        self.current_test_url = reverse('api:restaurant_list')
 
         # create new restaurant
         self.rest_client.login(
@@ -87,7 +86,7 @@ class MenuSerializerTest(TestCase):
             ['menusection_set', 'restaurant_name'])
 
     def test_method_create_adds_restaurant_to_menu(self):
-        self.current_test_url = reverse('api:menu_list_create', kwargs={
+        self.current_test_url = reverse('api:menu_list', kwargs={
             'restaurant_pk': self.test_restaurant.pk})
 
         old_menu_count = Menu.objects.count()
@@ -141,7 +140,7 @@ class MenuSectionSerializerTest(TestCase):
             ['menuitem_set', 'restaurant_name', 'menu_name'])
 
     def test_method_create_adds_menu_to_menusection(self):
-        self.current_test_url = reverse('api:menusection_list_create', kwargs={
+        self.current_test_url = reverse('api:menusection_list', kwargs={
             'restaurant_pk': self.test_menu.restaurant.pk,
             'menu_pk': self.test_menu.pk})
 
@@ -201,7 +200,7 @@ class MenuItemSerializerTest(TestCase):
             ['menuitem_set', 'restaurant_name', 'menu_name'])
 
     def test_method_create_adds_menusection_to_menuitem(self):
-        self.current_test_url = reverse('api:menuitem_list_create', kwargs={
+        self.current_test_url = reverse('api:menuitem_list', kwargs={
             'restaurant_pk': self.test_menusection.menu.restaurant.pk,
             'menu_pk': self.test_menusection.menu.pk,
             'menusection_pk': self.test_menusection.pk})

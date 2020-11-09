@@ -15,12 +15,14 @@ class RestaurantList(generics.ListCreateAPIView):
 
 class RestaurantDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'restaurant_pk'
     queryset = Restaurant.objects.all()
     serializer_class = serializers.RestaurantSerializer
 
 
 class MenuList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'restaurant_pk'
     serializer_class = serializers.MenuSerializer
 
     def get_serializer_context(self):
@@ -34,12 +36,14 @@ class MenuList(generics.ListCreateAPIView):
 
 class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'menu_pk'
     queryset = Menu.objects.all()
     serializer_class = serializers.MenuSerializer
 
 
 class MenuSectionList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'menu_pk'
     queryset = MenuSection.objects.all()
     serializer_class = serializers.MenuSectionSerializer
 
@@ -54,12 +58,14 @@ class MenuSectionList(generics.ListCreateAPIView):
 
 class MenuSectionDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'menusection_pk'
     queryset = MenuSection.objects.all()
     serializer_class = serializers.MenuSectionSerializer
 
 
 class MenuItemList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'menu_pk'
     queryset = MenuItem.objects.all()
     serializer_class = serializers.MenuItemSerializer
 
@@ -75,5 +81,6 @@ class MenuItemList(generics.ListCreateAPIView):
 
 class MenuItemDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
+    lookup_url_kwarg = 'menuitem_pk'
     queryset = MenuItem.objects.all()
     serializer_class = serializers.MenuItemSerializer

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient  # , APIRequestFactory
+from rest_framework.test import APIClient
 
 import factories
 from menus_project import constants

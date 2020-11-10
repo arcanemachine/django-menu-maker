@@ -1,12 +1,10 @@
 from django.contrib.auth.models import AnonymousUser
-from django.urls import reverse
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework import permissions
 
 import factories as f
-from restaurants.models import Restaurant
-from menus.models import Menu, MenuSection, MenuItem
 from api.permissions import HasRestaurantPermissionsOrReadOnly
+
 
 class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
 
@@ -19,7 +17,6 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         cls.admin_user = f.UserFactory(username='admin_user', is_staff=True)
         cls.permitted_user = f.UserFactory(username='permitted_user')
         cls.unprivileged_user = f.UserFactory(username='unprivileged_user')
-
 
     def setUp(self):
         # create restaurant objects and add permitted user to admin_users

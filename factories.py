@@ -24,10 +24,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     password = factory.PostGenerationMethodCall(
         'set_password', TEST_USER_PASSWORD)
-
-
-class AdminUserFactory(UserFactory):
-    is_staff = True
+    is_staff = False
 
 
 # restaurant

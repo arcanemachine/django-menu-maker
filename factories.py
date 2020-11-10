@@ -37,7 +37,8 @@ class RestaurantFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def admin_users(self, create, extracted, **kwargs):
         """
-        Add user to admin_users: RestaurantFactory(admin_users=[user])
+        Add user to admin_users:
+            - RestaurantFactory(admin_users=[user])
         """
         # if object not saved to database, do nothing
         if not create:
@@ -64,6 +65,22 @@ class MenuFactory(factory.django.DjangoModelFactory):
     restaurant = factory.SubFactory(RestaurantFactory)
     name = factory.Sequence(lambda n: f'Test Menu {n+1}')
 
+    @factory.post_generation
+    def admin_users(self, create, extracted, **kwargs):
+        """
+        Add user to restaurant.admin_users:
+            - MenuFactory(admin_users=[user])
+        """
+        # if object not saved to database, do nothing
+        if not create:
+            return
+
+        # if object saved to database, add users to admin_users
+        if extracted:
+            for user in extracted:
+                self.restaurant.admin_users.add(user)
+
+
 
 # menu section
 class MenuSectionFactory(factory.django.DjangoModelFactory):
@@ -72,6 +89,21 @@ class MenuSectionFactory(factory.django.DjangoModelFactory):
 
     menu = factory.SubFactory(MenuFactory)
     name = factory.Sequence(lambda n: f'Test Menu Section {n+1}')
+
+    @factory.post_generation
+    def admin_users(self, create, extracted, **kwargs):
+        """
+        Add user to menu.restaurant.admin_users:
+            - MenuSectionFactory(admin_users=[user])
+        """
+        # if object not saved to database, do nothing
+        if not create:
+            return
+
+        # if object saved to database, add users to admin_users
+        if extracted:
+            for user in extracted:
+                self.menu.restaurant.admin_users.add(user)
 
 
 # menu item
@@ -82,3 +114,18 @@ class MenuItemFactory(factory.django.DjangoModelFactory):
     menusection = factory.SubFactory(MenuSectionFactory)
     name = factory.Sequence(lambda n: f'Test Menu Item {n+1}')
     description = factory.Sequence(lambda n: f'Test Menu Description {n+1}')
+
+    @factory.post_generation
+    def admin_users(self, create, extracted, **kwargs):
+        """
+        Add user to menu.restaurant.admin_users:
+            - MenuSectionFactory(admin_users=[user])
+        """
+        # if object not saved to database, do nothing
+        if not create:
+            return
+
+        # if object saved to database, add users to admin_users
+        if extracted:
+            for user in extracted:
+                self.menusection.menu.restaurant.admin_users.add(user)

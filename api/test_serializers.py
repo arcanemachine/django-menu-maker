@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-import factories
+import factories as f
 from menus_project import constants
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
@@ -24,7 +24,7 @@ class RestaurantSerializerTest(TestCase):
         cls.rest_client = APIClient()
 
         # create objects
-        cls.test_user = factories.UserFactory()
+        cls.test_user = f.UserFactory()
 
     def test_meta_model_name(self):
         self.assertEqual(self.serializer.Meta.model.__name__, 'Restaurant')
@@ -66,8 +66,8 @@ class MenuSerializerTest(TestCase):
         cls.rest_client = APIClient()
 
         # create objects
-        cls.test_user = factories.UserFactory()
-        cls.test_restaurant = factories.RestaurantFactory()
+        cls.test_user = f.UserFactory()
+        cls.test_restaurant = f.RestaurantFactory()
 
     def test_fields_contain_restaurant_name(self):
         self.assertTrue('restaurant_name' in self.serializer.Meta.fields)
@@ -117,8 +117,8 @@ class MenuSectionSerializerTest(TestCase):
         cls.rest_client = APIClient()
 
         # create objects
-        cls.test_user = factories.UserFactory()
-        cls.test_menu = factories.MenuFactory()
+        cls.test_user = f.UserFactory()
+        cls.test_menu = f.MenuFactory()
 
     def test_fields_contain_restaurant_name(self):
         self.assertTrue('restaurant_name' in self.serializer.Meta.fields)
@@ -173,8 +173,8 @@ class MenuItemSerializerTest(TestCase):
         cls.rest_client = APIClient()
 
         # create objects
-        cls.test_user = factories.UserFactory()
-        cls.test_menusection = factories.MenuSectionFactory()
+        cls.test_user = f.UserFactory()
+        cls.test_menusection = f.MenuSectionFactory()
 
     def test_fields_contain_restaurant_name(self):
         self.assertTrue('restaurant_name' in self.serializer.Meta.fields)

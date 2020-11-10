@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.test import APITestCase
 
-import factories
+import factories as f
 from . import serializers, views
 from .permissions import HasRestaurantPermissionsOrReadOnly
 from menus_project import constants
@@ -18,8 +18,8 @@ class RestaurantListTest(APITestCase):
         cls.view = views.RestaurantList
 
         # create model objects
-        cls.test_user = factories.UserFactory()
-        cls.test_restaurants = factories.RestaurantFactory.create_batch(3)
+        cls.test_user = f.UserFactory()
+        cls.test_restaurants = f.RestaurantFactory.create_batch(3)
 
         # generate test url
         cls.current_test_url = reverse('api:restaurant_list')
@@ -81,10 +81,10 @@ class RestaurantDetailTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.view = views.RestaurantDetail
-        cls.restaurant_admin_user = factories.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
 
         # create model objects
-        cls.test_restaurant = factories.RestaurantFactory()
+        cls.test_restaurant = f.RestaurantFactory()
 
         # add user to restaurant admin_users
         cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
@@ -146,7 +146,7 @@ class RestaurantDetailTest(APITestCase):
 
     def test_request_delete_method_destroy_object(self):
         # create object to delete
-        self.restaurant_to_delete = factories.RestaurantFactory()
+        self.restaurant_to_delete = f.RestaurantFactory()
 
         # generate new test url
         self.kwargs = {'restaurant_pk': self.test_restaurant.pk}
@@ -170,9 +170,9 @@ class MenuListTest(APITestCase):
         cls.view = views.MenuList
 
         # create model objects
-        cls.restaurant_admin_user = factories.UserFactory()
-        cls.test_restaurant = factories.RestaurantFactory()
-        cls.test_menus = factories.MenuFactory.create_batch(
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_restaurant = f.RestaurantFactory()
+        cls.test_menus = f.MenuFactory.create_batch(
             size=3, restaurant=cls.test_restaurant)
 
         # add user to restaurant admin_users
@@ -242,8 +242,8 @@ class MenuDetailTest(APITestCase):
         cls.view = views.MenuDetail
 
         # create model objects
-        cls.restaurant_admin_user = factories.UserFactory()
-        cls.test_menu = factories.MenuFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menu = f.MenuFactory()
 
         # add user to restaurant admin_users
         cls.test_menu.restaurant.admin_users.add(cls.restaurant_admin_user)
@@ -313,7 +313,7 @@ class MenuDetailTest(APITestCase):
 
     def test_request_delete_method_destroy_object(self):
         # create object to delete
-        self.menu_to_delete = factories.MenuFactory()
+        self.menu_to_delete = f.MenuFactory()
 
         # generate new test url
         self.kwargs = {'restaurant_pk': self.test_menu.restaurant.pk,
@@ -338,9 +338,9 @@ class MenuSectionListTest(APITestCase):
         cls.view = views.MenuSectionList
 
         # create model objects
-        cls.restaurant_admin_user = factories.UserFactory()
-        cls.test_menu = factories.MenuFactory()
-        cls.test_menusections = factories.MenuSectionFactory.create_batch(
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menu = f.MenuFactory()
+        cls.test_menusections = f.MenuSectionFactory.create_batch(
             size=3, menu=cls.test_menu)
 
         # add user to restaurant admin_users
@@ -413,8 +413,8 @@ class MenuSectionDetailTest(APITestCase):
         cls.view = views.MenuSectionDetail
 
         # create model objects
-        cls.restaurant_admin_user = factories.UserFactory()
-        cls.test_menusection = factories.MenuSectionFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menusection = f.MenuSectionFactory()
 
         # add user to restaurant admin_users
         cls.test_menusection.menu.restaurant.admin_users.add(
@@ -480,7 +480,7 @@ class MenuSectionDetailTest(APITestCase):
 
     def test_request_delete_method_destroy_object(self):
         # create object to delete
-        self.menusection_to_delete = factories.MenuSectionFactory()
+        self.menusection_to_delete = f.MenuSectionFactory()
 
         # generate new test url
         self.kwargs = {
@@ -507,9 +507,9 @@ class MenuItemListTest(APITestCase):
         cls.view = views.MenuItemList
 
         # create model objects
-        cls.restaurant_admin_user = factories.UserFactory()
-        cls.test_menusection = factories.MenuSectionFactory()
-        cls.test_menuitems = factories.MenuItemFactory.create_batch(
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menusection = f.MenuSectionFactory()
+        cls.test_menuitems = f.MenuItemFactory.create_batch(
             size=3, menusection=cls.test_menusection)
 
         # add user to restaurant admin_users
@@ -586,8 +586,8 @@ class MenuItemDetailTest(APITestCase):
         cls.view = views.MenuItemDetail
 
         # create model objects
-        cls.restaurant_admin_user = factories.UserFactory()
-        cls.test_menuitem = factories.MenuItemFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menuitem = f.MenuItemFactory()
 
         # add user to restaurant admin_users
         cls.test_menuitem.menusection.menu.restaurant.admin_users.add(
@@ -655,7 +655,7 @@ class MenuItemDetailTest(APITestCase):
 
     def test_request_delete_method_destroy_object(self):
         # create object to delete
-        self.menuitem_to_delete = factories.MenuItemFactory()
+        self.menuitem_to_delete = f.MenuItemFactory()
 
         # generate new test url
         self.kwargs = {

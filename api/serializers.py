@@ -29,7 +29,8 @@ class MenuSerializer(serializers.ModelSerializer):
         read_only_fields = ['menusection_set', 'restaurant_name']
 
     def __init__(self, *args, **kwargs):
-        if kwargs['context'].get('restaurant_pk', None):
+        if 'context' in kwargs \
+                and kwargs['context'].get('restaurant_pk', None):
             self.restaurant = \
                 Restaurant.objects.get(pk=kwargs['context']['restaurant_pk'])
         super().__init__(*args, **kwargs)
@@ -52,7 +53,7 @@ class MenuSectionSerializer(serializers.ModelSerializer):
         read_only_fields = ['menuitem_set', 'restaurant_name', 'menu_name']
 
     def __init__(self, *args, **kwargs):
-        if kwargs['context'].get('menu_pk', None):
+        if 'context' in kwargs and kwargs['context'].get('menu_pk', None):
             self.menu = Menu.objects.get(pk=kwargs['context']['menu_pk'])
         super().__init__(*args, **kwargs)
 
@@ -60,7 +61,6 @@ class MenuSectionSerializer(serializers.ModelSerializer):
         menusection = MenuSection.objects.create(
             menu=self.menu, **validated_data)
         return menusection
-
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -77,7 +77,8 @@ class MenuItemSerializer(serializers.ModelSerializer):
         read_only_fields = ['restaurant_name', 'menu_name', 'menusection_name']
 
     def __init__(self, *args, **kwargs):
-        if kwargs['context'].get('menusection_pk', None):
+        if 'context' in kwargs \
+                and kwargs['context'].get('menusection_pk', None):
             self.menusection = \
                 MenuSection.objects.get(pk=kwargs['context']['menusection_pk'])
         super().__init__(*args, **kwargs)

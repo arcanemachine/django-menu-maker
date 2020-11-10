@@ -34,6 +34,20 @@ class RestaurantFactory(factory.django.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: f'Test Restaurant {n+1}')
 
+    @factory.post_generation
+    def admin_users(self, create, extracted, **kwargs):
+        """
+        Add user to admin_users: RestaurantFactory(admin_users=[user])
+        """
+        # if object not saved to database, do nothing
+        if not create:
+            return
+
+        # if object saved to database, add users to admin_users
+        if extracted:
+            for user in extracted:
+                self.admin_users.add(user)
+
 
 class RandomRestaurantFactory(factory.django.DjangoModelFactory):
     class Meta:

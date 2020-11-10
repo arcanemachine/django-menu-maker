@@ -7,10 +7,11 @@ from menus.models import Menu, MenuSection, MenuItem
 class HasRestaurantPermissionsOrReadOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS \
-                and request.user.is_authenticated:
-            return True
+        if not request.user.is_authenticated:
+            return False
         elif request.user.is_staff:
+            return True
+        elif request.method in permissions.SAFE_METHODS:
             return True
         elif type(obj) == Restaurant:
             return request.user in obj.admin_users.all()

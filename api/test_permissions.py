@@ -18,7 +18,7 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         # create users
         cls.admin_user = f.UserFactory(username='admin_user', is_staff=True)
         cls.permitted_user = f.UserFactory(username='permitted_user')
-        cls.non_permitted_user = f.UserFactory(username='non_permitted_user')
+        cls.unprivileged_user = f.UserFactory(username='unprivileged_user')
 
 
     def setUp(self):
@@ -30,7 +30,7 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         self.test_menuitem = \
             f.MenuItemFactory(menusection=self.test_menusection)
 
-    def test_unauthenticated_user_returns_false(self):
+    def test_unauthenticated_user_least_privileged_request_returns_false(self):
         request = self.factory.get('/')
         request.user = AnonymousUser()
 
@@ -48,9 +48,9 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         self.assertTrue(
             self.test_permission.has_object_permission(request, None, obj))
 
-    def test_non_permitted_user_can_use_safe_methods(self):
+    def test_unprivileged_user_can_use_safe_methods(self):
         request = self.factory.get('/')
-        request.user = self.non_permitted_user
+        request.user = self.unprivileged_user
 
         obj = None
 
@@ -94,7 +94,7 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         self.assertTrue(
             self.test_permission.has_object_permission(request, None, obj))
 
-    def test_permitted_user_with_non_restaurant_object(self):
+    def test_non_restaurant_object(self):
         request = self.factory.delete('/')
         request.user = self.permitted_user
 

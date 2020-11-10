@@ -39,6 +39,16 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         self.assertFalse(
             self.test_permission.has_object_permission(request, None, obj))
 
+    # sanity check
+    def test_authenticated_user_least_privileged_request_returns_true(self):
+        request = self.factory.get('/')
+        request.user = self.unprivileged_user
+
+        obj = None
+
+        self.assertTrue(
+            self.test_permission.has_object_permission(request, None, obj))
+
     def test_admin_user_returns_true(self):
         request = self.factory.delete('/')
         request.user = self.admin_user
@@ -65,6 +75,16 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         obj = self.test_restaurant
 
         self.assertTrue(
+            self.test_permission.has_object_permission(request, None, obj))
+
+    # sanity check
+    def test_unprivileged_user_with_restaurant_object(self):
+        request = self.factory.delete('/')
+        request.user = self.unprivileged_user
+
+        obj = self.test_restaurant
+
+        self.assertFalse(
             self.test_permission.has_object_permission(request, None, obj))
 
     def test_permitted_user_with_menu_object(self):
@@ -102,13 +122,3 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
 
         with self.assertRaises(TypeError):
             self.test_permission.has_object_permission(request, None, obj)
-
-    # edge cases
-    def test_non_permitted_user_with_restaurant_object(self):
-        request = self.factory.delete('/')
-        request.user = self.non_permitted_user
-
-        obj = self.test_restaurant
-
-        self.assertFalse(
-            self.test_permission.has_object_permission(request, None, obj))

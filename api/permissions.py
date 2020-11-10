@@ -18,7 +18,7 @@ class HasRestaurantPermissionsOrReadOnly(permissions.BasePermission):
             return request.user in obj.restaurant.admin_users.all()
         elif type(obj) == MenuSection:
             return request.user in obj.menu.restaurant.admin_users.all()
-        elif type(obj) == Menu:
+        elif type(obj) == MenuItem:
             return request.user \
                 in obj.menusection.menu.restaurant.admin_users.all()
         else:

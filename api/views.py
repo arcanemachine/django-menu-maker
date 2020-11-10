@@ -44,7 +44,6 @@ class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
 class MenuSectionList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
     lookup_url_kwarg = 'menu_pk'
-    queryset = MenuSection.objects.all()
     serializer_class = serializers.MenuSectionSerializer
 
     def get_serializer_context(self):
@@ -66,7 +65,6 @@ class MenuSectionDetail(generics.RetrieveUpdateDestroyAPIView):
 class MenuItemList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
     lookup_url_kwarg = 'menu_pk'
-    queryset = MenuItem.objects.all()
     serializer_class = serializers.MenuItemSerializer
 
     def get_serializer_context(self):

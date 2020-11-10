@@ -22,5 +22,7 @@ class HasRestaurantPermissionsOrReadOnly(permissions.BasePermission):
         elif type(obj) == MenuItem:
             return request.user \
                 in obj.menusection.menu.restaurant.admin_users.all()
+        # if non-restaurant object submitted, raise TypeError
         else:
-            return False
+            raise TypeError("This permission can only be used with a "
+                "Restaurant-related object.")

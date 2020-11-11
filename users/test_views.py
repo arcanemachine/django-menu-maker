@@ -43,10 +43,10 @@ class RegisterViewTest(TestCase):
             "Your account has been successfully registered.")
 
     # request.GET
-    def test_get_method(self):
+    def test_request_get_method(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_post_method_register_new_user(self):
+    def test_request_post_method_register_new_user(self):
         # get user count before POST
         old_user_count = get_user_model().objects.count()
 
@@ -275,7 +275,7 @@ class UserUpdateViewTest(TestCase):
             self.assertIn(rf'value="{value}"', self.html)
 
     # request.POST
-    def test_post_method(self):
+    def test_request_post_method(self):
         updated_user_first_name = f"{self.test_user.first_name}y"
         updated_user_last_name = f"{self.test_user.last_name}son"
 
@@ -360,7 +360,7 @@ class UserDeleteViewTest(TestCase):
             "Are you sure you want to delete your account?", self.html)
 
     # request.POST
-    def test_post_method(self):
+    def test_request_post_method(self):
         # get user count before deleting self.test_user
         old_user_count = get_user_model().objects.count()
 
@@ -413,7 +413,7 @@ class UserLogoutViewTest(TestCase):
             self.view.__class__.__bases__[-1].__name__, 'LogoutView')
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.client.logout()
         self.response = self.client.get(self.current_test_url)
 
@@ -431,7 +431,7 @@ class UserLogoutViewTest(TestCase):
         self.assertNotIn(self.view.success_message, self.html)
         self.assertEqual(len(self.response.context['messages']), 0)
 
-    def test_get_method_authenticated_user(self):
+    def test_request_get_method_authenticated_user(self):
         self.response = self.client.get(self.current_test_url)
 
         # redirect to settings.LOGIN_REDIRECT_URL
@@ -448,7 +448,7 @@ class UserLogoutViewTest(TestCase):
         self.assertIn(self.view.success_message, self.html)
         self.assertEqual(len(self.response.context['messages']), 1)
 
-    def test_post_method_unauthenticated_user(self):
+    def test_request_post_method_unauthenticated_user(self):
         self.client.logout()
         self.response = self.client.post(self.current_test_url)
 
@@ -466,7 +466,7 @@ class UserLogoutViewTest(TestCase):
         self.assertNotIn(self.view.success_message, self.html)
         self.assertEqual(len(self.response.context['messages']), 0)
 
-    def test_post_method_authenticated_user(self):
+    def test_request_post_method_authenticated_user(self):
         self.response = self.client.post(self.current_test_url)
 
         # redirect to settings.LOGIN_REDIRECT_URL

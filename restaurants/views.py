@@ -44,6 +44,11 @@ class RestaurantCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
+class RestaurantDetailView(DetailView):
+    model = Restaurant
+    slug_url_kwarg = 'restaurant_slug'
+
+
 class RestaurantUpdateView(
         UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Restaurant
@@ -67,11 +72,6 @@ class RestaurantUpdateView(
             return True
         return self.request.user in \
             self.get_object().admin_users.all()
-
-
-class RestaurantDetailView(DetailView):
-    model = Restaurant
-    slug_url_kwarg = 'restaurant_slug'
 
 
 class RestaurantDeleteView(UserPassesTestMixin, DeleteView):

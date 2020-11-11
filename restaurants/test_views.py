@@ -35,7 +35,7 @@ class RestaurantListViewTest(TestCase):
         self.assertTrue('restaurants' in self.context)
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
 
@@ -86,7 +86,7 @@ class RestaurantCreateViewTest(TestCase):
         self.assertEqual(self.context['action_verb'], 'Create')
 
     # request.GET
-    def test_get_method(self):
+    def test_request_get_method(self):
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -95,7 +95,7 @@ class RestaurantCreateViewTest(TestCase):
             "Please enter the information for your restaurant:", self.html)
 
     # request.POST
-    def test_post_method_authorized_user(self):
+    def test_request_post_method_authorized_user(self):
         # get restaurant count before POST
         old_restaurant_count = Restaurant.objects.count()
 
@@ -198,7 +198,7 @@ class RestaurantDetailViewTest(TestCase):
         self.assertEqual(self.view.model.__name__, 'Restaurant')
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -287,7 +287,7 @@ class RestaurantUpdateViewTest(TestCase):
         self.assertEqual(self.view.get_object(), self.test_restaurant)
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.client.logout()
 
         # request by unauthenticated user should redirect to login
@@ -296,7 +296,7 @@ class RestaurantUpdateViewTest(TestCase):
         redirect_url = urlparse(self.response.url)[2]
         self.assertEqual(redirect_url, reverse('login'))
 
-    def test_get_method_authenticated_but_unauthorized_user(self):
+    def test_request_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
             username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
@@ -304,10 +304,10 @@ class RestaurantUpdateViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 403)
 
-    def test_get_method_authorized_user(self):
+    def test_request_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_get_method_staff_user(self):
+    def test_request_get_method_staff_user(self):
         # give staff privileges to self.test_user
         self.test_user.is_staff = True
         self.test_user.save()
@@ -330,7 +330,7 @@ class RestaurantUpdateViewTest(TestCase):
         self.assertIn(rf'value="{self.test_restaurant.name}"', self.html)
 
     # request.POST
-    def test_post_method_unauthenticated_user(self):
+    def test_request_post_method_unauthenticated_user(self):
         self.client.logout()
 
         old_restaurant_name = self.test_restaurant.name
@@ -349,7 +349,7 @@ class RestaurantUpdateViewTest(TestCase):
         self.test_restaurant.refresh_from_db()
         self.assertEqual(self.test_restaurant.name, old_restaurant_name)
 
-    def test_post_method_authenticated_but_unauthorized_user(self):
+    def test_request_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
             username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
@@ -367,7 +367,7 @@ class RestaurantUpdateViewTest(TestCase):
         self.test_restaurant.refresh_from_db()
         self.assertEqual(self.test_restaurant.name, old_restaurant_name)
 
-    def test_post_method_authorized_user(self):
+    def test_request_post_method_authorized_user(self):
         updated_restaurant_name = f'Updated {self.test_restaurant.name}'
         updated_restaurant_slug = slugify(updated_restaurant_name)
 
@@ -445,8 +445,9 @@ class RestaurantDeleteViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.test_user = f.UserFactory()
+        cls.admin_user = f.UserFactory(is_staff=True)
         cls.restaurant_admin_user = f.UserFactory()
+        cls.test_user = f.UserFactory()
         cls.test_restaurant = \
             f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
@@ -502,7 +503,7 @@ class RestaurantDeleteViewTest(TestCase):
         self.assertEqual(self.view.get_object(), self.test_restaurant)
 
     # request.GET
-    def test_get_method_unauthenticated_user(self):
+    def test_request_get_method_unauthenticated_user(self):
         self.client.logout()
 
         # request by unauthenticated user should redirect to login
@@ -511,29 +512,21 @@ class RestaurantDeleteViewTest(TestCase):
         redirect_url = urlparse(self.response.url)[2]
         self.assertEqual(redirect_url, reverse('login'))
 
-    def test_get_method_authenticated_but_unauthorized_user(self):
+    def test_request_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
             username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
-        # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 403)
 
-    def test_get_method_authorized_user(self):
+    def test_request_get_method_authorized_user(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_get_method_staff_user(self):
-        # give staff privileges to self.test_user
-        self.test_user.is_staff = True
-        self.test_user.save()
+    def test_request_get_method_staff_user(self):
+        self.client.login(
+            username=self.admin_user.username, password=c.TEST_USER_PASSWORD)
 
-        # reload the page
         self.response = self.client.get(self.current_test_url)
-
-        # remove staff privileges from self.test_user
-        self.test_user.is_staff = False
-        self.test_user.save()
-
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -543,7 +536,7 @@ class RestaurantDeleteViewTest(TestCase):
             fr"'{self.test_restaurant.name}' restaurant?", self.html)
 
     # request.POST
-    def test_post_method_unauthenticated_user(self):
+    def test_request_post_method_unauthenticated_user(self):
         self.client.logout()
 
         # get restaurant count before POST
@@ -561,7 +554,7 @@ class RestaurantDeleteViewTest(TestCase):
         new_restaurant_count = Restaurant.objects.count()
         self.assertEqual(old_restaurant_count, new_restaurant_count)
 
-    def test_post_method_authenticated_but_unauthorized_user(self):
+    def test_request_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
             username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
@@ -578,7 +571,7 @@ class RestaurantDeleteViewTest(TestCase):
         new_restaurant_count = Restaurant.objects.count()
         self.assertEqual(old_restaurant_count, new_restaurant_count)
 
-    def test_post_method_authorized_user(self):
+    def test_request_post_method_authorized_user(self):
         # get restaurant count before attempting POST
         old_restaurant_count = Restaurant.objects.count()
 

@@ -14,9 +14,9 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         cls.test_permission = HasRestaurantPermissionsOrReadOnly()
 
         # create users
-        cls.admin_user = f.UserFactory(username='admin_user', is_staff=True)
-        cls.permitted_user = f.UserFactory(username='permitted_user')
         cls.unprivileged_user = f.UserFactory(username='unprivileged_user')
+        cls.permitted_user = f.UserFactory(username='permitted_user')
+        cls.admin_user = f.UserFactory(username='admin_user', is_staff=True)
 
     def setUp(self):
         # create restaurant objects and add permitted user to admin_users

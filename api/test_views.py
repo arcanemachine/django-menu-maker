@@ -81,13 +81,11 @@ class RestaurantDetailTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.view = views.RestaurantDetail
-        cls.restaurant_admin_user = f.UserFactory()
 
         # create model objects
-        cls.test_restaurant = f.RestaurantFactory()
-
-        # add user to restaurant admin_users
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_restaurant = \
+            f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {'restaurant_pk': cls.test_restaurant.pk}
@@ -173,10 +171,9 @@ class MenuListTest(APITestCase):
         cls.restaurant_admin_user = f.UserFactory()
         cls.test_restaurant = f.RestaurantFactory()
         cls.test_menus = f.MenuFactory.create_batch(
-            size=3, restaurant=cls.test_restaurant)
-
-        # add user to restaurant admin_users
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+            size=3,
+            restaurant=cls.test_restaurant,
+            admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {'restaurant_pk': cls.test_menus[0].pk}
@@ -243,10 +240,7 @@ class MenuDetailTest(APITestCase):
 
         # create model objects
         cls.restaurant_admin_user = f.UserFactory()
-        cls.test_menu = f.MenuFactory()
-
-        # add user to restaurant admin_users
-        cls.test_menu.restaurant.admin_users.add(cls.restaurant_admin_user)
+        cls.test_menu = f.MenuFactory(admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {'restaurant_pk': cls.test_menu.restaurant.pk,
@@ -341,10 +335,9 @@ class MenuSectionListTest(APITestCase):
         cls.restaurant_admin_user = f.UserFactory()
         cls.test_menu = f.MenuFactory()
         cls.test_menusections = f.MenuSectionFactory.create_batch(
-            size=3, menu=cls.test_menu)
-
-        # add user to restaurant admin_users
-        cls.test_menu.restaurant.admin_users.add(cls.restaurant_admin_user)
+            size=3,
+            menu=cls.test_menu,
+            admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {'restaurant_pk': cls.test_menu.restaurant.pk,
@@ -414,11 +407,8 @@ class MenuSectionDetailTest(APITestCase):
 
         # create model objects
         cls.restaurant_admin_user = f.UserFactory()
-        cls.test_menusection = f.MenuSectionFactory()
-
-        # add user to restaurant admin_users
-        cls.test_menusection.menu.restaurant.admin_users.add(
-            cls.restaurant_admin_user)
+        cls.test_menusection = \
+            f.MenuSectionFactory(admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {'restaurant_pk': cls.test_menusection.menu.restaurant.pk,
@@ -510,11 +500,9 @@ class MenuItemListTest(APITestCase):
         cls.restaurant_admin_user = f.UserFactory()
         cls.test_menusection = f.MenuSectionFactory()
         cls.test_menuitems = f.MenuItemFactory.create_batch(
-            size=3, menusection=cls.test_menusection)
-
-        # add user to restaurant admin_users
-        cls.test_menusection.menu.restaurant.admin_users.add(
-            cls.restaurant_admin_user)
+            size=3,
+            menusection=cls.test_menusection,
+            admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {
@@ -587,11 +575,8 @@ class MenuItemDetailTest(APITestCase):
 
         # create model objects
         cls.restaurant_admin_user = f.UserFactory()
-        cls.test_menuitem = f.MenuItemFactory()
-
-        # add user to restaurant admin_users
-        cls.test_menuitem.menusection.menu.restaurant.admin_users.add(
-            cls.restaurant_admin_user)
+        cls.test_menuitem = \
+            f.MenuItemFactory(admin_users=[cls.restaurant_admin_user])
 
         # generate test url
         cls.kwargs = {

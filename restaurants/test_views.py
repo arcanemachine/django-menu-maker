@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
@@ -6,6 +5,7 @@ from django.utils.text import slugify
 from html import unescape
 from urllib.parse import urlparse
 
+import factories as f
 from .models import Restaurant
 from menus_project import constants
 
@@ -20,18 +20,6 @@ class RestaurantListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create test user
-        cls.test_user = \
-                get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.set([cls.test_user])
-        cls.test_restaurant.save()
-
         cls.current_test_url = reverse('restaurants:restaurant_list')
 
     def setUp(self):
@@ -61,12 +49,7 @@ class RestaurantCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
+        cls.restaurant_admin_user = f.UserFactory()
         cls.current_test_url = reverse('restaurants:restaurant_create')
 
     def setUp(self):
@@ -198,17 +181,9 @@ class RestaurantDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create test user
-        cls.test_user = get_user_model().objects.create(
-                username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = Restaurant.objects.create(
-            name=test_restaurant_name)
-        cls.test_restaurant.admin_users.set([cls.test_user])
-        cls.test_restaurant.save()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_restaurant = \
+            f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse(
             'restaurants:restaurant_detail', kwargs={
@@ -241,7 +216,7 @@ class RestaurantDetailViewTest(TestCase):
 
     def test_template_authorized_user_can_view_auth_links(self):
         self.client.login(
-            username=self.test_user.username,
+            username=self.restaurant_admin_user.username,
             password=test_user_password)
         self.setUp()
         self.assertIn('auth-links', self.html)
@@ -258,23 +233,12 @@ class RestaurantUpdateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
 
     def setUp(self):
-        # create test restaurant
         self.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        self.test_restaurant.admin_users.add(self.restaurant_admin_user)
+            f.RestaurantFactory(admin_users=[self.restaurant_admin_user])
 
         # login as authorized user
         self.client.login(
@@ -490,22 +454,10 @@ class RestaurantDeleteViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+            f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse(
             'restaurants:restaurant_delete', kwargs={

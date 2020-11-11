@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
@@ -7,10 +6,10 @@ from html import unescape
 from inspect import getfullargspec
 from urllib.parse import urlparse
 
+import factories as f
 from . import views
 from .models import Menu, MenuSection, MenuItem
 from menus_project import constants
-from restaurants.models import Restaurant
 
 test_user_username = constants.TEST_USER_USERNAME
 test_user_password = constants.TEST_USER_PASSWORD
@@ -30,8 +29,7 @@ class MenusRootViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.view = views.menus_root
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
+        cls.test_restaurant = f.RestaurantFactory()
         cls.current_test_url = reverse('menus:menus_root', kwargs={
             'restaurant_slug': cls.test_restaurant.slug})
 
@@ -76,22 +74,11 @@ class MenuCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
+        cls.admin_user = f.UserFactory(is_staff=True)
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+            f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menu_create', kwargs={
             'restaurant_slug': cls.test_restaurant.slug})
@@ -177,17 +164,11 @@ class MenuCreateViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_get_method_staff_user(self):
-        # give staff privileges to self.test_user
-        self.test_user.is_staff = True
-        self.test_user.save()
+        self.client.login(
+            username=self.admin_user.username,
+            password=self.admin_user.password)
 
-        # reload the page
         self.response = self.client.get(self.current_test_url)
-
-        # remove staff privileges from self.test_user
-        self.test_user.is_staff = False
-        self.test_user.save()
-
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -301,29 +282,13 @@ class MenuDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+            f.MenuFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menu_detail', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
+            'restaurant_slug': cls.test_menu.restaurant.slug,
             'menu_slug': cls.test_menu.slug})
 
     def setUp(self):
@@ -402,9 +367,8 @@ class MenuDetailViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menu_detail', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
-                'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug'})
+                    self.test_menu.restaurant.slug if i != 0 else 'bad-slug',
+                'menu_slug': self.test_menu.slug if i != 1 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
             self.assertEqual(self.response.status_code, 404)
 
@@ -413,28 +377,13 @@ class MenuUpdateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
+            f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
     def setUp(self):
-
-        # create test menu
-        self.test_menu = \
-            self.test_restaurant.menu_set.create(name=test_menu_name)
+        self.test_menu = f.MenuFactory(restaurant=self.test_restaurant)
 
         # login as authorized user
         self.client.login(
@@ -442,7 +391,7 @@ class MenuUpdateViewTest(TestCase):
             password=restaurant_admin_user_password)
 
         self.current_test_url = reverse('menus:menu_update', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
+            'restaurant_slug': self.test_menu.restaurant.slug,
             'menu_slug': self.test_menu.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -653,9 +602,8 @@ class MenuUpdateViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menu_update', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
-                'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug'})
+                    self.test_menu.restaurant.slug if i != 0 else 'bad-slug',
+                'menu_slug': self.test_menu.slug if i != 1 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
             self.assertEqual(self.response.status_code, 404)
 
@@ -664,29 +612,12 @@ class MenuDeleteViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menu = f.MenuFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menu_delete', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
+            'restaurant_slug': cls.test_menu.restaurant.slug,
             'menu_slug': cls.test_menu.slug})
 
     def setUp(self):
@@ -735,7 +666,7 @@ class MenuDeleteViewTest(TestCase):
     def test_method_get_success_url(self):
         self.assertEqual(
             self.view.get_success_url(),
-            self.test_restaurant.get_absolute_url())
+            self.test_menu.restaurant.get_absolute_url())
 
     # request.GET
     def test_get_method_unauthenticated_user(self):
@@ -830,7 +761,7 @@ class MenuDeleteViewTest(TestCase):
         # user is redirected to restaurant_detail
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, self.test_restaurant.get_absolute_url())
+            self.response.url, self.test_menu.restaurant.get_absolute_url())
 
         # restaurant_detail loads successfully and contains success_message
         self.response = self.client.get(self.response.url)
@@ -844,7 +775,7 @@ class MenuDeleteViewTest(TestCase):
 
         # restaurant_detail does not contain menu name after refresh
         self.response = self.client.get(
-            self.test_restaurant.get_absolute_url())
+            self.test_menu.restaurant.get_absolute_url())
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertNotIn(f"{self.test_menu.name}", self.html)
 
@@ -858,13 +789,8 @@ class MenuDeleteViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-        # delete self.test_menu
         self.test_menu.delete()
-
-        # attempt POST request to delete already-deleted menu
         self.response = self.client.post(self.current_test_url)
-
-        # returns HTTP 404
         self.assertEqual(self.response.status_code, 404)
 
     # bad kwargs
@@ -872,9 +798,8 @@ class MenuDeleteViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menu_delete', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
-                'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug'})
+                    self.test_menu.restaurant.slug if i != 0 else 'bad-slug',
+                'menu_slug': self.test_menu.slug if i != 1 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
             self.assertEqual(self.response.status_code, 404)
 
@@ -883,29 +808,12 @@ class MenuSectionCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menu = f.MenuFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menusection_create', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
+            'restaurant_slug': cls.test_menu.restaurant.slug,
             'menu_slug': cls.test_menu.slug})
 
     def setUp(self):
@@ -1109,7 +1017,8 @@ class MenuSectionCreateViewTest(TestCase):
             self.current_test_url = reverse(
                 'menus:menusection_create', kwargs={
                     'restaurant_slug':
-                        self.test_restaurant.slug if i != 0 else 'bad-slug',
+                        self.test_menu.restaurant.slug
+                        if i != 0 else 'bad-slug',
                     'menu_slug':
                         self.test_menu.slug if i != 1 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -1120,34 +1029,14 @@ class MenuSectionDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
-
-        # create test menusection
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_menusection = \
-            cls.test_menu.menusection_set.create(name=test_menusection_name)
+            f.MenuSectionFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menusection_detail', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
-            'menu_slug': cls.test_menu.slug,
+            'restaurant_slug': cls.test_menusection.menu.restaurant.slug,
+            'menu_slug': cls.test_menusection.menu.slug,
             'menusection_slug': cls.test_menusection.slug})
 
     def setUp(self):
@@ -1198,9 +1087,11 @@ class MenuSectionDetailViewTest(TestCase):
             self.current_test_url = reverse(
                 'menus:menusection_detail', kwargs={
                     'restaurant_slug':
-                        self.test_restaurant.slug if i != 0 else 'bad-slug',
+                        self.test_menusection.menu.restaurant.slug
+                        if i != 0 else 'bad-slug',
                     'menu_slug':
-                        self.test_menu.slug if i != 1 else 'bad-slug',
+                        self.test_menusection.menu.slug
+                        if i != 1 else 'bad-slug',
                     'menusection_slug':
                         self.test_menusection.slug if i != 2 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -1211,31 +1102,12 @@ class MenuSectionUpdateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
 
     def setUp(self):
-        # create test menusection
         self.test_menusection = \
-            self.test_menu.menusection_set.create(name=test_menusection_name)
+            f.MenuSectionFactory(admin_users=[self.restaurant_admin_user])
 
         # login as authorized user
         self.client.login(
@@ -1243,8 +1115,8 @@ class MenuSectionUpdateViewTest(TestCase):
             password=restaurant_admin_user_password)
 
         self.current_test_url = reverse('menus:menusection_update', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
+            'restaurant_slug': self.test_menusection.menu.restaurant.slug,
+            'menu_slug': self.test_menusection.menu.slug,
             'menusection_slug': self.test_menusection.slug})
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -1290,7 +1162,7 @@ class MenuSectionUpdateViewTest(TestCase):
         self.assertTrue('menu' in self.context)
 
     def test_context_has_correct_menu(self):
-        self.assertEqual(self.context['menu'], self.test_menu)
+        self.assertEqual(self.context['menu'], self.test_menusection.menu)
 
     def test_context_has_menusection(self):
         self.assertTrue('menusection' in self.context)
@@ -1302,7 +1174,7 @@ class MenuSectionUpdateViewTest(TestCase):
     def test_method_get_initial(self):
         self.assertEqual(
             self.view.get_initial(), {
-                'menu': self.test_menu,
+                'menu': self.test_menusection.menu,
                 'name': self.test_menusection.name})
 
     # get_object()
@@ -1438,8 +1310,9 @@ class MenuSectionUpdateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-        self.test_menusection_2 = self.test_menu.menusection_set.create(
-            name=f'New {self.test_menusection.name}')
+        self.test_menusection_2 = \
+            self.test_menusection.menu.menusection_set.create(
+                name=f'New {self.test_menusection.name}')
 
         old_menusection_name = self.test_menusection.name
         old_menusection_slug = self.test_menusection.slug
@@ -1465,9 +1338,11 @@ class MenuSectionUpdateViewTest(TestCase):
                 'menus:menusection_update',
                 kwargs={
                     'restaurant_slug':
-                        self.test_restaurant.slug if i != 0 else 'bad-slug',
+                        self.test_menusection.menu.restaurant.slug
+                        if i != 0 else 'bad-slug',
                     'menu_slug':
-                        self.test_menu.slug if i != 1 else 'bad-slug',
+                        self.test_menusection.menu.slug
+                        if i != 1 else 'bad-slug',
                     'menusection_slug':
                         self.test_menusection.slug if i != 2 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -1478,34 +1353,14 @@ class MenuSectionDeleteViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
-
-        # create test menusection
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_menusection = \
-            cls.test_menu.menusection_set.create(name=test_menusection_name)
+            f.MenuSectionFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menusection_delete', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
-            'menu_slug': cls.test_menu.slug,
+            'restaurant_slug': cls.test_menusection.menu.restaurant.slug,
+            'menu_slug': cls.test_menusection.menu.slug,
             'menusection_slug': cls.test_menusection.slug})
 
     def setUp(self):
@@ -1650,7 +1505,8 @@ class MenuSectionDeleteViewTest(TestCase):
 
         # user is redirected to menu_detail
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(self.response.url, self.test_menu.get_absolute_url())
+        self.assertEqual(
+            self.response.url, self.test_menusection.menu.get_absolute_url())
 
         # menusection_detail loads successfully and contains success_message
         self.response = self.client.get(self.response.url)
@@ -1661,9 +1517,9 @@ class MenuSectionDeleteViewTest(TestCase):
             rf"'{self.test_menusection.name}' has been deleted from the menu.",
             self.html)
 
-        # menu_detail does not contain menu name after refresh
+        # menu_detail does not contain menusection name after refresh
         self.response = self.client.get(
-            self.test_menu.get_absolute_url())
+            self.test_menusection.menu.get_absolute_url())
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertNotIn(f"{self.test_menusection.name}", self.html)
 
@@ -1677,13 +1533,8 @@ class MenuSectionDeleteViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-        # delete self.test_menusection
         self.test_menusection.delete()
-
-        # attempt POST request to delete already-deleted menusection
         self.response = self.client.post(self.current_test_url)
-
-        # returns HTTP 404
         self.assertEqual(self.response.status_code, 404)
 
     # bad kwargs
@@ -1693,9 +1544,11 @@ class MenuSectionDeleteViewTest(TestCase):
                 'menus:menusection_delete',
                 kwargs={
                     'restaurant_slug':
-                        self.test_restaurant.slug if i != 0 else 'bad-slug',
+                        self.test_menusection.menu.restaurant.slug
+                        if i != 0 else 'bad-slug',
                     'menu_slug':
-                        self.test_menu.slug if i != 1 else 'bad-slug',
+                        self.test_menusection.menu.slug
+                        if i != 1 else 'bad-slug',
                     'menusection_slug':
                         self.test_menusection.slug if i != 2 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -1706,34 +1559,14 @@ class MenuItemCreateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
-
-        # create test menusection
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_menusection = \
-            cls.test_menu.menusection_set.create(name=test_menusection_name)
+            f.MenuSectionFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menuitem_create', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
-            'menu_slug': cls.test_menu.slug,
+            'restaurant_slug': cls.test_menusection.menu.restaurant.slug,
+            'menu_slug': cls.test_menusection.menu.slug,
             'menusection_slug': cls.test_menusection.slug})
 
     def setUp(self):
@@ -1960,9 +1793,10 @@ class MenuItemCreateViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_create', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
+                    self.test_menusection.menu.restaurant.slug
+                    if i != 0 else 'bad-slug',
                 'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug',
+                    self.test_menusection.menu.slug if i != 1 else 'bad-slug',
                 'menusection_slug':
                     self.test_menusection.slug if i != 2 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -1973,26 +1807,16 @@ class MenuItemDetailViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
-
-        # create test menusection
-        cls.test_menusection = \
-            cls.test_menu.menusection_set.create(name=test_menusection_name)
-
-        # create test menuitem
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_menuitem = \
-            cls.test_menusection.menuitem_set.create(name=test_menuitem_name)
+            f.MenuItemFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menuitem_detail', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
-            'menu_slug': cls.test_menu.slug,
-            'menusection_slug': cls.test_menusection.slug,
+            'restaurant_slug':
+                cls.test_menuitem.menusection.menu.restaurant.slug,
+            'menu_slug': cls.test_menuitem.menusection.menu.slug,
+            'menusection_slug': cls.test_menuitem.menusection.slug,
             'menuitem_slug': cls.test_menuitem.slug})
 
     def setUp(self):
@@ -2026,11 +1850,14 @@ class MenuItemDetailViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_detail', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
+                    self.test_menuitem.menusection.menu.restaurant.slug
+                    if i != 0 else 'bad-slug',
                 'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug',
+                    self.test_menuitem.menusection.menu.slug
+                    if i != 1 else 'bad-slug',
                 'menusection_slug':
-                    self.test_menusection.slug if i != 2 else 'bad-slug',
+                    self.test_menuitem.menusection.slug
+                    if i != 2 else 'bad-slug',
                 'menuitem_slug':
                     self.test_menuitem.slug if i != 3 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -2041,37 +1868,12 @@ class MenuItemUpdateViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
-
-        # create test menusection
-        cls.test_menusection = \
-            cls.test_menu.menusection_set.create(name=test_menusection_name)
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
 
     def setUp(self):
-        # create test menuitem
         self.test_menuitem = \
-            self.test_menusection.menuitem_set.create(
-                name=test_menuitem_name,
-                description=test_menuitem_description)
+            f.MenuItemFactory(admin_users=[self.restaurant_admin_user])
 
         # login as authorized user
         self.client.login(
@@ -2079,9 +1881,10 @@ class MenuItemUpdateViewTest(TestCase):
             password=restaurant_admin_user_password)
 
         self.current_test_url = reverse('menus:menuitem_update', kwargs={
-            'restaurant_slug': self.test_restaurant.slug,
-            'menu_slug': self.test_menu.slug,
-            'menusection_slug': self.test_menusection.slug,
+            'restaurant_slug':
+                self.test_menuitem.menusection.menu.restaurant.slug,
+            'menu_slug': self.test_menuitem.menusection.menu.slug,
+            'menusection_slug': self.test_menuitem.menusection.slug,
             'menuitem_slug': self.test_menuitem.slug})
 
         self.response = self.client.get(self.current_test_url)
@@ -2126,7 +1929,8 @@ class MenuItemUpdateViewTest(TestCase):
         self.assertTrue('menusection' in self.context)
 
     def test_context_has_correct_menusection(self):
-        self.assertEqual(self.context['menusection'], self.test_menusection)
+        self.assertEqual(
+            self.context['menusection'], self.test_menuitem.menusection)
 
     def test_context_has_menuitem(self):
         self.assertTrue('menuitem' in self.context)
@@ -2138,7 +1942,7 @@ class MenuItemUpdateViewTest(TestCase):
     def test_method_get_initial(self):
         self.assertEqual(
             self.view.get_initial(), {
-                'menusection': self.test_menusection,
+                'menusection': self.test_menuitem.menusection,
                 'name': self.test_menuitem.name,
                 'description': self.test_menuitem.description})
 
@@ -2295,9 +2099,10 @@ class MenuItemUpdateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-        self.test_menuitem_2 = self.test_menusection.menuitem_set.create(
-            name=f'Updated {self.test_menuitem.name}',
-            description=f'Updated {self.test_menuitem.description}')
+        self.test_menuitem_2 = \
+            self.test_menuitem.menusection.menuitem_set.create(
+                name=f'Updated {self.test_menuitem.name}',
+                description=f'Updated {self.test_menuitem.description}')
 
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description
@@ -2326,11 +2131,14 @@ class MenuItemUpdateViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_update', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
+                    self.test_menuitem.menusection.menu.restaurant.slug
+                    if i != 0 else 'bad-slug',
                 'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug',
+                    self.test_menuitem.menusection.menu.slug
+                    if i != 1 else 'bad-slug',
                 'menusection_slug':
-                    self.test_menusection.slug if i != 2 else 'bad-slug',
+                    self.test_menuitem.menusection.slug
+                    if i != 2 else 'bad-slug',
                 'menuitem_slug':
                     self.test_menuitem.slug if i != 3 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)
@@ -2341,39 +2149,16 @@ class MenuItemDeleteViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create unprivileged user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
-
-        # create restaurant admin user
-        cls.restaurant_admin_user = get_user_model().objects.create(
-            username=restaurant_admin_user_username)
-        cls.restaurant_admin_user.set_password(restaurant_admin_user_password)
-        cls.restaurant_admin_user.save()
-
-        # create test restaurant
-        cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
-
-        # create test menu
-        cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
-
-        # create test menusection
-        cls.test_menusection = \
-            cls.test_menu.menusection_set.create(name=test_menusection_name)
-
-        # create test menuitem
+        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
         cls.test_menuitem = \
-            cls.test_menusection.menuitem_set.create(name=test_menuitem_name)
+            f.MenuItemFactory(admin_users=[cls.restaurant_admin_user])
 
         cls.current_test_url = reverse('menus:menuitem_delete', kwargs={
-            'restaurant_slug': cls.test_restaurant.slug,
-            'menu_slug': cls.test_menu.slug,
-            'menusection_slug': cls.test_menusection.slug,
+            'restaurant_slug':
+                cls.test_menuitem.menusection.menu.restaurant.slug,
+            'menu_slug': cls.test_menuitem.menusection.menu.slug,
+            'menusection_slug': cls.test_menuitem.menusection.slug,
             'menuitem_slug': cls.test_menuitem.slug})
 
     def setUp(self):
@@ -2509,7 +2294,7 @@ class MenuItemDeleteViewTest(TestCase):
 
         # menusection_detail contains test_menuitem.name before delete
         self.response = self.client.get(
-            self.test_menusection.get_absolute_url())
+            self.test_menuitem.menusection.get_absolute_url())
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{self.test_menuitem.name}", self.html)
 
@@ -2519,7 +2304,8 @@ class MenuItemDeleteViewTest(TestCase):
         # user is redirected to menusection_detail
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, self.test_menusection.get_absolute_url())
+            self.response.url,
+            self.test_menuitem.menusection.get_absolute_url())
 
         # menusection_detail loads successfully and contains success_message
         self.response = self.client.get(self.response.url)
@@ -2532,7 +2318,7 @@ class MenuItemDeleteViewTest(TestCase):
 
         # menusection_detail does not contain menuitem name after refresh
         self.response = self.client.get(
-            self.test_menusection.get_absolute_url())
+            self.test_menuitem.menusection.get_absolute_url())
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertNotIn(f"{self.test_menuitem.name}", self.html)
 
@@ -2546,13 +2332,8 @@ class MenuItemDeleteViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-        # delete self.test_menuitem
         self.test_menuitem.delete()
-
-        # attempt POST request to delete already-deleted menuitem
         self.response = self.client.post(self.current_test_url)
-
-        # returns HTTP 404
         self.assertEqual(self.response.status_code, 404)
 
     # bad kwargs
@@ -2560,11 +2341,14 @@ class MenuItemDeleteViewTest(TestCase):
         for i in range(len(self.view.kwargs)):
             self.current_test_url = reverse('menus:menuitem_delete', kwargs={
                 'restaurant_slug':
-                    self.test_restaurant.slug if i != 0 else 'bad-slug',
+                    self.test_menuitem.menusection.menu.restaurant.slug
+                    if i != 0 else 'bad-slug',
                 'menu_slug':
-                    self.test_menu.slug if i != 1 else 'bad-slug',
+                    self.test_menuitem.menusection.menu.slug
+                    if i != 1 else 'bad-slug',
                 'menusection_slug':
-                    self.test_menusection.slug if i != 2 else 'bad-slug',
+                    self.test_menuitem.menusection.slug
+                    if i != 2 else 'bad-slug',
                 'menuitem_slug':
                     self.test_menuitem.slug if i != 3 else 'bad-slug'})
             self.response = self.client.get(self.current_test_url)

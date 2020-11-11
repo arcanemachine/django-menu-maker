@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
 
+import factories as f
 from .models import Restaurant
 from menus_project import constants
 
@@ -16,16 +17,13 @@ class RestaurantModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # create test user
-        cls.test_user = \
-            get_user_model().objects.create(username=test_user_username)
-        cls.test_user.set_password(test_user_password)
-        cls.test_user.save()
+        # create restaurant_admin_user
+        cls.restaurant_admin_user = f.UserFactory()
 
         # create test_restaurant
         cls.test_restaurant = \
             Restaurant.objects.create(name=test_restaurant_name)
-        cls.test_restaurant.admin_users.add(cls.test_user)
+        cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
 
     def test_object_name(self):
         self.assertEqual(self.test_restaurant._meta.object_name, 'Restaurant')
@@ -33,7 +31,7 @@ class RestaurantModelTest(TestCase):
     def test_object_content(self):
         expected_name = test_restaurant_name
         expected_admin_users = \
-            get_user_model().objects.filter(pk=self.test_user.pk)
+            get_user_model().objects.filter(pk=self.restaurant_admin_user.pk)
 
         self.assertEqual(self.test_restaurant.name, expected_name)
         self.assertEqual(

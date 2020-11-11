@@ -4,9 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.test import APITestCase
 
 import factories as f
+from menus_project import constants as c
 from . import serializers, views
 from .permissions import HasRestaurantPermissionsOrReadOnly
-from menus_project import constants
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
@@ -26,7 +26,7 @@ class RestaurantListTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.test_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
 
     # view attributes
     def test_view_name(self):
@@ -94,7 +94,7 @@ class RestaurantDetailTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
 
     # view attributes
     def test_view_name(self):
@@ -181,7 +181,7 @@ class MenuListTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
 
     # view attributes
     def test_view_name(self):
@@ -250,7 +250,7 @@ class MenuDetailTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
         self.response = self.client.get(self.current_test_url)
 
     # view attributes
@@ -347,7 +347,7 @@ class MenuSectionListTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
 
     # view attributes
     def test_view_name(self):
@@ -419,7 +419,7 @@ class MenuSectionDetailTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
         self.response = self.client.get(self.current_test_url)
 
     # view attributes
@@ -515,7 +515,7 @@ class MenuItemListTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
 
     # view attributes
     def test_view_name(self):
@@ -589,7 +589,7 @@ class MenuItemDetailTest(APITestCase):
 
     def setUp(self):
         self.client.login(username=self.restaurant_admin_user.username,
-                          password=constants.TEST_USER_PASSWORD)
+                          password=c.TEST_USER_PASSWORD)
 
     # view attributes
     def test_view_name(self):

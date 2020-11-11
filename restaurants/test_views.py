@@ -6,14 +6,8 @@ from html import unescape
 from urllib.parse import urlparse
 
 import factories as f
+from menus_project import constants as c
 from .models import Restaurant
-from menus_project import constants
-
-test_user_username = constants.TEST_USER_USERNAME
-test_user_password = constants.TEST_USER_PASSWORD
-test_restaurant_name = constants.TEST_RESTAURANT_NAME
-restaurant_admin_user_username = constants.RESTAURANT_ADMIN_USER_USERNAME
-restaurant_admin_user_password = constants.RESTAURANT_ADMIN_USER_PASSWORD
 
 
 class RestaurantListViewTest(TestCase):
@@ -55,7 +49,7 @@ class RestaurantCreateViewTest(TestCase):
     def setUp(self):
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -107,11 +101,11 @@ class RestaurantCreateViewTest(TestCase):
 
         # create new restaurant via POST
         self.response = self.client.post(
-            self.current_test_url, {'name': test_restaurant_name})
+            self.current_test_url, {'name': c.TEST_RESTAURANT_NAME})
         self.html = unescape(self.response.content.decode('utf-8'))
 
         # user is redirected to restaurant_detail
-        new_restaurant = Restaurant.objects.get(name=test_restaurant_name)
+        new_restaurant = Restaurant.objects.get(name=c.TEST_RESTAURANT_NAME)
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, new_restaurant.get_absolute_url())
 
@@ -132,14 +126,14 @@ class RestaurantCreateViewTest(TestCase):
 
     # validation
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
-        Restaurant.objects.create(name=test_restaurant_name)
+        Restaurant.objects.create(name=c.TEST_RESTAURANT_NAME)
 
         # get restaurant count before attempting POST
         old_restaurant_count = Restaurant.objects.count()
 
         # attempt to create duplicate restaurant via POST
         self.response = self.client.post(
-            self.current_test_url, {'name': test_restaurant_name})
+            self.current_test_url, {'name': c.TEST_RESTAURANT_NAME})
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn("This name is too similar", self.html)
 
@@ -148,29 +142,26 @@ class RestaurantCreateViewTest(TestCase):
         self.assertEqual(old_restaurant_count, new_restaurant_count)
 
     def test_validation_post_attempt_by_user_with_too_many_restaurants(self):
-        self.test_restaurants = []
-        for i in range(constants.MAX_RESTAURANTS_PER_USER):
-            self.test_restaurants.append(
-                Restaurant.objects.create(
-                    name=test_restaurant_name + f" {i+1}"))
-            self.test_restaurants[i].admin_users.add(
-                self.restaurant_admin_user)
+        self.test_restaurants = \
+            f.RestaurantFactory.create_batch(
+                size=c.MAX_RESTAURANTS_PER_USER,
+                admin_users=[self.restaurant_admin_user])
 
         self.setUp()
 
         # template contains MAX_RESTAURANTS_PER_USER_ERROR_STRING
         self.assertIn(
-            constants.MAX_RESTAURANTS_PER_USER_ERROR_STRING, self.html)
+            c.MAX_RESTAURANTS_PER_USER_ERROR_STRING, self.html)
 
         # get restaurant count before attempting POST
         old_restaurant_count = Restaurant.objects.count()
 
         # attempt to create restaurant via POST
         self.response = self.client.post(
-            self.current_test_url, {'name': test_restaurant_name})
+            self.current_test_url, {'name': c.TEST_RESTAURANT_NAME})
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn(
-            constants.MAX_RESTAURANTS_PER_USER_ERROR_STRING, self.html)
+            c.MAX_RESTAURANTS_PER_USER_ERROR_STRING, self.html)
 
         # restaurant count should be unchanged
         new_restaurant_count = Restaurant.objects.count()
@@ -217,7 +208,7 @@ class RestaurantDetailViewTest(TestCase):
     def test_template_authorized_user_can_view_auth_links(self):
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=test_user_password)
+            password=c.TEST_USER_PASSWORD)
         self.setUp()
         self.assertIn('auth-links', self.html)
 
@@ -243,7 +234,7 @@ class RestaurantUpdateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.current_test_url = reverse(
             'restaurants:restaurant_update', kwargs={
@@ -307,7 +298,7 @@ class RestaurantUpdateViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -360,7 +351,7 @@ class RestaurantUpdateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         old_restaurant_name = self.test_restaurant.name
         updated_restaurant_name = f'Updated {self.test_restaurant.name}'
@@ -467,7 +458,7 @@ class RestaurantDeleteViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -522,7 +513,7 @@ class RestaurantDeleteViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -572,7 +563,7 @@ class RestaurantDeleteViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # get restaurant count before attempting POST
         old_restaurant_count = Restaurant.objects.count()

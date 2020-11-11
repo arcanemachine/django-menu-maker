@@ -7,21 +7,9 @@ from inspect import getfullargspec
 from urllib.parse import urlparse
 
 import factories as f
+from menus_project import constants as c
 from . import views
 from .models import Menu, MenuSection, MenuItem
-from menus_project import constants
-
-test_user_username = constants.TEST_USER_USERNAME
-test_user_password = constants.TEST_USER_PASSWORD
-
-restaurant_admin_user_username = constants.RESTAURANT_ADMIN_USER_USERNAME
-restaurant_admin_user_password = constants.RESTAURANT_ADMIN_USER_PASSWORD
-
-test_restaurant_name = constants.TEST_RESTAURANT_NAME
-test_menu_name = constants.TEST_MENU_NAME
-test_menusection_name = constants.TEST_MENUSECTION_NAME
-test_menuitem_name = constants.TEST_MENUITEM_NAME
-test_menuitem_description = constants.TEST_MENUITEM_DESCRIPTION
 
 
 class MenusRootViewTest(TestCase):
@@ -87,7 +75,7 @@ class MenuCreateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -154,7 +142,7 @@ class MenuCreateViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -186,7 +174,7 @@ class MenuCreateViewTest(TestCase):
         self.response = self.client.post(
             self.current_test_url, {
                 'restaurant': self.test_restaurant.pk,
-                'name': test_menu_name})
+                'name': c.TEST_MENU_NAME})
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -199,7 +187,7 @@ class MenuCreateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # get menu count before attempting to post data
         old_menu_count = Menu.objects.count()
@@ -207,7 +195,7 @@ class MenuCreateViewTest(TestCase):
         # attempt to create new menu via POST
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_restaurant.pk,
-            'name': test_menu_name})
+            'name': c.TEST_MENU_NAME})
 
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
@@ -223,13 +211,13 @@ class MenuCreateViewTest(TestCase):
         # create new menu via POST
         self.response = self.client.post(self.current_test_url, {
             'restaurant': self.test_restaurant.pk,
-            'name': test_menu_name})
+            'name': c.TEST_MENU_NAME})
         self.html = unescape(self.response.content.decode('utf-8'))
 
         # user is redirected to menu_detail
         new_menu = Menu.objects.get(
             restaurant=self.test_restaurant,
-            name=test_menu_name)
+            name=c.TEST_MENU_NAME)
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, new_menu.get_absolute_url())
 
@@ -238,11 +226,11 @@ class MenuCreateViewTest(TestCase):
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'menus/menu_detail.html')
-        self.assertIn(f"{test_menu_name}", self.html)
+        self.assertIn(f"{c.TEST_MENU_NAME}", self.html)
 
         # template contains success_message
         self.assertIn(
-            f"Menu Created: {test_menu_name}", self.html)
+            f"Menu Created: {c.TEST_MENU_NAME}", self.html)
 
         # menu count increased by 1
         new_menu_count = Menu.objects.count()
@@ -252,7 +240,7 @@ class MenuCreateViewTest(TestCase):
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
         original_menu = Menu.objects.create(
             restaurant=self.test_restaurant,
-            name=test_menu_name)
+            name=c.TEST_MENU_NAME)
 
         # get menu count before attempting POST
         old_menu_count = Menu.objects.count()
@@ -321,7 +309,7 @@ class MenuDetailViewTest(TestCase):
     # auth-links
     def test_unprivileged_user_cannot_view_auth_links(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         self.setUp()  # reload the page
         self.assertNotIn('auth-links', self.html)
@@ -329,7 +317,7 @@ class MenuDetailViewTest(TestCase):
     def test_restaurant_admin_user_can_view_auth_links(self):
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.setUp()  # reload the page
         self.assertIn('auth-links', self.html)
@@ -341,7 +329,7 @@ class MenuDetailViewTest(TestCase):
 
     def test_template_with_1_menusection(self):
         test_menusection = \
-            self.test_menu.menusection_set.create(name=test_menusection_name)
+            self.test_menu.menusection_set.create(name=c.TEST_MENUSECTION_NAME)
         self.assertEqual(MenuSection.objects.count(), 1)
 
         self.setUp()  # reload the page
@@ -354,7 +342,7 @@ class MenuDetailViewTest(TestCase):
         for i in range(number_of_menusections):
             test_menusections.append(
                 self.test_menu.menusection_set.create(
-                    name=f'{test_menusection_name} {i+1}')
+                    name=f'{c.TEST_MENUSECTION_NAME} {i+1}')
                 )
         self.assertEqual(MenuSection.objects.count(), number_of_menusections)
 
@@ -388,7 +376,7 @@ class MenuUpdateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.current_test_url = reverse('menus:menu_update', kwargs={
             'restaurant_slug': self.test_menu.restaurant.slug,
@@ -464,7 +452,7 @@ class MenuUpdateViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -519,7 +507,7 @@ class MenuUpdateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         old_menu_name = self.test_menu.name
         updated_menu_name = f'Updated {self.test_menu}'
@@ -624,7 +612,7 @@ class MenuDeleteViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -680,7 +668,7 @@ class MenuDeleteViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -730,7 +718,7 @@ class MenuDeleteViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # get menu count before attempting POST
         old_menu_count = Menu.objects.count()
@@ -820,7 +808,7 @@ class MenuSectionCreateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -890,7 +878,7 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -929,7 +917,7 @@ class MenuSectionCreateViewTest(TestCase):
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
-            'name': test_menusection_name})
+            'name': c.TEST_MENUSECTION_NAME})
 
         # user is redirected to login page
         self.assertEqual(self.response.status_code, 302)
@@ -942,7 +930,7 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
@@ -950,7 +938,7 @@ class MenuSectionCreateViewTest(TestCase):
         # attempt to create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
-            'name': test_menusection_name})
+            'name': c.TEST_MENUSECTION_NAME})
 
         # user receives HTTP 403
         self.assertEqual(self.response.status_code, 403)
@@ -966,13 +954,13 @@ class MenuSectionCreateViewTest(TestCase):
         # create new menusection via POST
         self.response = self.client.post(self.current_test_url, {
             'menu': self.test_menu.pk,
-            'name': test_menusection_name})
+            'name': c.TEST_MENUSECTION_NAME})
         self.html = unescape(self.response.content.decode('utf-8'))
 
         # user is redirected to new menusection_detail
         new_menusection = MenuSection.objects.get(
             menu=self.test_menu,
-            slug=slugify(test_menusection_name))
+            slug=slugify(c.TEST_MENUSECTION_NAME))
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, new_menusection.get_absolute_url())
 
@@ -995,7 +983,7 @@ class MenuSectionCreateViewTest(TestCase):
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
         original_menusection = MenuSection.objects.create(
                 menu=self.test_menu,
-                name=test_menusection_name)
+                name=c.TEST_MENUSECTION_NAME)
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
@@ -1043,7 +1031,7 @@ class MenuSectionDetailViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -1112,7 +1100,7 @@ class MenuSectionUpdateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.current_test_url = reverse('menus:menusection_update', kwargs={
             'restaurant_slug': self.test_menusection.menu.restaurant.slug,
@@ -1194,7 +1182,7 @@ class MenuSectionUpdateViewTest(TestCase):
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
             username=self.test_user.username,
-            password=test_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -1250,7 +1238,7 @@ class MenuSectionUpdateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         old_menusection_name = self.test_menusection.name
         updated_menusection_name = f'New {self.test_menusection.name}'
@@ -1367,7 +1355,7 @@ class MenuSectionDeleteViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -1424,7 +1412,7 @@ class MenuSectionDeleteViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -1475,7 +1463,7 @@ class MenuSectionDeleteViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # get menusection count before attempting to post data
         old_menusection_count = MenuSection.objects.count()
@@ -1573,7 +1561,7 @@ class MenuItemCreateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -1635,8 +1623,8 @@ class MenuItemCreateViewTest(TestCase):
     # get_success_url()
     def test_method_get_success_url(self):
         self.view.object = self.test_menusection.menuitem_set.create(
-            name=test_menuitem_name,
-            description=test_menuitem_description)
+            name=c.TEST_MENUITEM_NAME,
+            description=c.TEST_MENUITEM_DESCRIPTION)
         self.assertEqual(
             self.view.get_success_url(),
             self.view.object.menusection.get_absolute_url())
@@ -1653,7 +1641,7 @@ class MenuItemCreateViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -1685,7 +1673,7 @@ class MenuItemCreateViewTest(TestCase):
     def test_post_method_unauthenticated_user(self):
         self.client.logout()
 
-        new_menuitem_name = test_menuitem_name
+        new_menuitem_name = c.TEST_MENUITEM_NAME
         new_menuitem_description = 'Test Menu Description'
 
         # get menusection count before attempting to post data
@@ -1708,9 +1696,9 @@ class MenuItemCreateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
-        new_menuitem_name = test_menuitem_name
+        new_menuitem_name = c.TEST_MENUITEM_NAME
         new_menuitem_description = 'Test Menu Description'
 
         # get menusection count before attempting to post data
@@ -1730,7 +1718,7 @@ class MenuItemCreateViewTest(TestCase):
         self.assertEqual(old_menuitem_count, new_menuitem_count)
 
     def test_post_method_authorized_user(self):
-        new_menuitem_name = test_menuitem_name
+        new_menuitem_name = c.TEST_MENUITEM_NAME
         new_menuitem_description = 'Test Menu Description'
 
         # get menusection count before attempting POST
@@ -1770,7 +1758,7 @@ class MenuItemCreateViewTest(TestCase):
     def test_validation_post_attempt_duplicate_by_authorized_user(self):
         original_menuitem = MenuItem.objects.create(
                 menusection=self.test_menusection,
-                name=test_menuitem_name,
+                name=c.TEST_MENUITEM_NAME,
                 description='Test Menu Description')
 
         # get menuitem count before attempting to post data
@@ -1878,7 +1866,7 @@ class MenuItemUpdateViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.current_test_url = reverse('menus:menuitem_update', kwargs={
             'restaurant_slug':
@@ -1962,7 +1950,7 @@ class MenuItemUpdateViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -2027,7 +2015,7 @@ class MenuItemUpdateViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         old_menuitem_name = self.test_menuitem.name
         old_menuitem_description = self.test_menuitem.description
@@ -2165,7 +2153,7 @@ class MenuItemDeleteViewTest(TestCase):
         # login as authorized user
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -2222,7 +2210,7 @@ class MenuItemDeleteViewTest(TestCase):
 
     def test_get_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # request by unauthorized user should return 403
         self.response = self.client.get(self.current_test_url)
@@ -2273,7 +2261,7 @@ class MenuItemDeleteViewTest(TestCase):
 
     def test_post_method_authenticated_but_unauthorized_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         # get menuitem count before attempting to post data
         old_menuitem_count = MenuItem.objects.count()

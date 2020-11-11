@@ -4,14 +4,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
 
-from menus_project import constants
+from menus_project import constants as c
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
-
-test_restaurant_name = constants.TEST_RESTAURANT_NAME
-test_menu_name = constants.TEST_MENU_NAME
-test_menusection_name = constants.TEST_MENUSECTION_NAME
-test_menuitem_name = constants.TEST_MENUITEM_NAME
 
 
 class MenuModelTest(TestCase):
@@ -19,16 +14,16 @@ class MenuModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
+            Restaurant.objects.create(name=c.TEST_RESTAURANT_NAME)
         cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+            cls.test_restaurant.menu_set.create(name=c.TEST_MENU_NAME)
 
     def test_object_name(self):
         self.assertEqual(self.test_menu._meta.object_name, 'Menu')
 
     def test_object_content(self):
         expected_restaurant = self.test_restaurant
-        expected_name = test_menu_name
+        expected_name = c.TEST_MENU_NAME
         expected_slug = slugify(expected_name)
 
         self.assertEqual(self.test_menu.restaurant, expected_restaurant)
@@ -162,11 +157,11 @@ class MenuSectionModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
+            Restaurant.objects.create(name=c.TEST_RESTAURANT_NAME)
         cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+            cls.test_restaurant.menu_set.create(name=c.TEST_MENU_NAME)
         cls.test_menusection = cls.test_menu.menusection_set.create(
-            name=test_menusection_name)
+            name=c.TEST_MENUSECTION_NAME)
 
     def test_object_name(self):
         self.assertEqual(
@@ -280,20 +275,20 @@ class MenuItemModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
+            Restaurant.objects.create(name=c.TEST_RESTAURANT_NAME)
         cls.test_menu = \
-            cls.test_restaurant.menu_set.create(name=test_menu_name)
+            cls.test_restaurant.menu_set.create(name=c.TEST_MENU_NAME)
         cls.test_menusection = cls.test_menu.menusection_set.create(
-            name=test_menusection_name)
+            name=c.TEST_MENUSECTION_NAME)
         cls.test_menuitem = cls.test_menusection.menuitem_set.create(
-            name=test_menuitem_name)
+            name=c.TEST_MENUITEM_NAME)
 
     def test_object_name(self):
         self.assertEqual(self.test_menuitem._meta.object_name, 'MenuItem')
 
     def test_object_content(self):
         expected_menusection = self.test_menusection
-        expected_name = test_menuitem_name
+        expected_name = c.TEST_MENUITEM_NAME
         expected_slug = slugify(expected_name)
 
         self.assertEqual(self.test_menuitem.menusection, expected_menusection)

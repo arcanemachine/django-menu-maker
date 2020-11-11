@@ -5,12 +5,8 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 import factories as f
+from menus_project import constants as c
 from .models import Restaurant
-from menus_project import constants
-
-test_user_username = constants.TEST_USER_USERNAME
-test_user_password = constants.TEST_USER_PASSWORD
-test_restaurant_name = constants.TEST_RESTAURANT_NAME
 
 
 class RestaurantModelTest(TestCase):
@@ -22,14 +18,14 @@ class RestaurantModelTest(TestCase):
 
         # create test_restaurant
         cls.test_restaurant = \
-            Restaurant.objects.create(name=test_restaurant_name)
+            Restaurant.objects.create(name=c.TEST_RESTAURANT_NAME)
         cls.test_restaurant.admin_users.add(cls.restaurant_admin_user)
 
     def test_object_name(self):
         self.assertEqual(self.test_restaurant._meta.object_name, 'Restaurant')
 
     def test_object_content(self):
-        expected_name = test_restaurant_name
+        expected_name = c.TEST_RESTAURANT_NAME
         expected_admin_users = \
             get_user_model().objects.filter(pk=self.restaurant_admin_user.pk)
 

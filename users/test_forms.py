@@ -2,11 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase
 
 from .forms import NewUserCreationForm, UserAuthenticationForm
-from menus_project import constants
-
-test_user_username = constants.TEST_USER_USERNAME
-test_user_email = constants.TEST_USER_EMAIL
-test_user_password = constants.TEST_USER_PASSWORD
+from menus_project import constants as c
 
 
 class NewUserCreationFormTest(TestCase):
@@ -40,24 +36,24 @@ class NewUserCreationFormTest(TestCase):
     def test_validation_success(self):
         self.form_instance = \
             NewUserCreationForm(data={
-                'username': test_user_username,
-                'email': test_user_email,
-                'password1': test_user_password,
-                'password2': test_user_password,
+                'username': c.TEST_USER_USERNAME,
+                'email': c.TEST_USER_EMAIL,
+                'password1': c.TEST_USER_PASSWORD,
+                'password2': c.TEST_USER_PASSWORD,
                 'captcha_0': 'test',
                 'captcha_1': 'PASSED'})
         self.assertTrue(self.form_instance.is_valid())
 
     def test_validation_fail_duplicate_email(self):
         self.test_user = get_user_model().objects.create(
-            username=test_user_username,
-            email=test_user_email)
+            username=c.TEST_USER_USERNAME,
+            email=c.TEST_USER_EMAIL)
         self.form_instance = \
             NewUserCreationForm(data={
                 'username': f'new_{self.test_user.username}',
                 'email': self.test_user.email,
-                'password1': test_user_password,
-                'password2': test_user_password,
+                'password1': c.TEST_USER_PASSWORD,
+                'password2': c.TEST_USER_PASSWORD,
                 'captcha_0': 'test',
                 'captcha_1': 'PASSED'})
         self.assertFalse(self.form_instance.is_valid())

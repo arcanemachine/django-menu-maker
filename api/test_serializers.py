@@ -2,17 +2,10 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 
 import factories as f
-from menus_project import constants
+from menus_project import constants as c
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 from . import serializers
-
-TEST_USER_PASSWORD = constants.TEST_USER_PASSWORD
-TEST_RESTAURANT_NAME = constants.TEST_RESTAURANT_NAME
-TEST_MENU_NAME = constants.TEST_MENU_NAME
-TEST_MENUSECTION_NAME = constants.TEST_MENUSECTION_NAME
-TEST_MENUITEM_NAME = constants.TEST_MENUITEM_NAME
-TEST_MENUITEM_DESCRIPTION = constants.TEST_MENUITEM_DESCRIPTION
 
 
 class RestaurantSerializerTest(APITestCase):
@@ -42,16 +35,16 @@ class RestaurantSerializerTest(APITestCase):
         # create new restaurant
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=TEST_USER_PASSWORD)
+            password=c.TEST_USER_PASSWORD)
         self.response = self.client.post(
-            self.current_test_url, {'name': TEST_RESTAURANT_NAME})
+            self.current_test_url, {'name': c.TEST_RESTAURANT_NAME})
 
         # new restaurant created successfully
         self.assertEqual(self.response.status_code, 201)
 
         # object has proper admin_users
         self.test_restaurant = \
-            Restaurant.objects.get(name=TEST_RESTAURANT_NAME)
+            Restaurant.objects.get(name=c.TEST_RESTAURANT_NAME)
         self.assertEqual(self.test_restaurant.admin_users.count(), 1)
         self.assertIn(
             self.restaurant_admin_user, self.test_restaurant.admin_users.all())
@@ -92,20 +85,20 @@ class MenuSerializerTest(APITestCase):
             'restaurant_pk': self.test_restaurant.pk})
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=TEST_USER_PASSWORD)
+            password=c.TEST_USER_PASSWORD)
 
         # get object count before creating new object
         old_menu_count = Menu.objects.count()
 
         # create new object
         self.response = self.client.post(
-            self.current_test_url, {'name': TEST_MENU_NAME})
+            self.current_test_url, {'name': c.TEST_MENU_NAME})
 
         # new object created successfully
         self.assertEqual(self.response.status_code, 201)
 
         # object has proper parent
-        self.test_menu = Menu.objects.get(name=TEST_MENU_NAME)
+        self.test_menu = Menu.objects.get(name=c.TEST_MENU_NAME)
         self.assertEqual(self.test_menu.restaurant, self.test_restaurant)
 
         # object count increased by 1
@@ -152,16 +145,16 @@ class MenuSectionSerializerTest(APITestCase):
         # create new object
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=TEST_USER_PASSWORD)
+            password=c.TEST_USER_PASSWORD)
         self.response = self.client.post(
-            self.current_test_url, {'name': TEST_MENUSECTION_NAME})
+            self.current_test_url, {'name': c.TEST_MENUSECTION_NAME})
 
         # new object created successfully
         self.assertEqual(self.response.status_code, 201)
 
         # object has proper parent
         self.test_menusection = \
-            MenuSection.objects.get(name=TEST_MENUSECTION_NAME)
+            MenuSection.objects.get(name=c.TEST_MENUSECTION_NAME)
         self.assertEqual(self.test_menusection.menu, self.test_menu)
 
         # object count increased by 1
@@ -210,7 +203,7 @@ class MenuItemSerializerTest(APITestCase):
             'menusection_pk': self.test_menusection.pk})
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=TEST_USER_PASSWORD)
+            password=c.TEST_USER_PASSWORD)
 
         # get object count before creating new object
         old_menuitem_count = MenuItem.objects.count()
@@ -218,15 +211,15 @@ class MenuItemSerializerTest(APITestCase):
         # create new object
         self.response = self.client.post(
             self.current_test_url, {
-                'name': TEST_MENUITEM_NAME,
-                'description': TEST_MENUITEM_DESCRIPTION})
+                'name': c.TEST_MENUITEM_NAME,
+                'description': c.TEST_MENUITEM_DESCRIPTION})
 
         # new object created successfully
         self.assertEqual(self.response.status_code, 201)
 
         # object has proper parent
         self.test_menuitem = \
-            MenuItem.objects.get(name=TEST_MENUITEM_NAME)
+            MenuItem.objects.get(name=c.TEST_MENUITEM_NAME)
         self.assertEqual(self.test_menuitem.menusection, self.test_menusection)
 
         # object count increased by 1

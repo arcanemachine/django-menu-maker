@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 
 import factory
 
-from menus_project.constants import TEST_USER_PASSWORD
+from menus_project import constants as c
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
@@ -18,12 +18,12 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
 
-    username = factory.Sequence(lambda n: f'test_user_{n+1}')
+    username = factory.Sequence(lambda n: f'{c.TEST_USER_USERNAME}_{n+1}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@email.com')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     password = factory.PostGenerationMethodCall(
-        'set_password', TEST_USER_PASSWORD)
+        'set_password', c.TEST_USER_PASSWORD)
     is_staff = False
 
 
@@ -32,7 +32,7 @@ class RestaurantFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Restaurant
 
-    name = factory.Sequence(lambda n: f'Test Restaurant {n+1}')
+    name = factory.Sequence(lambda n: f'{c.TEST_RESTAURANT_NAME} {n+1}')
 
     @factory.post_generation
     def admin_users(self, create, extracted, **kwargs):
@@ -63,7 +63,7 @@ class MenuFactory(factory.django.DjangoModelFactory):
         model = Menu
 
     restaurant = factory.SubFactory(RestaurantFactory)
-    name = factory.Sequence(lambda n: f'Test Menu {n+1}')
+    name = factory.Sequence(lambda n: f'{c.TEST_MENU_NAME} {n+1}')
 
     @factory.post_generation
     def admin_users(self, create, extracted, **kwargs):
@@ -88,7 +88,7 @@ class MenuSectionFactory(factory.django.DjangoModelFactory):
         model = MenuSection
 
     menu = factory.SubFactory(MenuFactory)
-    name = factory.Sequence(lambda n: f'Test Menu Section {n+1}')
+    name = factory.Sequence(lambda n: f'{c.TEST_MENUSECTION_NAME} {n+1}')
 
     @factory.post_generation
     def admin_users(self, create, extracted, **kwargs):
@@ -112,8 +112,9 @@ class MenuItemFactory(factory.django.DjangoModelFactory):
         model = MenuItem
 
     menusection = factory.SubFactory(MenuSectionFactory)
-    name = factory.Sequence(lambda n: f'Test Menu Item {n+1}')
-    description = factory.Sequence(lambda n: f'Test Menu Description {n+1}')
+    name = factory.Sequence(lambda n: f'{c.TEST_MENUITEM_NAME} {n+1}')
+    description = \
+        factory.Sequence(lambda n: f'{c.TEST_MENUITEM_DESCRIPTION} {n+1}')
 
     @factory.post_generation
     def admin_users(self, create, extracted, **kwargs):

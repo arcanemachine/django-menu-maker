@@ -8,7 +8,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from django.views.generic.edit import UpdateView
 
 from .models import Restaurant
-from menus_project import constants
+from menus_project import constants as c
 
 
 class RestaurantListView(ListView):
@@ -24,10 +24,10 @@ class RestaurantCreateView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         # do not allow users to register too many restaurants
         if request.user.restaurant_set.count() >= \
-                constants.MAX_RESTAURANTS_PER_USER  \
+                c.MAX_RESTAURANTS_PER_USER  \
                 and not request.user.is_staff:
             messages.error(
-                request, constants.MAX_RESTAURANTS_PER_USER_ERROR_STRING)
+                request, c.MAX_RESTAURANTS_PER_USER_ERROR_STRING)
             return super().get(request, *args, **kwargs)
         return super().dispatch(request, *args, **kwargs)
 

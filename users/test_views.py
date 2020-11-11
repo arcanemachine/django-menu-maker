@@ -7,21 +7,8 @@ from html import unescape
 from urllib.parse import urlparse
 
 import factories as f
+from menus_project import constants as c
 from . import views
-from menus_project import constants
-
-test_user_username = constants.TEST_USER_USERNAME
-test_user_first_name = constants.TEST_USER_FIRST_NAME
-test_user_last_name = constants.TEST_USER_LAST_NAME
-test_user_email = constants.TEST_USER_EMAIL
-test_user_password = constants.TEST_USER_PASSWORD
-
-restaurant_admin_user_username = constants.RESTAURANT_ADMIN_USER_USERNAME
-restaurant_admin_user_password = constants.RESTAURANT_ADMIN_USER_PASSWORD
-
-test_restaurant_name = constants.TEST_RESTAURANT_NAME
-test_menu_name = constants.TEST_MENU_NAME
-test_menusection_name = constants.TEST_MENUSECTION_NAME
 
 
 class RegisterViewTest(TestCase):
@@ -64,10 +51,10 @@ class RegisterViewTest(TestCase):
         old_user_count = get_user_model().objects.count()
 
         self.response = self.client.post(self.current_test_url, {
-            'username': test_user_username,
-            'email': test_user_email,
-            'password1': test_user_password,
-            'password2': test_user_password,
+            'username': c.TEST_USER_USERNAME,
+            'email': c.TEST_USER_EMAIL,
+            'password1': c.TEST_USER_PASSWORD,
+            'password2': c.TEST_USER_PASSWORD,
             'captcha_0': 'test',
             'captcha_1': 'PASSED'})
 
@@ -108,7 +95,7 @@ class PasswordChangeViewTest(TestCase):
         self.test_user = f.UserFactory()
 
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         self.current_test_url = reverse('users:password_change')
         self.response = self.client.get(self.current_test_url)
@@ -150,7 +137,7 @@ class UserDetailViewTest(TestCase):
     def setUp(self):
         self.client.login(
             username=self.restaurant_admin_user.username,
-            password=restaurant_admin_user_password)
+            password=c.TEST_USER_PASSWORD)
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = unescape(self.response.content.decode('utf-8'))
@@ -224,7 +211,7 @@ class UserUpdateViewTest(TestCase):
     def setUp(self):
         self.test_user = f.UserFactory()
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         self.current_test_url = reverse('users:user_update')
         self.response = self.client.get(self.current_test_url)
@@ -275,7 +262,7 @@ class UserUpdateViewTest(TestCase):
 
     def test_get_method_authenticated_user(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
         self.assertEqual(self.response.status_code, 200)
 
     # template
@@ -321,7 +308,7 @@ class UserDeleteViewTest(TestCase):
 
     def setUp(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
 
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
@@ -408,7 +395,7 @@ class UserLogoutViewTest(TestCase):
 
     def setUp(self):
         self.client.login(
-            username=self.test_user.username, password=test_user_password)
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
         self.response = self.client.get(self.current_test_url)
 
         # setup the view

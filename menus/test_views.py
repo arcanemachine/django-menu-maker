@@ -6,8 +6,8 @@ from html import unescape
 from inspect import getfullargspec
 from urllib.parse import urlparse
 
-import factories as f
 from menus_project import constants as c
+from menus_project import factories as f
 from . import views
 from .models import Menu, MenuSection, MenuItem
 

@@ -3,8 +3,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.test import APITestCase
 
-import factories as f
 from menus_project import constants as c
+from menus_project import factories as f
 from . import serializers, views
 from .permissions import HasRestaurantPermissionsOrReadOnly
 from restaurants.models import Restaurant

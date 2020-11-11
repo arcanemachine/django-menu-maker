@@ -5,8 +5,8 @@ from django.utils.text import slugify
 from html import unescape
 from urllib.parse import urlparse
 
-import factories as f
 from menus_project import constants as c
+from menus_project import factories as f
 from .models import Restaurant
 
 

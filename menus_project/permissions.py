@@ -51,4 +51,8 @@ class UserHasRestaurantPermissionsMixin(UserPassesTestMixin):
                 return True
             else:
                 return False
-        return False
+
+        raise AttributeError(
+                "This permission needs to be called on a view with a "
+                "Restaurant or related object. "
+                "(e.g. Menu/MenuSection/MenuItem")

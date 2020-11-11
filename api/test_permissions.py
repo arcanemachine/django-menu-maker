@@ -2,7 +2,7 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework import permissions
 
-import factories as f
+from menus_project import factories as f
 from api.permissions import HasRestaurantPermissionsOrReadOnly
 
 

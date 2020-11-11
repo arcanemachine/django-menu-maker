@@ -2,7 +2,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-import factories as f
+import menus_project.factories as f
 from .permissions import UserHasRestaurantPermissionsMixin
 
 

@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.text import slugify
 
-import factories as f
 from menus_project import constants as c
+from menus_project import factories as f
 from .models import Restaurant
 
 

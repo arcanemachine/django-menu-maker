@@ -1,8 +1,8 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
-import factories as f
 from menus_project import constants as c
+from menus_project import factories as f
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 from . import serializers

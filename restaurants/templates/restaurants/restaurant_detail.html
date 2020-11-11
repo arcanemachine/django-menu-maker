@@ -8,15 +8,56 @@
 
 {% block content %}
 
-<h4>Menus</h4>
+<h2 class="pb-4 text-center">Menus</h2>
   {% if not restaurant.menu_set.all %}
 <p>This restaurant does not have any menus.</p>
   {% else %}
-<ul>
+
     {% for menu in restaurant.menu_set.all %}
-  <li><a href="{% url 'menus:menu_detail' restaurant_slug=restaurant.slug menu_slug=menu.slug %}">{{ menu.name }}</a></li>
+  <div class="mt-2" id="accordion">
+    <div class="card">
+      <div class="card-header {% if not menu.menusection_set.count %}bg-warning{% endif %}" id="headingMenu{{ forloop.counter }}">
+        <div class="mb-0 text-center">
+          <button class="btn btn-link collapsed text-center" data-toggle="collapse" data-target="#collapseMenu{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseCoursesAndCertificates">
+            <h5 class="font-weight-bold text-dark">{{ menu.name }}
+      
+
+      {% if user in restaurant.admin_users.all %}
+          {% if not menu.menusection_set.count %}(Empty){% endif %}
+            (<a href="{% url 'menus:menu_detail' restaurant_slug=restaurant.slug menu_slug=menu.slug %}">Edit this menu</a>)
+      {% endif %}</h5>
+          </button>
+        </div>
+      </div>
+      {% if menu.menusection_set.count %}
+      <div id="collapseMenu{{ forloop.counter }}" class="collapse" aria-labelledby="headingMenu{{ forloop.counter }}" data-parent="#accordion">
+        <div class="card-body">
+
+        {% for menusection in menu.menusection_set.all %}
+        <h2 class="pt-2 text-center"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h2>
+
+          {% if menusection.menuitem_set.count %}
+
+          <ul class="pt-2 pb-4">
+            {% for menuitem in menusection.menuitem_set.all %}
+            <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}</li>
+
+            {% endfor %}
+          </ul>
+
+          {% elif not menusection.menuitem_set.count %}
+          <p class="text-center font-weight-bold">This section does not have any items.</p>
+          {% endif %}
+
+        {% endfor %}
+
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
     {% endfor %}
-</ul>
+
   {% endif %}
 
   {% if user.is_authenticated and user in restaurant.admin_users.all %}

@@ -175,6 +175,8 @@ class RestaurantDetailViewTest(TestCase):
         cls.restaurant_admin_user = f.UserFactory()
         cls.test_restaurant = \
             f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
+        cls.test_menu = \
+            f.MenuFactory(restaurant=cls.test_restaurant)
 
         cls.current_test_url = reverse(
             'restaurants:restaurant_detail', kwargs={
@@ -203,6 +205,7 @@ class RestaurantDetailViewTest(TestCase):
 
     # template
     def test_template_unauthorized_user_cannot_view_auth_links(self):
+        self.assertNotIn("Edit this menu", self.html)
         self.assertNotIn('auth-links', self.html)
 
     def test_template_authorized_user_can_view_auth_links(self):
@@ -210,6 +213,7 @@ class RestaurantDetailViewTest(TestCase):
             username=self.restaurant_admin_user.username,
             password=c.TEST_USER_PASSWORD)
         self.setUp()
+        self.assertIn("Edit this menu", self.html)
         self.assertIn('auth-links', self.html)
 
     # bad kwargs

@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase
 
-from .forms import NewUserCreationForm, UserAuthenticationForm
 from menus_project import constants as c
+from .forms import NewUserCreationForm, UserAuthenticationForm
 
 
 class NewUserCreationFormTest(TestCase):

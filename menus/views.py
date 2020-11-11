@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -7,6 +6,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
+from menus_project.permissions import UserHasRestaurantPermissionsMixin
 from .forms import MenuForm, MenuSectionForm, MenuItemForm
 from .models import Menu, MenuSection, MenuItem
 from restaurants.models import Restaurant
@@ -19,7 +19,7 @@ def menus_root(request, restaurant_slug):
 
 
 class MenuCreateView(
-        UserPassesTestMixin, SuccessMessageMixin, CreateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, CreateView):
     model = Menu
     form_class = MenuForm
     success_message = "Menu Created: %(name)s"
@@ -38,11 +38,6 @@ class MenuCreateView(
     def get_initial(self):
         return {'restaurant': self.restaurant}
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in self.restaurant.admin_users.all()
-
 
 class MenuDetailView(DetailView):
     model = Menu
@@ -55,7 +50,7 @@ class MenuDetailView(DetailView):
 
 
 class MenuUpdateView(
-        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, UpdateView):
     model = Menu
     form_class = MenuForm
     success_message = "Menu Successfully Updated: %(name)s"
@@ -77,14 +72,8 @@ class MenuUpdateView(
             restaurant__slug=self.kwargs['restaurant_slug'],
             slug=self.kwargs['menu_slug'])
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().restaurant.admin_users.all()
 
-
-class MenuDeleteView(UserPassesTestMixin, DeleteView):
+class MenuDeleteView(UserHasRestaurantPermissionsMixin, DeleteView):
     model = Menu
     success_message = "The '%(name)s' menu has been deleted."
 
@@ -102,15 +91,9 @@ class MenuDeleteView(UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return self.object.restaurant.get_absolute_url()
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().restaurant.admin_users.all()
-
 
 class MenuSectionCreateView(
-        UserPassesTestMixin, SuccessMessageMixin, CreateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, CreateView):
     model = MenuSection
     form_class = MenuSectionForm
     success_message = "Menu Section Created: %(name)s"
@@ -131,11 +114,6 @@ class MenuSectionCreateView(
     def get_initial(self):
         return {'menu': self.menu}
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in self.menu.restaurant.admin_users.all()
-
 
 class MenuSectionDetailView(DetailView):
     model = MenuSection
@@ -149,7 +127,7 @@ class MenuSectionDetailView(DetailView):
 
 
 class MenuSectionUpdateView(
-        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, UpdateView):
     model = MenuSection
     form_class = MenuSectionForm
     success_message = "Menu Section Successfully Updated: %(name)s"
@@ -172,14 +150,8 @@ class MenuSectionUpdateView(
             menu__slug=self.kwargs['menu_slug'],
             slug=self.kwargs['menusection_slug'])
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().menu.restaurant.admin_users.all()
 
-
-class MenuSectionDeleteView(UserPassesTestMixin, DeleteView):
+class MenuSectionDeleteView(UserHasRestaurantPermissionsMixin, DeleteView):
     model = MenuSection
     success_message = "'%(name)s' has been deleted from the menu."
 
@@ -198,15 +170,9 @@ class MenuSectionDeleteView(UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return self.object.menu.get_absolute_url()
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().menu.restaurant.admin_users.all()
-
 
 class MenuItemCreateView(
-        UserPassesTestMixin, SuccessMessageMixin, CreateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, CreateView):
     model = MenuItem
     form_class = MenuItemForm
     success_message = "Menu Item Created: %(name)s"
@@ -231,12 +197,6 @@ class MenuItemCreateView(
     def get_success_url(self):
         return self.object.menusection.get_absolute_url()
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.menusection.menu.restaurant.admin_users.all()
-
 
 class MenuItemDetailView(DetailView):
     model = MenuItem
@@ -251,7 +211,7 @@ class MenuItemDetailView(DetailView):
 
 
 class MenuItemUpdateView(
-        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, UpdateView):
     model = MenuItem
     form_class = MenuItemForm
     success_message = "Menu Item Successfully Updated: %(name)s"
@@ -276,14 +236,8 @@ class MenuItemUpdateView(
             menusection__slug=self.kwargs['menusection_slug'],
             slug=self.kwargs['menuitem_slug'])
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().menusection.menu.restaurant.admin_users.all()
 
-
-class MenuItemDeleteView(UserPassesTestMixin, DeleteView):
+class MenuItemDeleteView(UserHasRestaurantPermissionsMixin, DeleteView):
     model = MenuItem
     success_message = "'%(name)s' has been deleted from the menu."
 
@@ -302,9 +256,3 @@ class MenuItemDeleteView(UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return self.object.menusection.get_absolute_url()
-
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().menusection.menu.restaurant.admin_users.all()

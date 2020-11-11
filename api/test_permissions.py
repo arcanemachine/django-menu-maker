@@ -10,8 +10,8 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.factory = APIRequestFactory()
         cls.test_permission = HasRestaurantPermissionsOrReadOnly()
+        cls.factory = APIRequestFactory()
 
         # create users
         cls.unprivileged_user = f.UserFactory(username='unprivileged_user')

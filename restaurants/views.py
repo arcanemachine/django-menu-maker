@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -9,6 +9,7 @@ from django.views.generic.edit import UpdateView
 
 from .models import Restaurant
 from menus_project import constants as c
+from menus_project.permissions import UserHasRestaurantPermissionsMixin
 
 
 class RestaurantListView(ListView):
@@ -50,7 +51,7 @@ class RestaurantDetailView(DetailView):
 
 
 class RestaurantUpdateView(
-        UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+        UserHasRestaurantPermissionsMixin, SuccessMessageMixin, UpdateView):
     model = Restaurant
     fields = ('name',)
     success_message = "Restaurant Successfully Updated: %(name)s"
@@ -67,14 +68,8 @@ class RestaurantUpdateView(
         return get_object_or_404(
             Restaurant, slug=self.kwargs['restaurant_slug'])
 
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().admin_users.all()
 
-
-class RestaurantDeleteView(UserPassesTestMixin, DeleteView):
+class RestaurantDeleteView(UserHasRestaurantPermissionsMixin, DeleteView):
     model = Restaurant
     success_message = "The '%(name)s' restaurant has been deleted."
     success_url = reverse_lazy('users:user_detail')
@@ -87,9 +82,3 @@ class RestaurantDeleteView(UserPassesTestMixin, DeleteView):
     def get_object(self):
         return get_object_or_404(
             Restaurant, slug=self.kwargs['restaurant_slug'])
-
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return self.request.user in \
-            self.get_object().admin_users.all()

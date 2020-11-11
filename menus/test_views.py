@@ -92,7 +92,8 @@ class MenuCreateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
         self.assertEqual(
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
@@ -396,7 +397,8 @@ class MenuUpdateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
         self.assertEqual(
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
@@ -630,7 +632,8 @@ class MenuDeleteViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
 
     def test_attribute_model_name(self):
         self.assertEqual(
@@ -826,7 +829,8 @@ class MenuSectionCreateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
         self.assertEqual(
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
@@ -1122,7 +1126,8 @@ class MenuSectionUpdateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
         self.assertEqual(
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
@@ -1373,7 +1378,8 @@ class MenuSectionDeleteViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
 
     def test_attribute_model_name(self):
         self.assertEqual(
@@ -1579,7 +1585,8 @@ class MenuItemCreateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
         self.assertEqual(
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
@@ -1891,7 +1898,8 @@ class MenuItemUpdateViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
         self.assertEqual(
             self.view.__class__.__bases__[1].__name__, 'SuccessMessageMixin')
 
@@ -2171,7 +2179,8 @@ class MenuItemDeleteViewTest(TestCase):
 
     def test_which_mixins_are_used(self):
         self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'UserPassesTestMixin')
+            self.view.__class__.__bases__[0].__name__,
+            'UserHasRestaurantPermissionsMixin')
 
     def test_attribute_model_name(self):
         self.assertEqual(

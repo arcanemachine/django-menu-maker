@@ -27,6 +27,11 @@ class MenuList(generics.ListCreateAPIView):
     lookup_url_kwarg = 'restaurant_pk'
     serializer_class = serializers.MenuSerializer
 
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        obj = Restaurant.objects.get(pk=self.kwargs['restaurant_pk'])
+        super().check_object_permissions(request, obj)
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['restaurant_pk'] = self.kwargs['restaurant_pk']
@@ -50,6 +55,11 @@ class MenuSectionList(generics.ListCreateAPIView):
     lookup_url_kwarg = 'menu_pk'
     serializer_class = serializers.MenuSectionSerializer
 
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        obj = Restaurant.objects.get(pk=self.kwargs['restaurant_pk'])
+        super().check_object_permissions(request, obj)
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['menu_pk'] = self.kwargs['menu_pk']
@@ -72,6 +82,11 @@ class MenuItemList(generics.ListCreateAPIView):
     permission_classes = [HasRestaurantPermissionsOrReadOnly]
     lookup_url_kwarg = 'menu_pk'
     serializer_class = serializers.MenuItemSerializer
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        obj = Restaurant.objects.get(pk=self.kwargs['restaurant_pk'])
+        super().check_object_permissions(request, obj)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

@@ -18,14 +18,12 @@ class HasRestaurantPermissionsOrReadOnlyTest(APITestCase):
         cls.permitted_user = f.UserFactory(username='permitted_user')
         cls.admin_user = f.UserFactory(username='admin_user', is_staff=True)
 
-    def setUp(self):
         # create restaurant objects and add permitted user to admin_users
-        self.test_restaurant = f.RestaurantFactory(
-            admin_users=[self.permitted_user])
-        self.test_menu = f.MenuFactory(restaurant=self.test_restaurant)
-        self.test_menusection = f.MenuSectionFactory(menu=self.test_menu)
-        self.test_menuitem = \
-            f.MenuItemFactory(menusection=self.test_menusection)
+        cls.test_restaurant = f.RestaurantFactory(
+            admin_users=[cls.permitted_user])
+        cls.test_menu = f.MenuFactory(restaurant=cls.test_restaurant)
+        cls.test_menusection = f.MenuSectionFactory(menu=cls.test_menu)
+        cls.test_menuitem = f.MenuItemFactory(menusection=cls.test_menusection)
 
     def test_unauthenticated_user_least_privileged_request_returns_false(self):
         request = self.factory.get('/')

@@ -213,8 +213,19 @@ class RestaurantDetailViewTest(TestCase):
             username=self.restaurant_admin_user.username,
             password=c.TEST_USER_PASSWORD)
         self.setUp()
+
         self.assertIn("Edit this menu", self.html)
         self.assertIn('auth-links', self.html)
+
+    def test_template_authorized_user_request_GET_view_as_customer(self):
+        self.current_test_url = self.current_test_url + '?view_as_customer=1'
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=c.TEST_USER_PASSWORD)
+        self.setUp()
+
+        self.assertNotIn("Edit this menu", self.html)
+        self.assertNotIn('auth-links', self.html)
 
     # bad kwargs
     def test_bad_kwargs(self):

@@ -20,9 +20,8 @@
         <div class="mb-0 text-center">
           <button class="btn btn-link collapsed text-center" data-toggle="collapse" data-target="#collapseMenu{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseCoursesAndCertificates">
             <h5 class="font-weight-bold text-dark">{{ menu.name }}
-      
 
-      {% if user in restaurant.admin_users.all %}
+      {% if user in restaurant.admin_users.all and not request.GET.view_as_customer == '1' %}
           {% if not menu.menusection_set.count %}(Empty){% endif %}
             (<a href="{% url 'menus:menu_detail' restaurant_slug=restaurant.slug menu_slug=menu.slug %}">Edit this menu</a>)
       {% endif %}</h5>
@@ -60,19 +59,25 @@
 
   {% endif %}
 
-  {% if user.is_authenticated and user in restaurant.admin_users.all %}
+  {% if user.is_authenticated and user in restaurant.admin_users.all and not request.GET.view_as_customer == '1' %}
 <div class="auth-links">
   <p><a href="{% url 'menus:menu_create' restaurant_slug=restaurant.slug %}">Add new menu</a></p>
+  <p><a href="{{ request.path }}?view_as_customer=1">View as customer</a></p>
   <p class="pt-3"><a href="{% url 'restaurants:restaurant_update' restaurant_slug=restaurant.slug %}">Update this restaurant's information</a></p>
   <p><a class="text-danger" href="{% url 'restaurants:restaurant_delete' restaurant_slug=restaurant.slug %}">Delete this restaurant</a></p>
 </div>
   {% endif %}
 
 <div id="bottom-links">
-  {% if user.restaurant_set.count %}
-  <p><a href="{% url 'restaurants:restaurant_list' %}">View your restaurants</a></p>
+
+  {% if request.GET.view_as_customer == '1' %}
+  <p><a href="{{ request.path }}">View as owner</a></p>
   {% endif %}
+
+  {% if user.restaurant_set.count and not request.GET.view_as_customer == '1' %}
+  <p><a href="{% url 'restaurants:restaurant_list' %}">View your restaurants</a></p>
   <p><a href="{% url 'restaurants:restaurant_list' %}">View all restaurants</a></p>
+  {% endif %}
 </div>
 
 {% endblock content %}

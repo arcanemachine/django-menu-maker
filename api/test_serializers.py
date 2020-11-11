@@ -1,6 +1,5 @@
-from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
+from rest_framework.test import APITestCase
 
 import factories as f
 from menus_project import constants
@@ -16,15 +15,12 @@ TEST_MENUITEM_NAME = constants.TEST_MENUITEM_NAME
 TEST_MENUITEM_DESCRIPTION = constants.TEST_MENUITEM_DESCRIPTION
 
 
-class RestaurantSerializerTest(TestCase):
+class RestaurantSerializerTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.serializer = serializers.RestaurantSerializer
-        cls.rest_client = APIClient()
-
-        # create objects
-        cls.test_user = f.UserFactory()
+        cls.restaurant_admin_user = f.UserFactory()
 
     def test_meta_model_name(self):
         self.assertEqual(self.serializer.Meta.model.__name__, 'Restaurant')
@@ -37,37 +33,43 @@ class RestaurantSerializerTest(TestCase):
         self.assertEqual(self.serializer.Meta.read_only_fields,
                          ['admin_users', 'menu_set'])
 
-    def test_method_create_adds_registrant_to_admin_users(self):
+    def test_method_create(self):
         self.current_test_url = reverse('api:restaurant_list')
 
+        # get object count before creating new object
+        old_restaurant_count = Restaurant.objects.count()
+
         # create new restaurant
-        self.rest_client.login(
-            username=self.test_user.username, password=TEST_USER_PASSWORD)
-        self.response = self.rest_client.post(self.current_test_url, {
-            'name': TEST_RESTAURANT_NAME})
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=TEST_USER_PASSWORD)
+        self.response = self.client.post(
+            self.current_test_url, {'name': TEST_RESTAURANT_NAME})
 
         # new restaurant created successfully
         self.assertEqual(self.response.status_code, 201)
 
-        # get restaurant from pk
+        # object has proper admin_users
         self.test_restaurant = \
             Restaurant.objects.get(name=TEST_RESTAURANT_NAME)
-
-        # restaurant.admin_users contains only the registrant
         self.assertEqual(self.test_restaurant.admin_users.count(), 1)
-        self.assertIn(self.test_user, self.test_restaurant.admin_users.all())
+        self.assertIn(
+            self.restaurant_admin_user, self.test_restaurant.admin_users.all())
+
+        # object count increased by 1
+        new_restaurant_count = Restaurant.objects.count()
+        self.assertEqual(old_restaurant_count + 1, new_restaurant_count)
 
 
-class MenuSerializerTest(TestCase):
+class MenuSerializerTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.serializer = serializers.MenuSerializer
-        cls.rest_client = APIClient()
 
-        # create objects
-        cls.test_user = f.UserFactory()
-        cls.test_restaurant = f.RestaurantFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_restaurant = \
+            f.RestaurantFactory(admin_users=[cls.restaurant_admin_user])
 
     def test_fields_contain_restaurant_name(self):
         self.assertTrue('restaurant_name' in self.serializer.Meta.fields)
@@ -85,40 +87,40 @@ class MenuSerializerTest(TestCase):
             self.serializer.Meta.read_only_fields,
             ['menusection_set', 'restaurant_name'])
 
-    def test_method_create_adds_restaurant_to_menu(self):
+    def test_method_create_adds_new_menu_to_restaurant(self):
         self.current_test_url = reverse('api:menu_list', kwargs={
             'restaurant_pk': self.test_restaurant.pk})
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=TEST_USER_PASSWORD)
 
+        # get object count before creating new object
         old_menu_count = Menu.objects.count()
 
-        # create new menu
-        self.rest_client.login(
-            username=self.test_user.username, password=TEST_USER_PASSWORD)
-        self.response = self.rest_client.post(
+        # create new object
+        self.response = self.client.post(
             self.current_test_url, {'name': TEST_MENU_NAME})
 
-        # new menu created successfully
+        # new object created successfully
         self.assertEqual(self.response.status_code, 201)
 
-        # menu has proper restaurant
+        # object has proper parent
         self.test_menu = Menu.objects.get(name=TEST_MENU_NAME)
         self.assertEqual(self.test_menu.restaurant, self.test_restaurant)
 
-        # menu count increased by 1
+        # object count increased by 1
         new_menu_count = Menu.objects.count()
         self.assertEqual(old_menu_count + 1, new_menu_count)
 
 
-class MenuSectionSerializerTest(TestCase):
+class MenuSectionSerializerTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.serializer = serializers.MenuSectionSerializer
-        cls.rest_client = APIClient()
 
-        # create objects
-        cls.test_user = f.UserFactory()
-        cls.test_menu = f.MenuFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menu = f.MenuFactory(admin_users=[cls.restaurant_admin_user])
 
     def test_fields_contain_restaurant_name(self):
         self.assertTrue('restaurant_name' in self.serializer.Meta.fields)
@@ -144,37 +146,39 @@ class MenuSectionSerializerTest(TestCase):
             'restaurant_pk': self.test_menu.restaurant.pk,
             'menu_pk': self.test_menu.pk})
 
+        # get object count before creating new object
         old_menusection_count = MenuSection.objects.count()
 
-        # create new menusection
-        self.rest_client.login(
-            username=self.test_user.username, password=TEST_USER_PASSWORD)
-        self.response = self.rest_client.post(
+        # create new object
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=TEST_USER_PASSWORD)
+        self.response = self.client.post(
             self.current_test_url, {'name': TEST_MENUSECTION_NAME})
 
-        # new menusection created successfully
+        # new object created successfully
         self.assertEqual(self.response.status_code, 201)
 
-        # menusection has proper restaurant
+        # object has proper parent
         self.test_menusection = \
             MenuSection.objects.get(name=TEST_MENUSECTION_NAME)
         self.assertEqual(self.test_menusection.menu, self.test_menu)
 
-        # menusection count increased by 1
+        # object count increased by 1
         new_menusection_count = MenuSection.objects.count()
         self.assertEqual(old_menusection_count + 1, new_menusection_count)
 
 
-class MenuItemSerializerTest(TestCase):
+class MenuItemSerializerTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.serializer = serializers.MenuItemSerializer
-        cls.rest_client = APIClient()
 
         # create objects
-        cls.test_user = f.UserFactory()
-        cls.test_menusection = f.MenuSectionFactory()
+        cls.restaurant_admin_user = f.UserFactory()
+        cls.test_menusection = \
+            f.MenuSectionFactory(admin_users=[cls.restaurant_admin_user])
 
     def test_fields_contain_restaurant_name(self):
         self.assertTrue('restaurant_name' in self.serializer.Meta.fields)
@@ -204,25 +208,27 @@ class MenuItemSerializerTest(TestCase):
             'restaurant_pk': self.test_menusection.menu.restaurant.pk,
             'menu_pk': self.test_menusection.menu.pk,
             'menusection_pk': self.test_menusection.pk})
+        self.client.login(
+            username=self.restaurant_admin_user.username,
+            password=TEST_USER_PASSWORD)
 
+        # get object count before creating new object
         old_menuitem_count = MenuItem.objects.count()
 
-        # create new menuitem
-        self.rest_client.login(
-            username=self.test_user.username, password=TEST_USER_PASSWORD)
-        self.response = self.rest_client.post(
+        # create new object
+        self.response = self.client.post(
             self.current_test_url, {
                 'name': TEST_MENUITEM_NAME,
                 'description': TEST_MENUITEM_DESCRIPTION})
 
-        # new menuitem created successfully
+        # new object created successfully
         self.assertEqual(self.response.status_code, 201)
 
-        # menuitem has proper menusection
+        # object has proper parent
         self.test_menuitem = \
             MenuItem.objects.get(name=TEST_MENUITEM_NAME)
         self.assertEqual(self.test_menuitem.menusection, self.test_menusection)
 
-        # menuitem count increased by 1
+        # object count increased by 1
         new_menuitem_count = MenuItem.objects.count()
         self.assertEqual(old_menuitem_count + 1, new_menuitem_count)

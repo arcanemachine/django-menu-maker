@@ -1,3 +1,7 @@
+ul {
+  list-style-type: '- ';
+}
+
 .auth-links {
   margin-top: 3em;
   font-weight: bold;

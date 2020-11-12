@@ -51,8 +51,21 @@
 
     <div id="content" class="container">
 
-      <h2 id="body-title">{% block body_title %}{% endblock body_title %}</h2>
-      <h5 id="body-subheading">{% block body_subheading %}{% endblock body_subheading %}</h5>
+      {% block body_title_wrapper %}
+      <h1 id="body-title"{% if body_title_tags %} class="{{ body_title_tags }}"{% endif %}>
+        {% block body_title %}
+          {% if body_title_text %}{{ body_title_text }}{% endif %}
+        {% endblock body_title %}
+      </h1>
+      {% endblock body_title_wrapper %}
+
+      {% block body_subheading_wrapper %}
+      <h4 id="body-subheading"{% if body_subheading_tags %} class="{{ body_subheading_tags }}"{% endif %}>
+        {% block body_subheading %}
+          {% if body_subheading_text %}{{ body_subheading_text }}{% endif %}
+        {% endblock body_subheading %}
+      </h4>
+      {% endblock body_subheading_wrapper %}
 
     {% if form.errors %}
       {% for error_field, error_message in form.errors.items %}

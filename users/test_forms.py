@@ -22,7 +22,7 @@ class NewUserCreationFormTest(TestCase):
     def test_field_captcha_help_text(self):
         self.assertEqual(
             self.form_instance.fields['captcha'].help_text,
-            "Please enter the letters you see in the image above.")
+            c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
 
     def test_meta_model_name(self):
         self.assertEqual(self.form.Meta.model, get_user_model())
@@ -79,4 +79,4 @@ class UserAuthenticationFormTest(SimpleTestCase):
     def test_field_captcha_help_text(self):
         self.assertEqual(
             self.form_instance.fields['captcha'].help_text,
-            "Please enter the letters you see in the image above.")
+            c.FORMS_CAPTCHA_FIELD_HELP_TEXT)

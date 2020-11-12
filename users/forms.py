@@ -4,11 +4,12 @@ from django.core.exceptions import ValidationError
 
 from captcha.fields import CaptchaField
 
+from menus_project import constants as c
 
 class NewUserCreationForm(UserCreationForm):
 
     captcha = CaptchaField(
-        help_text="Please enter the letters you see in the image above.")
+        help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
 
     class Meta:
         model = get_user_model()
@@ -29,4 +30,4 @@ class NewUserCreationForm(UserCreationForm):
 class UserAuthenticationForm(AuthenticationForm):
 
     captcha = CaptchaField(
-        help_text="Please enter the letters you see in the image above.")
+        help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)

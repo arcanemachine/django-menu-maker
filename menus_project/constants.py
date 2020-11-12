@@ -3,6 +3,10 @@ PROJECT_NAME = "Menu Maker"
 RESERVED_KEYWORDS = ['add-new-restaurant', 'all', 'delete', 'edit', 'new-item',
                      'new-section']
 
+# forms
+FORMS_CAPTCHA_FIELD_HELP_TEXT = \
+    "Please enter the letters seen in the image above."
+
 # testing
 TEST_USER_USERNAME = 'test_user'
 TEST_USER_FIRST_NAME = 'Test'

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'captcha',
     'crispy_forms',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 
@@ -127,6 +128,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # rest framework
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],

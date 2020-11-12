@@ -90,7 +90,7 @@ class LoginViewTest(TestCase):
             self.view.form_class.__name__, 'UserAuthenticationForm')
 
     def test_template_name(self):
-        self.assertTrue(self.view.template_name, 'users/login.html')
+        self.assertEqual(self.view.template_name, 'users/login.html')
 
 
 class PasswordChangeViewTest(TestCase):
@@ -110,7 +110,7 @@ class PasswordChangeViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_template_name(self):
-        self.assertTrue(
+        self.assertEqual(
             self.view.template_name, 'users/password_change_form.html')
 
 
@@ -125,11 +125,11 @@ class PasswordResetViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_form_class(self):
-        self.assertTrue(
+        self.assertEqual(
             self.view.form_class.__name__, 'UserPasswordResetForm')
 
     def test_template_name(self):
-        self.assertTrue(
+        self.assertEqual(
             self.view.template_name, 'users/password_reset_form.html')
 
 

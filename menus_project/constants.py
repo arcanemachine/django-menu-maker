@@ -3,6 +3,9 @@ PROJECT_NAME = "Menu Maker"
 RESERVED_KEYWORDS = ['add-new-restaurant', 'all', 'delete', 'edit', 'new-item',
                      'new-section']
 
+# validation #
+MAX_RESTAURANTS_PER_USER = 3
+
 # forms
 FORMS_CAPTCHA_FIELD_HELP_TEXT = \
     "Please enter the letters seen in the image above."
@@ -20,14 +23,15 @@ TEST_MENUSECTION_NAME = 'Test Menu Section'
 TEST_MENUITEM_NAME = 'Test Menu Item'
 TEST_MENUITEM_DESCRIPTION = 'Test Menu Item Description'
 
-# VALIDATION #
 
-# reserved keywords
+
+# STRINGS #
+
+# misc
 RESERVED_KEYWORD_ERROR_STRING = \
     "This name is reserved and cannot be used. Please choose another name."
 
 # restaurants
-MAX_RESTAURANTS_PER_USER = 3
 MAX_RESTAURANTS_PER_USER_ERROR_STRING = "You cannot register more than "\
     f"{MAX_RESTAURANTS_PER_USER} restaurants. If you wish to register a "\
     "new restaurant, you must first delete one of your existing restaurants."

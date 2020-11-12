@@ -1,3 +1,5 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -6,6 +8,8 @@ from .permissions import HasRestaurantPermissionsOrReadOnly
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
+def api_root(request):
+    return HttpResponseRedirect(reverse('api:restaurant_list'))
 
 class RestaurantList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]

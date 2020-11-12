@@ -6,6 +6,9 @@ from . import views
 app_name = 'api'
 
 urlpatterns = [
+    path('',
+         views.api_root,
+         name='api_root'),
     path('api-token-auth/',
          obtain_auth_token,
          name='api_token_auth'),

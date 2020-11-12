@@ -9,7 +9,8 @@ import sys
 
 from pathlib import Path
 
-import server_config, secret_key
+import secret_key
+import server_config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

@@ -85,6 +85,10 @@ class LoginViewTest(TestCase):
     def test_get_method(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_form_class(self):
+        self.assertEqual(
+            self.view.form_class.__name__, 'UserAuthenticationForm')
+
     def test_template_name(self):
         self.assertTrue(self.view.template_name, 'users/login.html')
 

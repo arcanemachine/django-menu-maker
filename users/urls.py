@@ -17,7 +17,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views
-from .forms import UserAuthenticationForm, UserPasswordResetForm
+from .forms import UserPasswordResetForm
 
 app_name = 'users'
 
@@ -26,6 +26,9 @@ urlpatterns = [
     path('register/',
          views.RegisterView.as_view(),
          name='register'),
+    path('login/',
+         views.LoginView.as_view(),
+         name='login'),
     path('me/',
          views.UserDetailView.as_view(),
          name='user_detail'),
@@ -39,11 +42,6 @@ urlpatterns = [
          views.UserLogoutView.as_view(),
          name='logout'),
     # django.contrib.auth.views
-    path('login/',
-         auth_views.LoginView.as_view(
-             form_class=UserAuthenticationForm,
-             template_name='users/login.html'),
-         name='login'),
     path('me/change-password/',
          auth_views.PasswordChangeView.as_view(
              template_name='users/password_change_form.html'),

@@ -2,15 +2,15 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
-from .forms import NewUserCreationForm
 from menus_project import constants as c
+from .forms import NewUserCreationForm, UserAuthenticationForm
 
 
 class RegisterView(SuccessMessageMixin, CreateView):
@@ -27,6 +27,31 @@ class RegisterView(SuccessMessageMixin, CreateView):
             messages.info(request, "You are already logged in, so we "
                 "redirected you here from the registration page.")
             return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        Set user.is_active = False until email address is confirmed.
+
+        Then, send a welcome email using a post_save() signal
+        """
+        form.instance.is_active = False
+        return super().form_valid(form)
+
+
+class LoginView(LoginView):
+    form_class = UserAuthenticationForm
+    template_name = 'users/login.html'
+    success_url = reverse_lazy(settings.LOGIN_REDIRECT_URL)
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Redirect logged-in users to settings.LOGIN_REDIRECT_URL
+        """
+        if self.request.user.is_authenticated:
+            messages.info(request, "You are already logged in, so we "
+                "redirected you here from the login page.")
+            return HttpResponseRedirect(self.success_url)
         return super().dispatch(request, *args, **kwargs)
 
 

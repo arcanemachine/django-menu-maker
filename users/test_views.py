@@ -89,6 +89,10 @@ class RegisterViewTest(TestCase):
 
 class LoginViewTest(TestCase):
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.authenticated_user = f.UserFactory(username='authenticated_user')
+
     def setUp(self):
         self.current_test_url = reverse('users:login')
         self.response = self.client.get(self.current_test_url)
@@ -102,9 +106,24 @@ class LoginViewTest(TestCase):
     def test_template_name(self):
         self.assertEqual(self.view.template_name, 'users/login.html')
 
+    def test_success_url(self):
+        self.assertEqual(
+            self.view.success_url, reverse(settings.LOGIN_REDIRECT_URL))
+
     # request.GET
     def test_get_method(self):
         self.assertEqual(self.response.status_code, 200)
+
+    def test_request_get_method_authenticated_user(self):
+        self.client.login(
+            username=self.authenticated_user, password=c.TEST_USER_PASSWORD)
+        self.response = self.client.get(self.current_test_url)
+
+        # redirects to settings.LOGIN_REDIRECT_URL
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(
+            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
+
 
 
 class PasswordChangeViewTest(TestCase):

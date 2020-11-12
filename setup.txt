@@ -9,3 +9,4 @@ Setup Guide (Not complete):
         - blah blah blah
 - constants
     - max_restaurants_per_user
+- ensure https is setup for authenticated-based views (and all authenticated API views)

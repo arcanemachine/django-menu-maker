@@ -1,6 +1,4 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.core.exceptions import PermissionDenied
-
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
@@ -21,11 +19,11 @@ class UserHasRestaurantPermissionsMixin(UserPassesTestMixin):
                 obj = self.menusection
             elif hasattr(self, 'menuitem'):
                 obj = self.menuitem
-        
+
         # if the view is not a CreateView, get object from self.get_object()
         if not obj:
             obj = self.get_object()
-        
+
         if type(obj) == Restaurant:
             if self.request.user in obj.admin_users.all() \
                     or self.request.user.is_staff:

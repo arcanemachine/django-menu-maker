@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, RequestFactory
-from django.urls import reverse
 
 import menus_project.factories as f
 from .permissions import UserHasRestaurantPermissionsMixin
@@ -24,7 +23,6 @@ class UserHasRestaurantPermissionsMixinTest(TestCase):
         cls.test_menu = f.MenuFactory(restaurant=cls.test_restaurant)
         cls.test_menusection = f.MenuSectionFactory(menu=cls.test_menu)
         cls.test_menuitem = f.MenuItemFactory(menusection=cls.test_menusection)
-
 
     # restaurant object
     def test_unauthenticated_user_restaurant_object_returns_false(self):

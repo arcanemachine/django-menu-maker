@@ -25,6 +25,7 @@ class NewUserCreationForm(UserCreationForm):
             raise ValidationError("This email address is already in use.")
         return email
 
+
 class UserAuthenticationForm(AuthenticationForm):
 
     captcha = CaptchaField(

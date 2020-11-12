@@ -81,7 +81,6 @@ class MenuFactory(factory.django.DjangoModelFactory):
                 self.restaurant.admin_users.add(user)
 
 
-
 # menu section
 class MenuSectionFactory(factory.django.DjangoModelFactory):
     class Meta:

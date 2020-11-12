@@ -25,4 +25,4 @@ class HasRestaurantPermissionsOrReadOnly(permissions.BasePermission):
         # if non-restaurant object submitted, raise TypeError
         else:
             raise TypeError("This permission can only be used with a "
-                "Restaurant-related object.")
+                            "Restaurant-related object.")

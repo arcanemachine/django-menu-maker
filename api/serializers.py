@@ -72,8 +72,8 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MenuItem
-        fields = ['id', 'name', 'description', 'restaurant_name', 'menu_name',
-            'menusection_name']
+        fields = ['id', 'name', 'description', 'restaurant_name',
+                  'menu_name', 'menusection_name']
         read_only_fields = ['restaurant_name', 'menu_name', 'menusection_name']
 
     def __init__(self, *args, **kwargs):

@@ -1,7 +1,7 @@
 # misc
 PROJECT_NAME = "Menu Maker"
 RESERVED_KEYWORDS = ['add-new-restaurant', 'all', 'delete', 'edit', 'new-item',
-    'new-section']
+                     'new-section']
 
 # testing
 TEST_USER_USERNAME = 'test_user'

@@ -334,7 +334,7 @@ class MenuDetailTest(APITestCase):
 
         # generate test url
         self.kwargs = {'restaurant_pk': self.test_menu.restaurant.pk,
-                      'menu_pk': self.test_menu.pk}
+                       'menu_pk': self.test_menu.pk}
         self.current_test_url = \
             reverse('api:menu_detail', kwargs=self.kwargs)
 
@@ -565,10 +565,10 @@ class MenuSectionDetailTest(APITestCase):
             f.MenuSectionFactory(admin_users=[self.restaurant_admin_user])
 
         # generate test url
-        self.kwargs = {'restaurant_pk': 
-                           self.test_menusection.menu.restaurant.pk,
-                       'menu_pk': self.test_menusection.menu.pk,
-                       'menusection_pk': self.test_menusection.pk}
+        self.kwargs = {
+            'restaurant_pk': self.test_menusection.menu.restaurant.pk,
+            'menu_pk': self.test_menusection.menu.pk,
+            'menusection_pk': self.test_menusection.pk}
         self.current_test_url = \
             reverse('api:menusection_detail', kwargs=self.kwargs)
 
@@ -735,7 +735,7 @@ class MenuItemListTest(APITestCase):
         login_successful = self.client.login(
             username=self.test_user.username, password=c.TEST_USER_PASSWORD)
         self.assertTrue(login_successful)
-        
+
         self.response = self.client.get(self.current_test_url)
         self.assertEqual(self.response.status_code, 200)
 

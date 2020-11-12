@@ -60,11 +60,11 @@
       {% endblock body_title_wrapper %}
 
       {% block body_subheading_wrapper %}
-      <h4 id="body-subheading" class="{% if body_subheading_tags %}{{ body_subheading_tags }}{% else %}text-center{% endif %}">
+      <h3 id="body-subheading" class="{% if body_subheading_tags %}{{ body_subheading_tags }}{% else %}text-center{% endif %}">
         {% block body_subheading %}
           {% if body_subheading_text %}{{ body_subheading_text }}{% endif %}
         {% endblock body_subheading %}
-      </h4>
+      </h3>
       {% endblock body_subheading_wrapper %}
 
     {% if form.errors %}

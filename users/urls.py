@@ -17,7 +17,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views
-from .forms import UserAuthenticationForm
+from .forms import UserAuthenticationForm, UserPasswordResetForm
 
 app_name = 'users'
 
@@ -50,6 +50,7 @@ urlpatterns = [
          name='password_change'),
     path('forgot-password/',
          auth_views.PasswordResetView.as_view(
-             template_name='users/password_reset_form.html'),
+             template_name='users/password_reset_form.html',
+             form_class=UserPasswordResetForm),
          name='password_reset'),
     ]

@@ -120,6 +120,10 @@ class PasswordResetViewTest(TestCase):
     def test_get_method(self):
         self.assertEqual(self.response.status_code, 200)
 
+    def test_form_class(self):
+        self.assertTrue(
+            self.view.form_class.__name__, 'UserPasswordResetForm')
+
     def test_template_name(self):
         self.assertTrue(
             self.view.template_name, 'users/password_reset_form.html')

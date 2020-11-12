@@ -1,10 +1,11 @@
+from captcha.fields import CaptchaField
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordResetForm, UserCreationForm)
 from django.core.exceptions import ValidationError
 
-from captcha.fields import CaptchaField
-
 from menus_project import constants as c
+
 
 class NewUserCreationForm(UserCreationForm):
 
@@ -28,6 +29,12 @@ class NewUserCreationForm(UserCreationForm):
 
 
 class UserAuthenticationForm(AuthenticationForm):
+
+    captcha = CaptchaField(
+        help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
+
+
+class UserPasswordResetForm(PasswordResetForm):
 
     captcha = CaptchaField(
         help_text=c.FORMS_CAPTCHA_FIELD_HELP_TEXT)

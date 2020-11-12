@@ -43,7 +43,7 @@
 {% endif %}
 
 <div id="bottom-links">
-<p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menu.restaurant.slug %}">Return to {{ menu.restaurant.name }}</a></p>
+<p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menu.restaurant.slug %}">Return to Restaurant: {{ menu.restaurant.name }}</a></p>
 </div>
 
 {% endblock content %}

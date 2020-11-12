@@ -19,9 +19,9 @@
 {% endif %}
 
 <div id="bottom-links">
-  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to menu section: {{ menuitem.menusection.name }}</a></p>
-  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to menu: {{ menuitem.menusection.menu.name }}</a></p>
-  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug %}">Return to restaurant: {{ menuitem.menusection.menu.restaurant.name }}</a></p>
+  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to Section: {{ menuitem.menusection.name }}</a></p>
+  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to Menu: {{ menuitem.menusection.menu.name }}</a></p>
+  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug %}">Return to Restaurant: {{ menuitem.menusection.menu.restaurant.name }}</a></p>
 </div>
 
 {% endblock content %}

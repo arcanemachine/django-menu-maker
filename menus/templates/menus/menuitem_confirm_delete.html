@@ -14,7 +14,10 @@
 {% endwith %}
 
 <div id="bottom-links">
-  <p><a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Return to menu item: {{ menuitem.name }}</a></p>
+  {% if object %}
+  <p><a href="{% url 'menus:menuitem_detail' restaurant_slug=object.menusection.menu.restaurant.slug menu_slug=object.menusection.menu.slug menusection_slug=object.menusection.slug menuitem_slug=object.slug %}">Return to Item: {{ object.name }}</a></p>
+  {% endif %}
+  <p><a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">Return to Item: {{ menuitem.name }}</a></p>
 </div>
 
 {% endblock content %}

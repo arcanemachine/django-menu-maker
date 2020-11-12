@@ -31,8 +31,8 @@
 {% endif %}
 
 <div id="bottom-links">
-  <p><a href="{% url 'menus:menu_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug %}">Return to menu: {{ menusection.menu.name }}</a></p>
-  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menusection.menu.restaurant.slug %}">Return to restaurant: {{ menusection.menu.restaurant.name }}</a></p>
+  <p><a href="{% url 'menus:menu_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug %}">Return to Menu: {{ menusection.menu.name }}</a></p>
+  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menusection.menu.restaurant.slug %}">Return to Restaurant: {{ menusection.menu.restaurant.name }}</a></p>
 </div>
 
 {% endblock content %}

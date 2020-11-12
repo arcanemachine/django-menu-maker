@@ -1,12 +1,27 @@
 Setup Guide (Not complete):
 
-- Setup Django
-    - pipenv shell
-        - pip3 install pipenv
+- clone github repo
+- install pip3
+- install pipenv
+- install virtualenvwrapper
+- activate virtual environment - in project root directory, enter command: pipenv shell
+- server_config.py
+    - DEBUG = True on 'dev' server, False on 'test' and 'production' servers
+    - may need to updated STATICFILES_DIRS and STATIC_ROOT
+- create secret key:
+    - Enter Django shell (in project root: ./manage.py shell) (must be using correct virtualenv)
+    - Enter these two lines:
+        from django.core.management import utils
+        print(utils.get_random_secret_key())
+    - copy the output
+- store in secret_key.py
+    - SECRET_KEY = 'my-secret-key289es89fu8932u498dsf893' (Ensure string is in quotation marks)
+
 - Setup email backend
     - default: console backend
     - choices:
         - blah blah blah
 - constants
     - max_restaurants_per_user
+
 - ensure https is setup for authenticated-based views (and all authenticated API views)

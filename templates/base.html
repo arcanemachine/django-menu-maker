@@ -52,7 +52,7 @@
     <div id="content" class="container">
 
       {% block body_title_wrapper %}
-      <h1 id="body-title"{% if body_title_tags %} class="{{ body_title_tags }}"{% endif %}>
+      <h1 id="body-title" class="{% if body_title_tags %}{{ body_title_tags }}{% else %}text-center{% endif %}">
         {% block body_title %}
           {% if body_title_text %}{{ body_title_text }}{% endif %}
         {% endblock body_title %}
@@ -60,7 +60,7 @@
       {% endblock body_title_wrapper %}
 
       {% block body_subheading_wrapper %}
-      <h4 id="body-subheading"{% if body_subheading_tags %} class="{{ body_subheading_tags }}"{% endif %}>
+      <h4 id="body-subheading" class="{% if body_subheading_tags %}{{ body_subheading_tags }}{% else %}text-center{% endif %}">
         {% block body_subheading %}
           {% if body_subheading_text %}{{ body_subheading_text }}{% endif %}
         {% endblock body_subheading %}

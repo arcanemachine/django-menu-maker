@@ -2,14 +2,10 @@
 
 {% block title %}Restaurant Detail - {{ restaurant.name }}{% endblock %}
 
-{% block body_title_wrapper %}
-  {% with body_title_text=restaurant.name body_title_tags="text-center" %}
-    {{ block.super }}
-  {% endwith %}
-{% endblock body_title_wrapper %}
+{% block body_title %}{{ restaurant.name }}{% endblock %}
 
 {% block body_subheading_wrapper %}
-  {% with body_subheading_text="Menus" body_subheading_tags="text-center" %}
+  {% with body_subheading_text="Menus" body_subheading_tags="pb-4 text-center" %}
     {{ block.super }}
   {% endwith %}
 {% endblock body_subheading_wrapper %}

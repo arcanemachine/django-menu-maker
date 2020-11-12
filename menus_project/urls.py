@@ -27,7 +27,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('captcha/', include('captcha.urls')),
     path('restaurants/', include('restaurants.urls')),
-    path('restaurants/<slug:restaurant_slug>/menu/', include('menus.urls')),
+    path('restaurants/<slug:restaurant_slug>/menus/', include('menus.urls')),
     path('users/', include('users.urls')),
     path('users/', include('django.contrib.auth.urls')),
 ]

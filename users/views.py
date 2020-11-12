@@ -4,18 +4,30 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.edit import UpdateView
 
 from .forms import NewUserCreationForm
+from menus_project import constants as c
 
 
 class RegisterView(SuccessMessageMixin, CreateView):
     form_class = NewUserCreationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy(settings.LOGIN_URL)
-    success_message = "Your account has been successfully registered."
+    success_message = c.USER_REGISTER_SUCCESS_MESSAGE
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Redirect logged-in users to settings.LOGIN_URL
+        """
+        if self.request.user.is_authenticated:
+            messages.info(request, "You are already logged in, so we "
+                "redirected you here from the registration page.")
+            return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

@@ -13,6 +13,10 @@ from . import views
 
 class RegisterViewTest(TestCase):
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.authenticated_user = f.UserFactory(username='authenticated_user')
+
     def setUp(self):
         self.current_test_url = reverse('users:register')
         self.response = self.client.get(self.current_test_url)
@@ -31,16 +35,15 @@ class RegisterViewTest(TestCase):
     def test_form_class(self):
         self.assertEqual(self.view.form_class.__name__, 'NewUserCreationForm')
 
-    def test_success_url(self):
-        self.assertEqual(self.view.success_url, reverse('users:login'))
-
     def test_template_name(self):
         self.assertEqual(self.view.template_name, 'users/register.html')
 
+    def test_success_url(self):
+        self.assertEqual(self.view.success_url, reverse('users:login'))
+
     def test_success_message(self):
         self.assertEqual(
-            self.view.success_message,
-            "Your account has been successfully registered.")
+            self.view.success_message, c.USER_REGISTER_SUCCESS_MESSAGE)
 
     # request.GET
     def test_request_get_method(self):
@@ -72,6 +75,16 @@ class RegisterViewTest(TestCase):
         # user count increased by 1
         new_user_count = get_user_model().objects.count()
         self.assertEqual(old_user_count + 1, new_user_count)
+
+    def test_request_get_method_authenticated_user(self):
+        self.client.login(
+            username=self.authenticated_user, password=c.TEST_USER_PASSWORD)
+        self.response = self.client.get(self.current_test_url)
+
+        # redirects to settings.LOGIN_REDIRECT_URL
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(
+            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
 
 
 class LoginViewTest(TestCase):

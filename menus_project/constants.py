@@ -33,3 +33,7 @@ MAX_RESTAURANTS_PER_USER_ERROR_STRING = "You cannot register more than "\
     "new restaurant, you must first delete one of your existing restaurants."
 RESTAURANT_DUPLICATE_SLUG_ERROR_STRING = \
     "This name is too similar to an existing restaurant name."
+
+# users
+USER_REGISTER_SUCCESS_MESSAGE = "Registration successful. Please check your "\
+    "email inbox for your confirmation email."

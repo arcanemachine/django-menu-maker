@@ -81,16 +81,17 @@ class LoginViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.view = self.response.context['view']
 
-    # request.GET
-    def test_get_method(self):
-        self.assertEqual(self.response.status_code, 200)
-
+    # view attributes
     def test_form_class(self):
         self.assertEqual(
             self.view.form_class.__name__, 'UserAuthenticationForm')
 
     def test_template_name(self):
         self.assertEqual(self.view.template_name, 'users/login.html')
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
 
 
 class PasswordChangeViewTest(TestCase):
@@ -105,13 +106,14 @@ class PasswordChangeViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.view = self.response.context['view']
 
-    # request.GET
-    def test_get_method(self):
-        self.assertEqual(self.response.status_code, 200)
-
+    # view attributes
     def test_template_name(self):
         self.assertEqual(
             self.view.template_name, 'users/password_change_form.html')
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
 
 
 class PasswordResetViewTest(TestCase):
@@ -121,9 +123,7 @@ class PasswordResetViewTest(TestCase):
         self.response = self.client.get(self.current_test_url)
         self.view = self.response.context['view']
 
-    def test_get_method(self):
-        self.assertEqual(self.response.status_code, 200)
-
+    # view attributes
     def test_form_class(self):
         self.assertEqual(
             self.view.form_class.__name__, 'UserPasswordResetForm')
@@ -131,6 +131,10 @@ class PasswordResetViewTest(TestCase):
     def test_template_name(self):
         self.assertEqual(
             self.view.template_name, 'users/password_reset_form.html')
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
 
 
 class UserDetailViewTest(TestCase):
@@ -186,8 +190,6 @@ class UserDetailViewTest(TestCase):
     def test_get_method_authenticated_user(self):
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, self.view.template_name)
-
-    # TEMPLATE
 
     # template
     def test_template_shows_restaurants(self):

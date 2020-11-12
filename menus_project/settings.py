@@ -83,7 +83,7 @@ DATABASES = {
 # authentication
 
 LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'root'
+LOGIN_REDIRECT_URL = 'users:user_detail'
 LOGOUT_REDIRECT_URL = 'root'
 
 # captcha

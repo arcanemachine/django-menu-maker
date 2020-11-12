@@ -178,7 +178,7 @@ class UserDetailViewTest(TestCase):
         # redirect to users:login
         self.assertEqual(self.response.status_code, 302)
         redirect_url = urlparse(self.response.url)[2]
-        self.assertTrue(redirect_url, reverse('users:login'))
+        self.assertEqual(redirect_url, reverse('users:login'))
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'users/login.html')
@@ -425,10 +425,10 @@ class UserLogoutViewTest(TestCase):
         self.client.logout()
         self.response = self.client.get(self.current_test_url)
 
-        # redirect to settings.LOGIN_REDIRECT_URL
+        # redirect to settings.LOGOUT_REDIRECT_URL
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
+            self.response.url, reverse(settings.LOGOUT_REDIRECT_URL))
 
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
@@ -442,10 +442,10 @@ class UserLogoutViewTest(TestCase):
     def test_request_get_method_authenticated_user(self):
         self.response = self.client.get(self.current_test_url)
 
-        # redirect to settings.LOGIN_REDIRECT_URL
+        # redirect to settings.LOGOUT_REDIRECT_URL
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
+            self.response.url, reverse(settings.LOGOUT_REDIRECT_URL))
 
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
@@ -460,10 +460,10 @@ class UserLogoutViewTest(TestCase):
         self.client.logout()
         self.response = self.client.post(self.current_test_url)
 
-        # redirect to settings.LOGIN_REDIRECT_URL
+        # redirect to settings.LOGOUT_REDIRECT_URL
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
+            self.response.url, reverse(settings.LOGOUT_REDIRECT_URL))
 
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
@@ -477,10 +477,10 @@ class UserLogoutViewTest(TestCase):
     def test_request_post_method_authenticated_user(self):
         self.response = self.client.post(self.current_test_url)
 
-        # redirect to settings.LOGIN_REDIRECT_URL
+        # redirect to settings.LOGOUT_REDIRECT_URL
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(
-            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
+            self.response.url, reverse(settings.LOGOUT_REDIRECT_URL))
 
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)

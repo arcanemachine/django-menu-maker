@@ -2,12 +2,12 @@
 
 {% block title %}Menu: {{ menusection.menu.restaurant.name }} - {{ menusection.menu.name }}: {{ menusection.name }}{% endblock %}
 
-{% block body_title %}{{ menusection.menu.restaurant.name }}{% endblock %}
-{% block body_subheading %}Menu: {{ menusection.menu.name }} - {{ menusection.name }}{% endblock %}
+{% block body_title %}<a class="text-dark" href="{% url 'restaurants:restaurant_detail' restaurant_slug=menusection.menu.restaurant.slug %}">{{ menusection.menu.restaurant.name }}</a>{% endblock %}
+{% block body_subheading %}<a class="text-dark" href="{% url 'menus:menu_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug %}">{{ menusection.menu.name }}</a>{% endblock %}
 
 {% block content %}
 
-<h3>Items</h3>
+<h2 class="pb-2">{{ menusection.name }}</h2>
 
 {% if not menusection.menuitem_set.count %}
 <p>This section has no items.</p>
@@ -15,7 +15,7 @@
 
 <ul>
   {% for menuitem in menusection.menuitem_set.all %}
-  <li><a href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}</li>
+  <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}</li>
   {% endfor %}
 </ul>
 
@@ -32,6 +32,7 @@
 
 <div id="bottom-links">
   <p><a href="{% url 'menus:menu_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug %}">Return to menu: {{ menusection.menu.name }}</a></p>
+  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menusection.menu.restaurant.slug %}">Return to restaurant: {{ menusection.menu.restaurant.name }}</a></p>
 </div>
 
 {% endblock content %}

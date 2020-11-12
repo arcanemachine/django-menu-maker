@@ -2,21 +2,36 @@
 
 {% block title %}{{ menu.restaurant.name }} - {{ menu.name }} - Menu Detail{% endblock %}
 
-{% block body_title %}{{ menu.restaurant.name }}{% endblock %}
-{% block body_subheading %}Menu: {{ menu.name }}{% endblock %}
+{% block body_title %}<a class="text-dark" href="{% url 'restaurants:restaurant_detail' restaurant_slug=menu.restaurant.slug %}">{{ menu.restaurant.name }}</a>{% endblock %}
+{% block body_subheading %}{{ menu.name }}{% endblock %}
 
 {% block content %}
 
-<h3>Sections</h3>
+<h2 class="pb-2">Sections</h2>
 {% if not menu.menusection_set.count %}
 <p>This menu does not have any sections.</p>
+
 {% else %}
-<ul>
+
   {% for menusection in menu.menusection_set.all %}
-  <li><a href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></li>
+  <h4 class="pt-2"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h4>
+
+    {% if menusection.menuitem_set.count %}
+    <ul class="pt-2 pb-4">
+
+      {% for menuitem in menusection.menuitem_set.all %}
+      <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}</li>
+      {% endfor %}
+    </ul>
+
+    {% elif not menusection.menuitem_set.count %}
+    <p class="ml-3 font-weight-bold">- This section does not have any items.</p>
+    {% endif %}
+
   {% endfor %}
-</ul>
+
 {% endif %}
+
 
 {% if user.is_authenticated and user in menu.restaurant.admin_users.all %}
 <div class="auth-links">

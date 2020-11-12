@@ -2,18 +2,14 @@
 
 {% block title %}{{ menuitem.menusection.menu.name }} Menu - {{ menuitem.name }} - {{ menuitem.menusection.menu.restaurant.name }}{% endblock %}
 
-{% block body_title %}{{ menuitem.menusection.menu.restaurant.name }}{% endblock %}
-{% block body_subheading %}{{ menuitem.menusection.menu.name }} Menu: '{{ menuitem.name }}'{% endblock %}
+{% block body_title %}<a class="text-dark" href="{% url 'restaurants:restaurant_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug %}">{{ menuitem.menusection.menu.restaurant.name }}</a>{% endblock %}
+{% block body_subheading %}<a class="text-dark" href="{% url 'menus:menu_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug %}">{{ menuitem.menusection.menu.name }}</a>{% endblock %}
 
 {% block content %}
 
-<p><strong>Menu:</strong> {{ menuitem.menusection.menu.name }}</p>
-<p><strong>Section:</strong> {{ menuitem.menusection.name }}</p>
+<h2 class="pb-2">{{ menuitem.name }}</h2>
 
-<br>
-<p><strong>Name:</strong> {{ menuitem.name }}</p>
 <p><strong>Description:</strong> {{ menuitem.description }}</p>
-<br>
 
 {% if user.is_authenticated and user in menuitem.menusection.menu.restaurant.admin_users.all %}
 <div class="auth-links">
@@ -23,7 +19,9 @@
 {% endif %}
 
 <div id="bottom-links">
-  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to menu section: {{ menuitem.menusection.menu.name }}</a></p>
+  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to menu section: {{ menuitem.menusection.name }}</a></p>
+  <p><a href="{% url 'menus:menusection_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menuitem.menusection.slug %}">Return to menu: {{ menuitem.menusection.menu.name }}</a></p>
+  <p><a href="{% url 'restaurants:restaurant_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug %}">Return to restaurant: {{ menuitem.menusection.menu.restaurant.name }}</a></p>
 </div>
 
 {% endblock content %}

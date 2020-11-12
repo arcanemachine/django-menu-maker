@@ -2,13 +2,20 @@
 
 {% block title %}Restaurant Detail - {{ restaurant.name }}{% endblock %}
 
-{% block body_title %}{{ restaurant.name }}{% endblock %}
-{% block body_subheading %}Restaurant Detail{% endblock %}
+{% block body_title_wrapper %}
+  {% with body_title_text=restaurant.name body_title_tags="text-center" %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock body_title_wrapper %}
 
+{% block body_subheading_wrapper %}
+  {% with body_subheading_text="Menus" body_subheading_tags="text-center" %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock body_subheading_wrapper %}
 
 {% block content %}
 
-<h2 class="pb-4 text-center">Menus</h2>
   {% if not restaurant.menu_set.all %}
 <p>This restaurant does not have any menus.</p>
   {% else %}

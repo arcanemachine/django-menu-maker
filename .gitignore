@@ -3,7 +3,7 @@
 *.sw*
 data.dump
 geckodriver.log
-keys.py
+secret_key.py
 gunicorn.sh 
 todo
 base_template.html

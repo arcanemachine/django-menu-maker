@@ -9,12 +9,12 @@ import sys
 
 from pathlib import Path
 
-import keys
+import server_config, secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = keys.DEBUG
-SECRET_KEY = keys.SECRET_KEY
+DEBUG = server_config.DEBUG
+SECRET_KEY = secret_key.SECRET_KEY
 ALLOWED_HOSTS = ['*']
 
 
@@ -113,8 +113,8 @@ USE_TZ = True
 # static files
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = keys.STATICFILES_DIRS
-STATIC_ROOT = keys.STATIC_ROOT
+STATICFILES_DIRS = server_config.STATICFILES_DIRS
+STATIC_ROOT = server_config.STATIC_ROOT
 
 # password validation
 

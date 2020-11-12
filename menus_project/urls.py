@@ -16,7 +16,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 
-import keys
+import server_config
 
 from . import views
 
@@ -32,6 +32,6 @@ urlpatterns = [
     path('users/', include('django.contrib.auth.urls')),
 ]
 
-if keys.SERVER_NAME == 'dev':
+if server_config.SERVER_NAME == 'dev':
     urlpatterns += static(
         settings.STATIC_URL, document_root=settings.STATIC_ROOT)

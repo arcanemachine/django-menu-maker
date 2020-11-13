@@ -39,18 +39,19 @@ class RegisterView(SuccessMessageMixin, CreateView):
 class LoginView(SuccessMessageMixin, LoginView):
     form_class = UserAuthenticationForm
     template_name = 'users/login.html'
-    success_url = reverse_lazy(settings.LOGIN_REDIRECT_URL)
     success_message = c.USER_LOGIN_SUCCESS_MESSAGE
 
     def dispatch(self, request, *args, **kwargs):
-        """
-        Redirect logged-in users to settings.LOGIN_REDIRECT_URL
-        """
         if self.request.user.is_authenticated:
             messages.info(request, "You are already logged in, so we "
                 "redirected you here from the login page.")
-            return HttpResponseRedirect(self.success_url)
+            return HttpResponseRedirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        if self.request.GET.get('next', None):
+            return self.request.GET['next']
+        return reverse(settings.LOGIN_REDIRECT_URL)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

@@ -110,9 +110,10 @@ class LoginViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.authenticated_user = f.UserFactory(username='authenticated_user')
+        cls.current_test_url = reverse('users:login')
+        cls.next_url = reverse('restaurants:restaurant_list')
 
     def setUp(self):
-        self.current_test_url = reverse('users:login')
         self.response = self.client.get(self.current_test_url)
         self.view = self.response.context['view']
 
@@ -128,9 +129,10 @@ class LoginViewTest(TestCase):
         self.assertEqual(
             self.view.success_message, c.USER_LOGIN_SUCCESS_MESSAGE)
 
-    def test_success_url(self):
+    # methods
+    def test_method_get_success_url(self):
         self.assertEqual(
-            self.view.success_url, reverse(settings.LOGIN_REDIRECT_URL))
+            self.view.get_success_url(), reverse(settings.LOGIN_REDIRECT_URL))
 
     def test_method_get_success_url_with_next_kwarg(self):
         self.current_test_url = \

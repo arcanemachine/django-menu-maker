@@ -77,6 +77,11 @@ class RegisterViewTest(TestCase):
         self.assertEqual(self.response.status_code, 302)
         self.assertEqual(self.response.url, self.next_url)
 
+        # template contains c.USER_REGISTER_ALREADY_AUTHENTICATED_MESSAGE
+        self.response = self.client.get(self.response.url)
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertIn(c.USER_REGISTER_ALREADY_AUTHENTICATED_MESSAGE, self.html)
+
     def test_request_post_method_register_new_user(self):
         # get user count before POST
         old_user_count = get_user_model().objects.count()
@@ -154,6 +159,10 @@ class LoginViewTest(TestCase):
         self.assertEqual(
             self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
 
+        # template contains c.USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE
+        self.response = self.client.get(self.response.url)
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertIn(c.USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE, self.html)
 
 
 class PasswordChangeViewTest(TestCase):
@@ -307,8 +316,7 @@ class UserUpdateViewTest(TestCase):
 
     def test_success_message(self):
         self.assertEqual(
-            self.view.success_message,
-            "You have updated your personal information.")
+            self.view.success_message, c.USER_UPDATE_SUCCESS_MESSAGE)
 
     # get_initial()
     def test_method_get_initial(self):
@@ -364,11 +372,12 @@ class UserUpdateViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.assertEqual(self.response.status_code, 200)
 
-        # template contains updated user information
+        # template contains updated user information and success_message
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn(f"{updated_user_first_name}", self.html)
         self.assertIn(f"{updated_user_last_name}", self.html)
         self.assertIn(f"{self.test_user.email}", self.html)
+        self.assertIn(self.view.success_message, self.html)
 
 
 class UserDeleteViewTest(TestCase):
@@ -409,7 +418,7 @@ class UserDeleteViewTest(TestCase):
 
     def test_attribute_success_message(self):
         self.assertEqual(
-            self.view.success_message, "Your account has been deleted.")
+            self.view.success_message, c.USER_DELETE_SUCCESS_MESSAGE)
 
     def test_attribute_success_url(self):
         self.assertEqual(self.view.get_success_url(), reverse('root'))
@@ -447,7 +456,7 @@ class UserDeleteViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertEqual(self.response.status_code, 200)
-        self.assertIn("Your account has been deleted.", self.html)
+        self.assertIn(self.view.success_message, self.html)
 
         # object no longer exists
         with self.assertRaises(get_user_model().DoesNotExist):
@@ -484,6 +493,10 @@ class UserLogoutViewTest(TestCase):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'LogoutView')
 
+    def test_view_success_message(self):
+        self.assertEqual(
+            self.view.success_message, c.USER_LOGOUT_SUCCESS_MESSAGE)
+
     # request.GET
     def test_request_get_method_unauthenticated_user(self):
         self.client.logout()
@@ -501,7 +514,6 @@ class UserLogoutViewTest(TestCase):
 
         # messages does not contain success_message
         self.assertNotIn(self.view.success_message, self.html)
-        self.assertEqual(len(self.response.context['messages']), 0)
 
     def test_request_get_method_authenticated_user(self):
         self.response = self.client.get(self.current_test_url)
@@ -518,7 +530,6 @@ class UserLogoutViewTest(TestCase):
 
         # messages contains success_message
         self.assertIn(self.view.success_message, self.html)
-        self.assertEqual(len(self.response.context['messages']), 1)
 
     def test_request_post_method_unauthenticated_user(self):
         self.client.logout()
@@ -536,7 +547,6 @@ class UserLogoutViewTest(TestCase):
 
         # messages does not contain success_message
         self.assertNotIn(self.view.success_message, self.html)
-        self.assertEqual(len(self.response.context['messages']), 0)
 
     def test_request_post_method_authenticated_user(self):
         self.response = self.client.post(self.current_test_url)

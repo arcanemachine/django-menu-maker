@@ -39,6 +39,13 @@ RESTAURANT_DUPLICATE_SLUG_ERROR_STRING = \
     "This name is too similar to an existing restaurant name."
 
 # users
-USER_LOGIN_SUCCESS_MESSAGE = "Login successful"
 USER_REGISTER_SUCCESS_MESSAGE = "Registration successful. Please check your "\
     "email inbox for your confirmation email."
+USER_REGISTER_ALREADY_AUTHENTICATED_MESSAGE = "You are already logged in, "\
+    "so we redirected you here from the registration page."
+USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE = \
+    "You are already logged in, so we redirected you here from the login page."
+USER_LOGIN_SUCCESS_MESSAGE = "Login successful"
+USER_LOGOUT_SUCCESS_MESSAGE = "You have successfully logged out."
+USER_UPDATE_SUCCESS_MESSAGE = "You have updated your personal information."
+USER_DELETE_SUCCESS_MESSAGE = "Your account has been deleted."

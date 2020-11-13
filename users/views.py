@@ -20,8 +20,8 @@ class RegisterView(SuccessMessageMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            messages.info(request, "You are already logged in, so we "
-                "redirected you here from the registration page.")
+            messages.info(
+                request, c.USER_REGISTER_ALREADY_AUTHENTICATED_MESSAGE)
             if request.GET.get('next', None):
                 return HttpResponseRedirect(request.GET['next'])
             return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
@@ -36,6 +36,7 @@ class RegisterView(SuccessMessageMixin, CreateView):
             return self.request.GET['next']
         return reverse(settings.LOGIN_URL)
 
+
 class LoginView(SuccessMessageMixin, LoginView):
     form_class = UserAuthenticationForm
     template_name = 'users/login.html'
@@ -43,8 +44,7 @@ class LoginView(SuccessMessageMixin, LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            messages.info(request, "You are already logged in, so we "
-                "redirected you here from the login page.")
+            messages.info(request, c.USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE)
             return HttpResponseRedirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
 
@@ -62,11 +62,11 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class UserUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = get_user_model()
     template_name = 'users/user_update.html'
     fields = ('first_name', 'last_name', 'email')
-    success_message = "You have updated your personal information."
+    success_message = c.USER_UPDATE_SUCCESS_MESSAGE
     success_url = reverse_lazy('users:user_detail')
 
     def get_object(self):
@@ -81,7 +81,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = get_user_model()
     template_name = 'users/user_confirm_delete.html'
-    success_message = "Your account has been deleted."
+    success_message = c.USER_DELETE_SUCCESS_MESSAGE
     success_url = reverse_lazy('root')
 
     def delete(self, request, *args, **kwargs):
@@ -93,7 +93,7 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class UserLogoutView(LogoutView):
-    success_message = "You have successfully logged out."
+    success_message = c.USER_LOGOUT_SUCCESS_MESSAGE
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:

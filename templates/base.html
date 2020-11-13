@@ -38,11 +38,11 @@
     {% else %}
 
         <li class="nav-item active mr-2">
-          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}">Register</a>
+          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and '/register/' not in request.path and '/login/' not in request.path %}?next={{ request.path }}{% endif %}">Register</a>
         </li>
 
         <li class="nav-item active mr-2">
-          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}{% if 'next' in request.GET and not '/login/' in request.GET.next %}?next={{ request.GET.next }}{% elif request.path != '/' and '/login/' not in request.path %}?next={{ request.path }}{% endif %}">Login</a>
+          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and '/register/' not in request.path and '/login/' not in request.path %}?next={{ request.path }}{% endif %}">Login</a>
         </li>
 
     {% endif %}

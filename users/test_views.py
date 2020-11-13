@@ -16,9 +16,10 @@ class RegisterViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.authenticated_user = f.UserFactory(username='authenticated_user')
+        cls.current_test_url = reverse('users:register')
+        cls.next_url = reverse('restaurants:restaurant_list')
 
     def setUp(self):
-        self.current_test_url = reverse('users:register')
         self.response = self.client.get(self.current_test_url)
         self.context = self.response.context
         self.html = unescape(self.response.content.decode('utf-8'))
@@ -38,16 +39,43 @@ class RegisterViewTest(TestCase):
     def test_template_name(self):
         self.assertEqual(self.view.template_name, 'users/register.html')
 
-    def test_success_url(self):
-        self.assertEqual(self.view.success_url, reverse('users:login'))
-
     def test_success_message(self):
         self.assertEqual(
             self.view.success_message, c.USER_REGISTER_SUCCESS_MESSAGE)
 
+    # methods
+    def test_method_get_success_url(self):
+        self.assertEqual(
+            self.view.get_success_url(), reverse(settings.LOGIN_URL))
+
+    def test_method_get_success_url_with_next_kwarg(self):
+        self.current_test_url = \
+            self.current_test_url + '?next=' + self.next_url
+        self.setUp()
+        self.assertEqual(self.view.get_success_url(), self.next_url)
+
     # request.GET
     def test_request_get_method(self):
         self.assertEqual(self.response.status_code, 200)
+
+    def test_request_get_method_authenticated_user(self):
+        self.client.login(
+            username=self.authenticated_user, password=c.TEST_USER_PASSWORD)
+        self.response = self.client.get(self.current_test_url)
+
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(
+            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
+
+    def test_request_get_method_authenticated_user_with_get_kwarg_next(self):
+        self.client.login(
+            username=self.authenticated_user, password=c.TEST_USER_PASSWORD)
+        self.response = \
+            self.client.get(self.current_test_url + '?next=' + self.next_url)
+
+        # redirects to settings.LOGIN_REDIRECT_URL
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.url, self.next_url)
 
     def test_request_post_method_register_new_user(self):
         # get user count before POST
@@ -61,9 +89,9 @@ class RegisterViewTest(TestCase):
             'captcha_0': 'test',
             'captcha_1': 'PASSED'})
 
-        # user is redirected to users:login
+        # user is redirected to success_url
         self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(self.response.url, reverse('users:login'))
+        self.assertEqual(self.response.url, self.view.get_success_url())
 
         self.response = self.client.get(self.response.url)
         self.context = self.response.context
@@ -75,16 +103,6 @@ class RegisterViewTest(TestCase):
         # user count increased by 1
         new_user_count = get_user_model().objects.count()
         self.assertEqual(old_user_count + 1, new_user_count)
-
-    def test_request_get_method_authenticated_user(self):
-        self.client.login(
-            username=self.authenticated_user, password=c.TEST_USER_PASSWORD)
-        self.response = self.client.get(self.current_test_url)
-
-        # redirects to settings.LOGIN_REDIRECT_URL
-        self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(
-            self.response.url, reverse(settings.LOGIN_REDIRECT_URL))
 
 
 class LoginViewTest(TestCase):
@@ -109,6 +127,12 @@ class LoginViewTest(TestCase):
     def test_success_url(self):
         self.assertEqual(
             self.view.success_url, reverse(settings.LOGIN_REDIRECT_URL))
+
+    def test_method_get_success_url_with_next_kwarg(self):
+        self.current_test_url = \
+            self.current_test_url + '?next=' + self.next_url
+        self.setUp()
+        self.assertEqual(self.view.get_success_url(), self.next_url)
 
     # request.GET
     def test_get_method(self):

@@ -16,28 +16,25 @@ from .forms import NewUserCreationForm, UserAuthenticationForm
 class RegisterView(SuccessMessageMixin, CreateView):
     form_class = NewUserCreationForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy(settings.LOGIN_URL)
     success_message = c.USER_REGISTER_SUCCESS_MESSAGE
 
     def dispatch(self, request, *args, **kwargs):
-        """
-        Redirect logged-in users to settings.LOGIN_URL
-        """
         if self.request.user.is_authenticated:
             messages.info(request, "You are already logged in, so we "
                 "redirected you here from the registration page.")
+            if request.GET.get('next', None):
+                return HttpResponseRedirect(request.GET['next'])
             return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        """
-        Set user.is_active = False until email address is confirmed.
-
-        Then, send a welcome email using a post_save() signal
-        """
         form.instance.is_active = False
         return super().form_valid(form)
 
+    def get_success_url(self):
+        if self.request.GET.get('next', None):
+            return self.request.GET['next']
+        return reverse(settings.LOGIN_URL)
 
 class LoginView(LoginView):
     form_class = UserAuthenticationForm

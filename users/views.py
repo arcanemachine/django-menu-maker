@@ -36,10 +36,11 @@ class RegisterView(SuccessMessageMixin, CreateView):
             return self.request.GET['next']
         return reverse(settings.LOGIN_URL)
 
-class LoginView(LoginView):
+class LoginView(SuccessMessageMixin, LoginView):
     form_class = UserAuthenticationForm
     template_name = 'users/login.html'
     success_url = reverse_lazy(settings.LOGIN_REDIRECT_URL)
+    success_message = c.USER_LOGIN_SUCCESS_MESSAGE
 
     def dispatch(self, request, *args, **kwargs):
         """

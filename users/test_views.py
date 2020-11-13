@@ -124,6 +124,10 @@ class LoginViewTest(TestCase):
     def test_template_name(self):
         self.assertEqual(self.view.template_name, 'users/login.html')
 
+    def test_success_message(self):
+        self.assertEqual(
+            self.view.success_message, c.USER_LOGIN_SUCCESS_MESSAGE)
+
     def test_success_url(self):
         self.assertEqual(
             self.view.success_url, reverse(settings.LOGIN_REDIRECT_URL))

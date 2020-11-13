@@ -39,5 +39,6 @@ RESTAURANT_DUPLICATE_SLUG_ERROR_STRING = \
     "This name is too similar to an existing restaurant name."
 
 # users
+USER_LOGIN_SUCCESS_MESSAGE = "Login successful"
 USER_REGISTER_SUCCESS_MESSAGE = "Registration successful. Please check your "\
     "email inbox for your confirmation email."

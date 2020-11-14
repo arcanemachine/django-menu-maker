@@ -6,6 +6,7 @@ Setup Guide (Not complete):
 - install virtualenvwrapper
 - activate virtual environment - in project root directory, enter command: pipenv shell
 - server_config.py
+    - EMAIL_CONFIRMATION_REQUIRED = True/False - Require user to confirm email address before they can sign in
     - DEBUG = True on 'dev' server, False on 'test' and 'production' servers
     - may need to updated STATICFILES_DIRS and STATIC_ROOT
 - create secret key:

@@ -1,3 +1,5 @@
+from django.conf import settings
+
 # misc
 PROJECT_NAME = "Menu Maker"
 RESERVED_KEYWORDS = ['add-new-restaurant', 'all', 'delete', 'edit', 'new-item',
@@ -23,8 +25,6 @@ TEST_MENUSECTION_NAME = 'Test Menu Section'
 TEST_MENUITEM_NAME = 'Test Menu Item'
 TEST_MENUITEM_DESCRIPTION = 'Test Menu Item Description'
 
-
-
 # STRINGS #
 
 # misc
@@ -38,14 +38,29 @@ MAX_RESTAURANTS_PER_USER_ERROR_STRING = "You cannot register more than "\
 RESTAURANT_DUPLICATE_SLUG_ERROR_STRING = \
     "This name is too similar to an existing restaurant name."
 
-# users
-USER_REGISTER_SUCCESS_MESSAGE = "Registration successful. Please check your "\
-    "email inbox for your confirmation email."
+# users - registration
 USER_REGISTER_ALREADY_AUTHENTICATED_MESSAGE = "You are already logged in, "\
     "so we redirected you here from the registration page."
+if settings.EMAIL_CONFIRMATION_REQUIRED:
+    USER_REGISTER_SUCCESS_MESSAGE = "Registration successful. Please "\
+        "check your email inbox for your confirmation email."
+else:
+    USER_REGISTER_SUCCESS_MESSAGE = "Registration successful. "\
+        "You may now login to your account."
+
+# users - activation
+USER_IS_UNCONFIRMED_MESSAGE = "You need to confirm your email address using "\
+    "the activation link we sent to your inbox (check the spam folder too)."
+USER_ACTIVATION_VIEW_MESSAGE = \
+    "Please login to your account to complete the activation process."
+USER_ACTIVATION_INVALID_URL_MESSAGE = "This validation URL is invalid."
+USER_ACTIVATION_SUCCESS_MESSAGE = \
+    "Your account has been successfully activated."
+
+# users - authentication
 USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE = \
     "You are already logged in, so we redirected you here from the login page."
-USER_LOGIN_SUCCESS_MESSAGE = "Login successful"
+USER_LOGIN_SUCCESS_MESSAGE = "You have successfully logged in."
 USER_LOGOUT_SUCCESS_MESSAGE = "You have successfully logged out."
 USER_UPDATE_SUCCESS_MESSAGE = "You have updated your personal information."
 USER_DELETE_SUCCESS_MESSAGE = "Your account has been deleted."

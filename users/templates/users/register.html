@@ -14,6 +14,7 @@
 
 <div id="bottom-links">
   <p><a href="{% url 'users:login' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and '/register/' not in request.path and '/login/' not in request.path %}?next={{ request.path }}{% endif %}">Login to an existing account</a></p>
+  <p><a href="{% url 'users:password_reset' %}">Forgot your password?</a></p>
 </div>
 
 {% endblock content %}

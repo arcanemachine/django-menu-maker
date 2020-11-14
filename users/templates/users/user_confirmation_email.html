@@ -1,0 +1,11 @@
+{% load i18n %}{% autoescape off %}
+
+{% translate "Please visit to the following link to confirm your account:" %}
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'users:user_activation' uidb64=uid token=token %}{% if next_url %}{{ next_url }}{% endif %}
+{% endblock %}
+{% translate 'Your username:' %} {{ username }}
+
+{% blocktranslate %}Thanks for using {{ PROJECT_NAME }}!{% endblocktranslate %}
+
+{% endautoescape %}

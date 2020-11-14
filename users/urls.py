@@ -1,5 +1,4 @@
 """
-
 django.contrib.auth views:
 
     register/  'register'                          users.RegisterView
@@ -11,7 +10,6 @@ django.contrib.auth views:
     password_reset/done/  'password_reset_done'    PasswordResetDoneView
     reset/<uidb64>/<token>/ password_reset_confirm PasswordResetConfirmView
     reset/done/  'password_reset_complete'         PasswordResetCompleteView
-
 """
 from django.contrib.auth import views as auth_views
 from django.urls import path
@@ -27,20 +25,23 @@ urlpatterns = [
          views.RegisterView.as_view(),
          name='register'),
     path('login/',
-         views.LoginView.as_view(),
+         views.UserLoginView.as_view(),
          name='login'),
+    path('login/<uidb64>/<token>/',
+         views.UserActivationView.as_view(),
+         name='user_activation'),
     path('me/',
          views.UserDetailView.as_view(),
          name='user_detail'),
     path('me/edit/',
          views.UserUpdateView.as_view(),
          name='user_update'),
-    path('me/delete-account/',
-         views.UserDeleteView.as_view(),
-         name='user_delete'),
     path('logout/',
          views.UserLogoutView.as_view(),
          name='logout'),
+    path('me/delete-account/',
+         views.UserDeleteView.as_view(),
+         name='user_delete'),
     # django.contrib.auth.views
     path('me/change-password/',
          auth_views.PasswordChangeView.as_view(

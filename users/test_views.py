@@ -16,6 +16,7 @@ class RegisterViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.authenticated_user = f.UserFactory(username='authenticated_user')
+
         cls.current_test_url = reverse('users:register')
         cls.next_url = reverse('restaurants:restaurant_list')
 
@@ -163,49 +164,6 @@ class LoginViewTest(TestCase):
         self.response = self.client.get(self.response.url)
         self.html = unescape(self.response.content.decode('utf-8'))
         self.assertIn(c.USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE, self.html)
-
-
-class PasswordChangeViewTest(TestCase):
-
-    def setUp(self):
-        self.test_user = f.UserFactory()
-
-        self.client.login(
-            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
-
-        self.current_test_url = reverse('users:password_change')
-        self.response = self.client.get(self.current_test_url)
-        self.view = self.response.context['view']
-
-    # view attributes
-    def test_template_name(self):
-        self.assertEqual(
-            self.view.template_name, 'users/password_change_form.html')
-
-    # request.GET
-    def test_get_method(self):
-        self.assertEqual(self.response.status_code, 200)
-
-
-class PasswordResetViewTest(TestCase):
-
-    def setUp(self):
-        self.current_test_url = reverse('users:password_reset')
-        self.response = self.client.get(self.current_test_url)
-        self.view = self.response.context['view']
-
-    # view attributes
-    def test_form_class(self):
-        self.assertEqual(
-            self.view.form_class.__name__, 'UserPasswordResetForm')
-
-    def test_template_name(self):
-        self.assertEqual(
-            self.view.template_name, 'users/password_reset_form.html')
-
-    # request.GET
-    def test_get_method(self):
-        self.assertEqual(self.response.status_code, 200)
 
 
 class UserDetailViewTest(TestCase):
@@ -380,93 +338,6 @@ class UserUpdateViewTest(TestCase):
         self.assertIn(self.view.success_message, self.html)
 
 
-class UserDeleteViewTest(TestCase):
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.test_user = f.UserFactory()
-        cls.current_test_url = reverse('users:user_delete')
-
-    def setUp(self):
-        self.client.login(
-            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
-
-        self.response = self.client.get(self.current_test_url)
-        self.context = self.response.context
-        self.html = unescape(self.response.content.decode('utf-8'))
-        self.view = self.response.context['view']
-
-    # view attributes
-    def test_view_class_name(self):
-        self.assertEqual(
-            self.view.__class__.__name__, 'UserDeleteView')
-
-    def test_parent_class_name(self):
-        self.assertEqual(
-            self.view.__class__.__bases__[-1].__name__, 'DeleteView')
-
-    def test_which_mixins_are_used(self):
-        self.assertEqual(
-            self.view.__class__.__bases__[0].__name__, 'LoginRequiredMixin')
-
-    def test_attribute_model(self):
-        self.assertEqual(self.view.model, get_user_model())
-
-    def test_attribute_template_name(self):
-        self.assertEqual(
-            self.view.template_name, 'users/user_confirm_delete.html')
-
-    def test_attribute_success_message(self):
-        self.assertEqual(
-            self.view.success_message, c.USER_DELETE_SUCCESS_MESSAGE)
-
-    def test_attribute_success_url(self):
-        self.assertEqual(self.view.get_success_url(), reverse('root'))
-
-    # get_object()
-    def test_method_get_object(self):
-        self.assertEqual(self.view.get_object(), self.test_user)
-
-    # request.GET
-    def test_get_method(self):
-        self.assertEqual(self.response.status_code, 200)
-        self.assertTemplateUsed(self.response, self.view.template_name)
-
-    # template
-    def test_get_method_authorized_user(self):
-        self.assertEqual(self.response.status_code, 200)
-
-    def test_template_contains_proper_confirm_text(self):
-        self.assertIn(
-            "Are you sure you want to delete your account?", self.html)
-
-    # request.POST
-    def test_request_post_method(self):
-        # get user count before deleting self.test_user
-        old_user_count = get_user_model().objects.count()
-
-        # delete user via POST
-        self.response = self.client.post(self.current_test_url)
-
-        # user is redirected to homepage
-        self.assertEqual(self.response.status_code, 302)
-        self.assertEqual(self.response.url, reverse('root'))
-
-        # homepage loads successfully and contains success_message
-        self.response = self.client.get(self.response.url)
-        self.html = unescape(self.response.content.decode('utf-8'))
-        self.assertEqual(self.response.status_code, 200)
-        self.assertIn(self.view.success_message, self.html)
-
-        # object no longer exists
-        with self.assertRaises(get_user_model().DoesNotExist):
-            self.test_user.refresh_from_db()
-
-        # user count decreased by 1
-        new_user_count = get_user_model().objects.count()
-        self.assertEqual(old_user_count - 1, new_user_count)
-
-
 class UserLogoutViewTest(TestCase):
 
     @classmethod
@@ -566,3 +437,133 @@ class UserLogoutViewTest(TestCase):
 
         # messages contains success_message
         self.assertIn(self.view.success_message, self.html)
+
+
+class UserDeleteViewTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = f.UserFactory()
+        cls.current_test_url = reverse('users:user_delete')
+
+    def setUp(self):
+        self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
+
+        self.response = self.client.get(self.current_test_url)
+        self.context = self.response.context
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_view_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__name__, 'UserDeleteView')
+
+    def test_parent_class_name(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[-1].__name__, 'DeleteView')
+
+    def test_which_mixins_are_used(self):
+        self.assertEqual(
+            self.view.__class__.__bases__[0].__name__, 'LoginRequiredMixin')
+
+    def test_attribute_model(self):
+        self.assertEqual(self.view.model, get_user_model())
+
+    def test_attribute_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/user_confirm_delete.html')
+
+    def test_attribute_success_message(self):
+        self.assertEqual(
+            self.view.success_message, c.USER_DELETE_SUCCESS_MESSAGE)
+
+    def test_attribute_success_url(self):
+        self.assertEqual(self.view.get_success_url(), reverse('root'))
+
+    # get_object()
+    def test_method_get_object(self):
+        self.assertEqual(self.view.get_object(), self.test_user)
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, self.view.template_name)
+
+    # template
+    def test_get_method_authorized_user(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_template_contains_proper_confirm_text(self):
+        self.assertIn(
+            "Are you sure you want to delete your account?", self.html)
+
+    # request.POST
+    def test_request_post_method(self):
+        # get user count before deleting self.test_user
+        old_user_count = get_user_model().objects.count()
+
+        # delete user via POST
+        self.response = self.client.post(self.current_test_url)
+
+        # user is redirected to homepage
+        self.assertEqual(self.response.status_code, 302)
+        self.assertEqual(self.response.url, reverse('root'))
+
+        # homepage loads successfully and contains success_message
+        self.response = self.client.get(self.response.url)
+        self.html = unescape(self.response.content.decode('utf-8'))
+        self.assertEqual(self.response.status_code, 200)
+        self.assertIn(self.view.success_message, self.html)
+
+        # object no longer exists
+        with self.assertRaises(get_user_model().DoesNotExist):
+            self.test_user.refresh_from_db()
+
+        # user count decreased by 1
+        new_user_count = get_user_model().objects.count()
+        self.assertEqual(old_user_count - 1, new_user_count)
+
+
+class PasswordChangeViewTest(TestCase):
+
+    def setUp(self):
+        self.test_user = f.UserFactory()
+
+        self.client.login(
+            username=self.test_user.username, password=c.TEST_USER_PASSWORD)
+
+        self.current_test_url = reverse('users:password_change')
+        self.response = self.client.get(self.current_test_url)
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/password_change_form.html')
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)
+
+
+class PasswordResetViewTest(TestCase):
+
+    def setUp(self):
+        self.current_test_url = reverse('users:password_reset')
+        self.response = self.client.get(self.current_test_url)
+        self.view = self.response.context['view']
+
+    # view attributes
+    def test_form_class(self):
+        self.assertEqual(
+            self.view.form_class.__name__, 'UserPasswordResetForm')
+
+    def test_template_name(self):
+        self.assertEqual(
+            self.view.template_name, 'users/password_reset_form.html')
+
+    # request.GET
+    def test_get_method(self):
+        self.assertEqual(self.response.status_code, 200)

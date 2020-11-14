@@ -22,30 +22,26 @@ class RegisterView(SuccessMessageMixin, CreateView):
         if self.request.user.is_authenticated:
             messages.info(
                 request, c.USER_REGISTER_ALREADY_AUTHENTICATED_MESSAGE)
-            if request.GET.get('next', None):
-                return HttpResponseRedirect(request.GET['next'])
-            return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
+            return HttpResponseRedirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        form.instance.is_active = False
-        return super().form_valid(form)
 
     def get_success_url(self):
         if self.request.GET.get('next', None):
             return self.request.GET['next']
+        if self.request.user.is_authenticated:
+            return reverse(settings.LOGIN_REDIRECT_URL)
         return reverse(settings.LOGIN_URL)
 
 
 class LoginView(SuccessMessageMixin, LoginView):
     form_class = UserAuthenticationForm
     template_name = 'users/login.html'
+    redirect_authenticated_user = True
     success_message = c.USER_LOGIN_SUCCESS_MESSAGE
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             messages.info(request, c.USER_LOGIN_ALREADY_AUTHENTICATED_MESSAGE)
-            return HttpResponseRedirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -78,6 +74,15 @@ class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 'email': self.request.user.email}
 
 
+class UserLogoutView(LogoutView):
+    success_message = c.USER_LOGOUT_SUCCESS_MESSAGE
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            messages.info(request, self.success_message)
+        return super().dispatch(request, *args, **kwargs)
+
+
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = get_user_model()
     template_name = 'users/user_confirm_delete.html'
@@ -90,12 +95,3 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_object(self):
         return self.request.user
-
-
-class UserLogoutView(LogoutView):
-    success_message = c.USER_LOGOUT_SUCCESS_MESSAGE
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            messages.info(request, self.success_message)
-        return super().dispatch(request, *args, **kwargs)

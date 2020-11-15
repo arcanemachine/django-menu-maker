@@ -47,6 +47,20 @@ class RegisterViewTest(TestCase):
         self.assertEqual(
             self.view.success_message, c.USER_REGISTER_SUCCESS_MESSAGE)
 
+    # methods
+    def test_get_form_kwargs(self):
+        kwargs = self.view.get_form_kwargs()
+        self.assertIn('next_url', kwargs)
+        self.assertEqual(kwargs['next_url'], None)
+
+    def test_get_form_kwargs_with_next_url(self):
+        self.current_test_url = f"{self.current_test_url}?next={self.next_url}"
+        self.setUp()
+
+        kwargs = self.view.get_form_kwargs()
+        self.assertIn('next_url', kwargs)
+        self.assertEqual(kwargs['next_url'], self.next_url)
+
     # success_url
     def test_success_url_with_next_kwarg(self):
         self.current_test_url = \
@@ -191,9 +205,11 @@ class EmailConfirmationViewTest(TestCase):
         self.view = self.response.context['view']
 
     # helper functions
-    def setup_unconfirmed_user(self, username):
+    def setup_unconfirmed_user(
+            self, username, registration_url=reverse('users:register'),
+            next_url=None):
         with self.settings(EMAIL_CONFIRMATION_REQUIRED=True):
-            self.response = self.client.post(reverse('users:register'), {
+            self.response = self.client.post(registration_url, {
                 'username': username,
                 'email': c.TEST_USER_EMAIL,
                 'password1': c.TEST_USER_PASSWORD,
@@ -206,7 +222,8 @@ class EmailConfirmationViewTest(TestCase):
             self.token = \
                 self.form_instance.send_new_user_email(user, get_token=True)
             self.current_test_url = \
-                self.form_instance.send_new_user_email(user, get_path=True)
+                self.form_instance.send_new_user_email(
+                    user, get_path=True, next_url=next_url)
             return user
 
     def user_activation_post_data(
@@ -227,10 +244,6 @@ class EmailConfirmationViewTest(TestCase):
     def test_parent_class_name(self):
         self.assertEqual(
             self.view.__class__.__bases__[-1].__name__, 'UserLoginView')
-
-    def test_success_message(self):
-        self.assertEqual(
-            self.view.success_message, c.USER_ACTIVATION_SUCCESS_MESSAGE)
 
     # view methods
     def test_get_method_displays_USER_ACTIVATION_VIEW_MESSAGE(self):
@@ -312,6 +325,63 @@ class EmailConfirmationViewTest(TestCase):
 
             # template contains success_message
             self.response = self.client.get(self.response.url)
+            self.assertEqual(self.response.status_code, 200)
+            self.html = unescape(self.response.content.decode('utf-8'))
+            self.assertIn(c.USER_ACTIVATION_SUCCESS_MESSAGE, self.html)
+
+            # user is active and logged in
+            unconfirmed_user.refresh_from_db()
+            self.assertEqual(self.response.wsgi_request.user, unconfirmed_user)
+            self.assertTrue(unconfirmed_user.is_active)
+
+    def test_successful_activation_with_next_kwarg(self):
+        with self.settings(EMAIL_CONFIRMATION_REQUIRED=True):
+            next_url = reverse('restaurants:restaurant_list')
+            registration_url_with_next_kwarg = \
+                reverse('users:register') + f'?next={next_url}'
+
+            # register user
+            unconfirmed_user = \
+                self.setup_unconfirmed_user(
+                    username='unconfirmed_user',
+                    registration_url=registration_url_with_next_kwarg,
+                    next_url=next_url)
+
+            # check that user is unconfirmed
+            self.assertFalse(unconfirmed_user.is_active)
+
+            # email is sent
+            self.assertEqual(len(mail.outbox), 1)
+            self.assertIn("Confirm your account", mail.outbox[0].subject)
+            self.assertIn("confirm your account", mail.outbox[0].body)
+
+            # email contains next_url
+            self.assertIn(f'?next={next_url}', mail.outbox[0].body)
+
+            # client goes to url in email
+            self.response = self.client.get(self.current_test_url)
+            self.assertEqual(self.response.status_code, 200)
+            self.assertTemplateUsed(self.response, 'users/login.html')
+
+            # template contains c.USER_ACTIVATION_VIEW_MESSAGE
+            self.html = unescape(self.response.content.decode('utf-8'))
+            self.assertIn(c.USER_ACTIVATION_VIEW_MESSAGE, self.html)
+
+            # user posts login info into user_activation
+            self.response = \
+                self.user_activation_post_data(username='unconfirmed_user')
+            self.assertEqual(self.response.status_code, 302)
+
+            # user is redirected to next_url
+            self.assertEqual(self.response.url, next_url)
+
+            # view uses proper template
+            self.response = self.client.get(self.response.url)
+            self.assertTemplateUsed(
+                self.response, 'restaurants/restaurant_list.html')
+
+            # view contains success_message
+            self.assertEqual(self.response.status_code, 200)
             self.html = unescape(self.response.content.decode('utf-8'))
             self.assertIn(c.USER_ACTIVATION_SUCCESS_MESSAGE, self.html)
 

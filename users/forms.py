@@ -25,6 +25,7 @@ class NewUserCreationForm(PasswordResetForm, UserCreationForm):
         fields = UserCreationForm.Meta.fields + ('email',)
 
     def __init__(self, *args, **kwargs):
+        self.next_url = kwargs.pop('next_url', None)
         super().__init__(*args, **kwargs)
         self.fields['email'].required = True
 
@@ -38,13 +39,15 @@ class NewUserCreationForm(PasswordResetForm, UserCreationForm):
     def save(self, *args, **kwargs):
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        user = self.send_new_user_email(user=user, update_user=True)
+        user = self.send_new_user_email(
+            user=user, next_url=self.next_url, update_user=True)
         return user
 
     def send_new_user_email(
-            self, user, get_url=False, get_path=False, get_uid=False,
-            get_token=False, check_token=False, token=None, update_user=False,
-            use_https=False, extra_email_context=None, *args, **kwargs):
+            self, user, get_url=False, next_url=None, get_next_url=False,
+            get_path=False, get_uid=False, get_token=False, check_token=False,
+            token=None, update_user=False, use_https=False,
+            extra_email_context=None, *args, **kwargs):
         if settings.EMAIL_CONFIRMATION_REQUIRED:
             if update_user:
                 user.is_active = False
@@ -61,11 +64,16 @@ class NewUserCreationForm(PasswordResetForm, UserCreationForm):
         user_email = user.email
         html_email_template_name = None
         extra_email_context = {'PROJECT_NAME': c.PROJECT_NAME}
+        if next_url is None:
+            next_url = ''
+        else:
+            next_url = f'?next={next_url}'
         if token is None:
             token = token_generator.make_token(user)
         context = {'token': token,
                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                    'email': user.email,
+                   'next_url': next_url,
                    'domain': SERVER_LOCATION,
                    'site_name': SERVER_LOCATION,
                    'username': user.username,
@@ -77,20 +85,21 @@ class NewUserCreationForm(PasswordResetForm, UserCreationForm):
             return context['token']
         if check_token:
             return token_generator.check_token(user, token)
-        if get_url or get_path:
+        if get_next_url:
+            return next_url
+        if get_path or get_url:
             protocol = context['protocol']
             domain = context['domain']
             if settings.EMAIL_CONFIRMATION_REQUIRED:
-                url = reverse('users:user_activation', kwargs={
+                base_url = reverse('users:user_activation', kwargs={
                     'uidb64': context['uid'],
                     'token': context['token']})
             else:
-                url = reverse(settings.LOGIN_URL)
-
+                base_url = reverse(settings.LOGIN_URL)
             if get_path:
-                return url
-
-            return f"{protocol}://{domain}{url}"
+                return f'{base_url}{next_url}'
+            if get_url:
+                return f'{protocol}://{domain}{base_url}{next_url}'
         self.send_mail(
             subject_template_name, email_template_name, context, from_email,
             user_email, html_email_template_name=html_email_template_name)

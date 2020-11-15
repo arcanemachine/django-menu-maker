@@ -3,6 +3,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
 from django.test import SimpleTestCase, TestCase
 from django.utils.http import urlsafe_base64_decode
+from django.urls import reverse
 from html import unescape
 
 from menus_project import constants as c
@@ -114,9 +115,9 @@ class NewUserCreationFormTest(TestCase):
             self.assertIn(c.USER_ACTIVATION_VIEW_MESSAGE, self.html)
 
             # path is valid
-            user_activation_url = self.form_instance.send_new_user_email(
+            user_activation_path = self.form_instance.send_new_user_email(
                 test_user, get_path=True)
-            self.response = self.client.get(user_activation_url)
+            self.response = self.client.get(user_activation_path)
             self.assertEqual(self.response.status_code, 200)
             self.html = unescape(self.response.content.decode('utf-8'))
             self.assertIn(c.USER_ACTIVATION_VIEW_MESSAGE, self.html)
@@ -126,6 +127,37 @@ class NewUserCreationFormTest(TestCase):
             self.assertEqual(len(mail.outbox), 1)
             self.assertIn("Confirm your account", mail.outbox[0].subject)
             self.assertIn("confirm your account", mail.outbox[0].body)
+
+            # email does not contain next kwarg
+            self.assertNotIn("?next=", mail.outbox[0].body)
+
+            # clear the outbox before doing the tests for next_url
+            del mail.outbox
+
+            # next_url
+            next_url = reverse('restaurants:restaurant_list')
+
+            # url contains next_url
+            user_activation_url_with_next_kwarg = \
+                self.form_instance.send_new_user_email(
+                    test_user, next_url=next_url, get_url=True)
+            self.assertIn(
+                f'?next={next_url}', user_activation_url_with_next_kwarg)
+
+            # path contains next_url
+            user_activation_path_with_next_kwarg = \
+                self.form_instance.send_new_user_email(
+                    test_user, next_url=next_url, get_path=True)
+            self.assertIn(
+                f'?next={next_url}', user_activation_path_with_next_kwarg)
+
+            # confirmation email sent and contains expected text
+            self.form_instance.send_new_user_email(
+                test_user, next_url=next_url)
+            self.assertEqual(len(mail.outbox), 1)
+            self.assertIn("Confirm your account", mail.outbox[0].subject)
+            self.assertIn("confirm your account", mail.outbox[0].body)
+            self.assertIn(f'?next={next_url}', mail.outbox[0].body)
 
     def test_welcome_email(self):
         test_user = f.UserFactory()

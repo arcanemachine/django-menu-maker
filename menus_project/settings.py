@@ -97,7 +97,7 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
 
 # email
 
-EMAIL_CONFIRMATION_REQUIRED = True
+EMAIL_CONFIRMATION_REQUIRED = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SERVER_EMAIL = server_config.SERVER_EMAIL
 

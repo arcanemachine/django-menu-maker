@@ -2,7 +2,7 @@
 
 {% translate "You have registered a new account at " %}{{ PROJECT_NAME }}. {% translate "You can login to your account by visiting the following link:" %}
 {% block reset_link %}
-{{ protocol }}://{{ domain }}{% url 'users:login' %}
+{{ protocol }}://{{ domain }}{% url 'users:login' %}{% if next_url %}{{ next_url }}{% endif %}
 {% endblock %}
 {% translate 'Your username:' %} {{ username }}
 

@@ -26,6 +26,11 @@ class RegisterView(SuccessMessageMixin, CreateView):
             return HttpResponseRedirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['next_url'] = self.request.GET.get('next', None)
+        return kwargs
+
     def get_success_url(self):
         if self.request.GET.get('next', None):
             return self.request.GET['next']
@@ -50,7 +55,6 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 
 
 class UserActivationView(UserLoginView):
-
     def dispatch(self, request, *args, **kwargs):
         try:
             self.user_pk = int(urlsafe_base64_decode(self.kwargs['uidb64']))

@@ -13,7 +13,6 @@ Usage:
 """
 
 
-# user
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
@@ -31,7 +30,6 @@ class UserFactory(factory.django.DjangoModelFactory):
     last_login = None
 
 
-# restaurant
 class RestaurantFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Restaurant
@@ -61,7 +59,6 @@ class RandomRestaurantFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('company')
 
 
-# menu
 class MenuFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Menu
@@ -85,7 +82,6 @@ class MenuFactory(factory.django.DjangoModelFactory):
                 self.restaurant.admin_users.add(user)
 
 
-# menu section
 class MenuSectionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = MenuSection
@@ -109,7 +105,6 @@ class MenuSectionFactory(factory.django.DjangoModelFactory):
                 self.menu.restaurant.admin_users.add(user)
 
 
-# menu item
 class MenuItemFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = MenuItem

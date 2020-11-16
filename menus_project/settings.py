@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # third-party
     'captcha',
     'crispy_forms',
+    'dj_rest_auth',
     'rest_framework',
     'rest_framework.authtoken',
 ]

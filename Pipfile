@@ -12,6 +12,7 @@ django-crispy-forms = "*"
 django-simple-captcha = "*"
 djangorestframework = "*"
 factory-boy = "*"
+dj-rest-auth = "*"
 
 [dev-packages]
 

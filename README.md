@@ -4,7 +4,7 @@
 
 <strong><h3>Note: This project is currently not feature-complete. It is currently usable as a proof-of-concept for the reliable creation of restaurants, menus, menu items, etc., but it is not particularly pretty.</h3></strong>
 
-<strong>Current Status:</strong> Adding API
+<strong>Current Status:</strong> API complete, begin building frontend
 
 
 ### About
@@ -13,7 +13,7 @@ Menu Maker is a project that showcases my understanding of best practices using 
 
 The following technologies have been used to make this app:
 
-- Django
+- Django + Django Rest Framework
 - Python
 - Bootstrap
 
@@ -50,12 +50,6 @@ Menu Maker makes use of many of Django's features:
     - Due to how Python's Coverage module detects code coverage, the number is a bit short of 100%. My goal is not to ensure that the badge says 100%, but to ensure that the codebase is fully tested (to a reasonable degree).
     - All efforts have been made to ensure that the tests cover all expected circumstances.
 - Custom context processor (albeit a simple one)
-
-In addition, the following third-party Django packages are of significant importance to this project:
-
-- Crispy Forms
-- Django Rest Framework
-- Django Simple Captcha
 
 This project also represents an effort to implement proper Git best practices, including:
 

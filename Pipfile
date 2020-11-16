@@ -13,6 +13,7 @@ django-simple-captcha = "*"
 djangorestframework = "*"
 factory-boy = "*"
 dj-rest-auth = "*"
+django-allauth = "*"
 
 [dev-packages]
 

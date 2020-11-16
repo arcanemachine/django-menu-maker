@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # local
@@ -32,9 +33,12 @@ INSTALLED_APPS = [
     'restaurants.apps.RestaurantsConfig',
     'users.apps.UsersConfig',
     # third-party
+    'allauth',
+    'allauth.account',
     'captcha',
     'crispy_forms',
     'dj_rest_auth',
+    'dj_rest_auth.registration',
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -79,6 +83,9 @@ DATABASES = {
         'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
+
+# allauth
+SITE_ID = 1
 
 # authentication
 LOGIN_URL = 'users:login'

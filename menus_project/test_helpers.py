@@ -3,10 +3,11 @@ from django.urls import reverse
 
 from menus_project.helpers import get_next_url
 
+
 class GetNextUrlTest(SimpleTestCase):
 
     def setUp(self):
-        self.url = reverse('users:login') 
+        self.url = reverse('users:login')
         self.next_url = reverse('users:user_detail')
 
     def test_with_next_karg(self):

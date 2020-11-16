@@ -16,6 +16,21 @@ from .forms import NewUserCreationForm
 UserModel = get_user_model()
 
 
+class UsersRootViewTest(TestCase):
+
+    def setUp(self):
+        self.current_test_url = reverse('users:user_detail')
+        self.view = views.users_root
+
+    def test_view_name(self):
+        self.assertEqual(views.users_root.__name__, 'users_root')
+
+    def test_get_method(self):
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 302)
+        self.assertIn(reverse('users:user_detail'), self.response.url)
+
+
 class UserRegisterViewTest(TestCase):
 
     @classmethod

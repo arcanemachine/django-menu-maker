@@ -8,6 +8,9 @@ app_name = 'users'
 
 urlpatterns = [
     # users.views
+    path('',
+         views.users_root,
+         name='register'),
     path('register/',
          views.UserRegisterView.as_view(),
          name='register'),

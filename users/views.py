@@ -16,6 +16,10 @@ from . import forms
 UserModel = get_user_model()
 
 
+def users_root(request):
+    return HttpResponseRedirect(reverse('users:user_detail'))
+
+
 class UserRegisterView(SuccessMessageMixin, CreateView):
     form_class = forms.NewUserCreationForm
     template_name = 'users/register.html'

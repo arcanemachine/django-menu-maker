@@ -16,7 +16,7 @@ from .forms import NewUserCreationForm
 UserModel = get_user_model()
 
 
-class RegisterViewTest(TestCase):
+class UserRegisterViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -33,7 +33,7 @@ class RegisterViewTest(TestCase):
 
     # view attributes
     def test_view_class_name(self):
-        self.assertEqual(self.view.__class__.__name__, 'RegisterView')
+        self.assertEqual(self.view.__class__.__name__, 'UserRegisterView')
 
     def test_parent_class_name(self):
         self.assertEqual(

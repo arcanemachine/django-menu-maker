@@ -16,7 +16,7 @@ from . import forms
 UserModel = get_user_model()
 
 
-class RegisterView(SuccessMessageMixin, CreateView):
+class UserRegisterView(SuccessMessageMixin, CreateView):
     form_class = forms.NewUserCreationForm
     template_name = 'users/register.html'
     success_message = c.USER_REGISTER_SUCCESS_MESSAGE

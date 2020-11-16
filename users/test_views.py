@@ -13,6 +13,8 @@ from menus_project import factories as f
 from . import views
 from .forms import NewUserCreationForm
 
+UserModel = get_user_model()
+
 
 class RegisterViewTest(TestCase):
 
@@ -113,7 +115,7 @@ class RegisterViewTest(TestCase):
     def test_request_post_method_new_user_no_confirmation_required(self):
         with self.settings(EMAIL_CONFIRMATION_REQUIRED=False):
             # get user count before POST
-            old_user_count = get_user_model().objects.count()
+            old_user_count = UserModel.objects.count()
 
             self.response = self.client.post(self.current_test_url, {
                 'username': c.TEST_USER_USERNAME,
@@ -135,12 +137,11 @@ class RegisterViewTest(TestCase):
             self.assertIn(self.view.success_message, self.html)
 
             # user count increased by 1
-            new_user_count = get_user_model().objects.count()
+            new_user_count = UserModel.objects.count()
             self.assertEqual(old_user_count + 1, new_user_count)
 
             # new user can log in immediately
-            new_user = \
-                get_user_model().objects.get(username=c.TEST_USER_USERNAME)
+            new_user = UserModel.objects.get(username=c.TEST_USER_USERNAME)
             self.assertTrue(new_user.is_active)
 
             # welcome email sent
@@ -151,7 +152,7 @@ class RegisterViewTest(TestCase):
     def test_request_post_method_register_user_confirmation_required(self):
         with self.settings(EMAIL_CONFIRMATION_REQUIRED=True):
             # get user count before POST
-            old_user_count = get_user_model().objects.count()
+            old_user_count = UserModel.objects.count()
 
             self.response = self.client.post(self.current_test_url, {
                 'username': c.TEST_USER_USERNAME,
@@ -173,12 +174,11 @@ class RegisterViewTest(TestCase):
             self.assertIn(self.view.success_message, self.html)
 
             # user count increased by 1
-            new_user_count = get_user_model().objects.count()
+            new_user_count = UserModel.objects.count()
             self.assertEqual(old_user_count + 1, new_user_count)
 
             # new user still requires confirmation
-            new_user = get_user_model().objects.get(
-                username=c.TEST_USER_USERNAME)
+            new_user = UserModel.objects.get(username=c.TEST_USER_USERNAME)
             self.assertFalse(new_user.is_active)
 
             # confirmation email sent
@@ -216,7 +216,7 @@ class EmailConfirmationViewTest(TestCase):
                 'password2': c.TEST_USER_PASSWORD,
                 'captcha_0': 'test',
                 'captcha_1': 'PASSED'})
-            user = get_user_model().objects.get(username=username)
+            user = UserModel.objects.get(username=username)
             self.uid = \
                 self.form_instance.send_new_user_email(user, get_uid=True)
             self.token = \
@@ -397,7 +397,7 @@ class EmailConfirmationViewTest(TestCase):
 
             # get the unconfirmed user object from the previous test
             unconfirmed_user = \
-                get_user_model().objects.get(username='unconfirmed_user')
+                UserModel.objects.get(username='unconfirmed_user')
 
             # user posts login info into user_activation
             self.response = \
@@ -469,6 +469,9 @@ class EmailConfirmationViewTest(TestCase):
                     username='unconfirmed_user', captcha='wrong_captcha')
             self.assertEqual(self.response.status_code, 200)
             self.html = unescape(self.response.content.decode('utf-8'))
+
+            # template does not leak successful user authentication details
+            self.assertNotIn(c.USER_IS_UNCONFIRMED_MESSAGE, self.html)
             self.assertIn("Invalid CAPTCHA", self.html)
 
             # user is still unconfirmed and not logged in
@@ -814,7 +817,7 @@ class UserUpdateViewTest(TestCase):
             self.view.__class__.__bases__[0].__name__, 'LoginRequiredMixin')
 
     def test_model(self):
-        self.assertEqual(self.view.model, get_user_model())
+        self.assertEqual(self.view.model, UserModel)
 
     def test_success_message(self):
         self.assertEqual(
@@ -1013,7 +1016,7 @@ class UserDeleteViewTest(TestCase):
             self.view.__class__.__bases__[0].__name__, 'LoginRequiredMixin')
 
     def test_attribute_model(self):
-        self.assertEqual(self.view.model, get_user_model())
+        self.assertEqual(self.view.model, UserModel)
 
     def test_attribute_template_name(self):
         self.assertEqual(
@@ -1046,7 +1049,7 @@ class UserDeleteViewTest(TestCase):
     # request.POST
     def test_request_post_method(self):
         # get user count before deleting self.test_user
-        old_user_count = get_user_model().objects.count()
+        old_user_count = UserModel.objects.count()
 
         # delete user via POST
         self.response = self.client.post(self.current_test_url)
@@ -1062,11 +1065,11 @@ class UserDeleteViewTest(TestCase):
         self.assertIn(self.view.success_message, self.html)
 
         # object no longer exists
-        with self.assertRaises(get_user_model().DoesNotExist):
+        with self.assertRaises(UserModel.DoesNotExist):
             self.test_user.refresh_from_db()
 
         # user count decreased by 1
-        new_user_count = get_user_model().objects.count()
+        new_user_count = UserModel.objects.count()
         self.assertEqual(old_user_count - 1, new_user_count)
 
 

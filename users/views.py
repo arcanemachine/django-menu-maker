@@ -13,6 +13,8 @@ from django.views.generic.edit import UpdateView
 from menus_project import constants as c
 from . import forms
 
+UserModel = get_user_model()
+
 
 class RegisterView(SuccessMessageMixin, CreateView):
     form_class = forms.NewUserCreationForm
@@ -83,7 +85,7 @@ class UserActivationView(UserLoginView):
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
-    model = get_user_model()
+    model = UserModel
     template_name = 'users/user_detail.html'
 
     def get_object(self):
@@ -91,7 +93,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = get_user_model()
+    model = UserModel
     template_name = 'users/user_update.html'
     fields = ('first_name', 'last_name', 'email')
     success_message = c.USER_UPDATE_SUCCESS_MESSAGE
@@ -116,7 +118,7 @@ class UserLogoutView(LogoutView):
 
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):
-    model = get_user_model()
+    model = UserModel
     template_name = 'users/user_confirm_delete.html'
     success_message = c.USER_DELETE_SUCCESS_MESSAGE
     success_url = reverse_lazy('root')

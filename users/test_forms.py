@@ -11,6 +11,8 @@ from menus_project import factories as f
 from .forms import (
     NewUserCreationForm, UserAuthenticationForm, UserPasswordResetForm)
 
+UserModel = get_user_model()
+
 
 class NewUserCreationFormTest(TestCase):
 
@@ -32,7 +34,7 @@ class NewUserCreationFormTest(TestCase):
             c.FORMS_CAPTCHA_FIELD_HELP_TEXT)
 
     def test_meta_model_name(self):
-        self.assertEqual(self.form.Meta.model, get_user_model())
+        self.assertEqual(self.form.Meta.model, UserModel)
 
     def test_meta_fields(self):
         self.assertEqual(self.form.Meta.fields, ('username', 'email'))
@@ -52,7 +54,7 @@ class NewUserCreationFormTest(TestCase):
         self.assertTrue(self.form_instance.is_valid())
 
     def test_validation_fail_duplicate_email(self):
-        self.test_user = get_user_model().objects.create(
+        self.test_user = UserModel.objects.create(
             username=c.TEST_USER_USERNAME,
             email=c.TEST_USER_EMAIL)
         self.form_instance = \

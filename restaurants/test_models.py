@@ -8,6 +8,8 @@ from menus_project import constants as c
 from menus_project import factories as f
 from .models import Restaurant
 
+UserModel = get_user_model()
+
 
 class RestaurantModelTest(TestCase):
 
@@ -27,7 +29,7 @@ class RestaurantModelTest(TestCase):
     def test_object_content(self):
         expected_name = c.TEST_RESTAURANT_NAME
         expected_admin_users = \
-            get_user_model().objects.filter(pk=self.restaurant_admin_user.pk)
+            UserModel.objects.filter(pk=self.restaurant_admin_user.pk)
 
         self.assertEqual(self.test_restaurant.name, expected_name)
         self.assertEqual(
@@ -94,7 +96,7 @@ class RestaurantModelTest(TestCase):
     def test_field_admin_users_related_model(self):
         related_model = \
             self.test_restaurant._meta.get_field('admin_users').related_model
-        self.assertEqual(related_model, get_user_model())
+        self.assertEqual(related_model, UserModel)
 
     # META #
     def test_meta_ordering(self):

@@ -6,16 +6,17 @@ from menus_project import constants as c
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
-"""
-Usage:
-    - Create object and save: e.g. user = UserFactory()
-    - Build object but don't save: e.g. user = UserFactory.build()
-"""
+UserModel = get_user_model()
 
 
 class UserFactory(factory.django.DjangoModelFactory):
+    """
+    Usage:
+        - Create object and save: e.g. user = UserFactory()
+        - Build object but don't save: e.g. user = UserFactory.build()
+    """
     class Meta:
-        model = get_user_model()
+        model = UserModel
 
     username = factory.Sequence(lambda n: f'{c.TEST_USER_USERNAME}_{n+1}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@email.com')

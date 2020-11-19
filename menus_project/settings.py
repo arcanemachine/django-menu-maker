@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'drf_spectacular',
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -86,6 +87,16 @@ DATABASES = {
 
 # allauth
 SITE_ID = 1
+
+# api
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Menu Maker',
+    'CONTACT': {
+        'name': 'Nicholas Moen',
+    },
+    'LICENSE': {'name': 'Creative Commons (CC BY 4.0)'},
+    'VERSION': '0.0.l',
+}
 
 # authentication
 LOGIN_URL = 'users:login'
@@ -138,4 +149,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }

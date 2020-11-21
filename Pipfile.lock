@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "667591b26b863fc9d35403555cea60dc45e0aa7e358b82d333a943dbdc8d0cc7"
+            "sha256": "f678723397098ad4f8dacdaf4a271c3377e9b9b3213b18a0697a4365b9e1a9d2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -128,10 +128,10 @@
         },
         "dj-rest-auth": {
             "hashes": [
-                "sha256:2312c1d722a12c453a5bd1678dc1d93e87eba3562bb2711a11547abaa134926c"
+                "sha256:c0d3495d3629f54644966da31611ca4619b8470978ae8bdc03f6b87e04cb562c"
             ],
             "index": "pypi",
-            "version": "==2.0.1"
+            "version": "==2.1.1"
         },
         "django": {
             "hashes": [
@@ -148,13 +148,21 @@
             "index": "pypi",
             "version": "==0.43.0"
         },
-        "django-crispy-forms": {
+        "django-cors-headers": {
             "hashes": [
-                "sha256:888bb316db89b60050a42ec35080facb361d823eec38010ccb0702f45642d3b8",
-                "sha256:f2f1e0fbb458851636447cfb6be1a611b40c8ac9e41a74ba923011378670b43b"
+                "sha256:9322255c296d5f75089571f29e520c83ff9693df17aa3cf9f6a4bea7c6740169",
+                "sha256:db82b2840f667d47872ae3e4a4e0a0d72fbecb42779b8aa233fa8bb965f7836a"
             ],
             "index": "pypi",
-            "version": "==1.9.2"
+            "version": "==3.5.0"
+        },
+        "django-crispy-forms": {
+            "hashes": [
+                "sha256:92ed3fdc52c08d21d60adbb9de24e432c590e66e894f43cee0974fc959209976",
+                "sha256:d3f808d20cafe20fd38a49a47e72db1fd519fcf31bef4f47f008619336a3ebff"
+            ],
+            "index": "pypi",
+            "version": "==1.10.0"
         },
         "django-ranged-response": {
             "hashes": [
@@ -195,10 +203,10 @@
         },
         "faker": {
             "hashes": [
-                "sha256:4d038ba51ae5e0a956d79cadd684d856e5750bfd608b61dad1807f8f08b1da49",
-                "sha256:f260f0375a44cd1e1a735c9b8c9b914304f607b5eef431d20e098c7c2f5b50a6"
+                "sha256:5398268e1d751ffdb3ed36b8a790ed98659200599b368eec38a02eed15bce997",
+                "sha256:d4183b8f57316de3be27cd6c3b40e9f9343d27c95c96179f027316c58c2c239e"
             ],
-            "version": "==4.16.0"
+            "version": "==4.17.1"
         },
         "gunicorn": {
             "hashes": [

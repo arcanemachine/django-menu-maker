@@ -15,6 +15,7 @@ factory-boy = "*"
 dj-rest-auth = "*"
 django-allauth = "*"
 django-timezone-field = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

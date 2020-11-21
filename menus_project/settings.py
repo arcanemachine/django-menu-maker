@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'captcha',
+    'corsheaders',
     'crispy_forms',
     'dj_rest_auth',
     'dj_rest_auth.registration',
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -111,6 +113,9 @@ CAPTCHA_LETTER_ROTATION = (-20, 25)
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     CAPTCHA_TEST_MODE = True
 
+# corsheaders
+CORS_ALLOW_ALL_ORIGINS = True
+
 # email
 EMAIL_CONFIRMATION_REQUIRED = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -146,7 +151,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny',
     ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',

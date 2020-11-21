@@ -5,6 +5,8 @@ Setup Guide (Not complete):
 - install pipenv
 - install virtualenvwrapper
 - activate virtual environment - in project root directory, enter command: pipenv shell
+- configure settings.py
+    - CORS_ALLOW_ALL_ORIGINS: set to True for testing, adjust for security
 - server_config.py
     - EMAIL_CONFIRMATION_REQUIRED = True/False - Require user to confirm email address before they can sign in
     - DEBUG = True on 'dev' server, False on 'test' and 'production' servers

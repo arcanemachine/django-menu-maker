@@ -2,8 +2,12 @@ Setup Guide (Not complete):
 
 - clone github repo
 - install pip3
+- install virtualenvwrapper:
+    - pip3 install virtualenvwrapper
 - install pipenv
-- install virtualenvwrapper
+    - pip3 install pipenv
+- install python dependencies
+    - (in project folder) pipenv install 
 - activate virtual environment - in project root directory, enter command: pipenv shell
 - configure settings.py
     - CORS_ALLOW_ALL_ORIGINS: set to True for testing, adjust for security

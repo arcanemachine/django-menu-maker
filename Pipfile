@@ -16,6 +16,7 @@ dj-rest-auth = "*"
 django-allauth = "*"
 django-timezone-field = "*"
 django-cors-headers = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 

@@ -1,4 +1,5 @@
-from django.http import HttpResponseRedirect
+from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -8,10 +9,16 @@ from .permissions import HasRestaurantPermissionsOrReadOnly
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
+UserModel = get_user_model()
 
 def api_root(request):
     return HttpResponseRedirect(reverse('api:restaurant_list'))
 
+def is_username_available(request, username):
+    if not UserModel.objects.filter(username=username).exists():
+        return JsonResponse({'isUsernameAvailable': True}, status=200)
+    else:
+        return JsonResponse({'isUsernameAvailable': False}, status=404)
 
 class RestaurantList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]

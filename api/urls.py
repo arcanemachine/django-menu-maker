@@ -12,6 +12,13 @@ urlpatterns = [
     path('api-token-auth/',
          obtain_auth_token,
          name='api_token_auth'),
+
+    # users
+    path('users/is-username-available/<str:username>/',
+         views.is_username_available,
+         name='is_username_available'),
+
+    # restaurants
     path('restaurants/',
          views.RestaurantList.as_view(),
          name='restaurant_list'),

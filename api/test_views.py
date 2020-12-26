@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +11,36 @@ from .permissions import HasRestaurantPermissionsOrReadOnly
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
+class isUsernameAvailableTest(APITestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.view = views.is_username_available
+
+        # create model objects
+        cls.test_user = f.UserFactory()
+
+    def test_available_username(self):
+        available_username = 'available_username'
+
+        self.current_test_url = reverse('api:is_username_available', kwargs = {
+            'username': available_username})
+
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 200)
+        response_json = self.response.content.decode('utf-8')
+        self.assertJSONEqual(response_json, {"isUsernameAvailable": True})
+
+    def test_unavailable_username(self):
+        unavailable_username = self.test_user.username
+
+        self.current_test_url = reverse('api:is_username_available', kwargs = {
+            'username': unavailable_username})
+
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 404)
+        response_json = self.response.content.decode('utf-8')
+        self.assertJSONEqual(response_json, {"isUsernameAvailable": False})
 
 class RestaurantListTest(APITestCase):
 

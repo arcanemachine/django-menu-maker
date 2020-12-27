@@ -17,6 +17,9 @@ urlpatterns = [
     path('users/is-username-available/<str:username>/',
          views.is_username_available,
          name='is_username_available'),
+    path('users/is-email-available/<str:email>/',
+         views.is_email_available,
+         name='is_email_available'),
 
     # restaurants
     path('restaurants/',

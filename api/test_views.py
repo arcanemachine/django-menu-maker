@@ -42,6 +42,37 @@ class isUsernameAvailableTest(APITestCase):
         response_json = self.response.content.decode('utf-8')
         self.assertJSONEqual(response_json, {"isUsernameAvailable": False})
 
+class isEmailAvailableTest(APITestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.view = views.is_email_available
+
+        # create model objects
+        cls.test_user = f.UserFactory()
+
+    def test_available_username(self):
+        available_email = 'available_email@email.com'
+
+        self.current_test_url = reverse('api:is_email_available', kwargs = {
+            'email': available_email})
+
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 200)
+        response_json = self.response.content.decode('utf-8')
+        self.assertJSONEqual(response_json, {"isEmailAvailable": True})
+
+    def test_unavailable_username(self):
+        unavailable_email = self.test_user.email
+
+        self.current_test_url = reverse('api:is_email_available', kwargs = {
+            'email': unavailable_email})
+
+        self.response = self.client.get(self.current_test_url)
+        self.assertEqual(self.response.status_code, 404)
+        response_json = self.response.content.decode('utf-8')
+        self.assertJSONEqual(response_json, {"isEmailAvailable": False})
+
 class RestaurantListTest(APITestCase):
 
     @classmethod

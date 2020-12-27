@@ -20,6 +20,12 @@ def is_username_available(request, username):
     else:
         return JsonResponse({'isUsernameAvailable': False}, status=404)
 
+def is_email_available(request, email):
+    if not UserModel.objects.filter(email=email).exists():
+        return JsonResponse({'isEmailAvailable': True}, status=200)
+    else:
+        return JsonResponse({'isEmailAvailable': False}, status=404)
+
 class RestaurantList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Restaurant.objects.all()

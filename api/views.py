@@ -6,13 +6,20 @@ from rest_framework.permissions import IsAuthenticated
 
 from . import serializers
 from .permissions import HasRestaurantPermissionsOrReadOnly
+from menus_project.constants import FRONTEND_SERVER_URL_CONFIRM_EMAIL
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
 UserModel = get_user_model()
 
+
 def api_root(request):
     return HttpResponseRedirect(reverse('api:restaurant_list'))
+
+
+def verify_email_view(request, key):
+    return HttpResponseRedirect(FRONTEND_SERVER_URL_CONFIRM_EMAIL + key)
+
 
 def is_username_available(request, username):
     if not UserModel.objects.filter(username=username).exists():
@@ -20,11 +27,13 @@ def is_username_available(request, username):
     else:
         return JsonResponse({'isUsernameAvailable': False})
 
+
 def is_email_available(request, email):
     if not UserModel.objects.filter(email=email).exists():
         return JsonResponse({'isEmailAvailable': True})
     else:
         return JsonResponse({'isEmailAvailable': False})
+
 
 class RestaurantList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]

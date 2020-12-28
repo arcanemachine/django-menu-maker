@@ -1,5 +1,9 @@
 from django.conf import settings
 
+FRONTEND_SERVER_URL = 'http://192.168.1.120:8081'
+FRONTEND_SERVER_URL_CONFIRM_EMAIL = \
+    FRONTEND_SERVER_URL + '/register/confirm-email/'
+
 # misc
 PROJECT_NAME = "Menu Maker"
 RESERVED_KEYWORDS = ['add-new-restaurant', 'all', 'delete', 'edit', 'new-item',

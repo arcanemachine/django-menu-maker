@@ -11,7 +11,7 @@ from .permissions import HasRestaurantPermissionsOrReadOnly
 from restaurants.models import Restaurant
 from menus.models import Menu, MenuSection, MenuItem
 
-class isUsernameAvailableTest(APITestCase):
+class IsUsernameAvailableTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -42,7 +42,7 @@ class isUsernameAvailableTest(APITestCase):
         response_json = self.response.content.decode('utf-8')
         self.assertJSONEqual(response_json, {"isUsernameAvailable": False})
 
-class isEmailAvailableTest(APITestCase):
+class IsEmailAvailableTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):

@@ -115,6 +115,8 @@ class MenuItem(models.Model):
     menusection = models.ForeignKey('MenuSection', on_delete=models.CASCADE)
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
+    price = models.IntegerField(blank=True, null=True,
+        help_text="Enter the price in cents (e.g. $5.00 = 500 cents)")
     description = models.CharField(max_length=1024, blank=True)
 
     def __str__(self):
@@ -144,6 +146,12 @@ class MenuItem(models.Model):
             'menu_slug': self.menusection.menu.slug,
             'menusection_slug': self.menusection.slug,
             'menuitem_slug': self.slug})
+
+    def get_readable_price(self):
+        dollars = int(self.price / 100)
+        cents = self.price - (dollars * 100)
+        padded_cents = str(cents).zfill(2)
+        return f"${dollars}.{padded_cents}"
 
     def save(self, *args, **kwargs):
         if not self.slug == slugify(self.name):

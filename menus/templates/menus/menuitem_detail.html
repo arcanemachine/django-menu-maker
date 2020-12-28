@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<h2 class="pb-2">{{ menuitem.name }}</h2>
+<h2 class="pb-2">{{ menuitem.name }}{% if menuitem.price %} - {{ menuitem.get_readable_price }}{% endif %}</h2>
 
 <p><strong>Description:</strong> {{ menuitem.description }}</p>
 

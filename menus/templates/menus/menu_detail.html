@@ -11,21 +11,21 @@
     <img src="{{ menu.image.url }}" class="item-img">
   {% endif %}
 
-<h2 class="pb-2">Sections</h2>
+<h2 class="mb-2 text-center">Sections</h2>
 {% if not menu.menusection_set.count %}
-<p>This menu does not have any sections.</p>
+<p class="text-center">This menu does not have any sections.</p>
 
 {% else %}
 
 
   {% for menusection in menu.menusection_set.all %}
-  <h4 class="pt-2"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h4>
+  <h4 class="pt-2 text-center"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h4>
 
     {% if menusection.menuitem_set.count %}
     <ul class="pt-2 pb-4">
 
       {% for menuitem in menusection.menuitem_set.all %}
-      <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}</li>
+      <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}{% if menuitem.price %}<span class="ml-2 font-italic">{{ menuitem.get_readable_price }}</span>{% endif %}</li>
       {% endfor %}
     </ul>
 

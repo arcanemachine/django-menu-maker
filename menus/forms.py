@@ -21,5 +21,5 @@ class MenuSectionForm(ModelForm):
 class MenuItemForm(ModelForm):
     class Meta:
         model = MenuItem
-        fields = ['menusection', 'name', 'description']
+        fields = ['menusection', 'name', 'price', 'description']
         widgets = {'menusection': forms.HiddenInput()}

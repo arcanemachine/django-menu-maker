@@ -7,11 +7,16 @@
 
 {% block content %}
 
+  {% if menu.image %}
+    <img src="{{ menu.image.url }}" class="item-img">
+  {% endif %}
+
 <h2 class="pb-2">Sections</h2>
 {% if not menu.menusection_set.count %}
 <p>This menu does not have any sections.</p>
 
 {% else %}
+
 
   {% for menusection in menu.menusection_set.all %}
   <h4 class="pt-2"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h4>

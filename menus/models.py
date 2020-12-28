@@ -1,9 +1,18 @@
+import os
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
 from menus_project import constants
+
+
+def upload_to(instance, filename):
+    base, extension = os.path.splitext(filename)
+    extension = extension.lower()
+    return f"img/restaurants/{instance.restaurant.pk}/" + \
+        f"menus/{instance.pk}-{instance.name}{extension}"
 
 
 class Menu(models.Model):
@@ -19,6 +28,10 @@ class Menu(models.Model):
         max_length=128,
         default=None,
         blank=False)
+
+    image = models.ImageField(
+        upload_to=upload_to, blank=True, null=True,
+        help_text="An image or logo for this menu (optional)")
 
     slug = models.SlugField(max_length=128)
 

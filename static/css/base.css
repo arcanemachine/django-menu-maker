@@ -1,5 +1,11 @@
+/* base */
+
 ul {
   list-style-type: '- ';
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 .project-theme {
@@ -19,6 +25,8 @@ ul {
   max-width: 75%;
 }
 
+/* forms */
+
 .form {
   margin-top: 1.5em;
 }
@@ -36,13 +44,11 @@ ul {
   margin-right: 5px;
 }
 
-.underline {
-  text-decoration: underline;
-}
-
 #body-title {
   margin-bottom: 0;
 }
+
+/* content */
 
 #body-subheading {
   margin-top: 0.25em;
@@ -57,4 +63,17 @@ ul {
   margin-top: 2.5em;
   font-weight: bold;
   font-size: 1.1rem;
+}
+
+/* restaurants */
+
+.item-img {
+  display: block;
+  margin: auto;
+  margin-bottom: 2rem;
+  max-width: 80%;
+  max-height: 500px;
+  height: auto;
+  max-height: 33vh;
+  border-radius: 2rem;
 }

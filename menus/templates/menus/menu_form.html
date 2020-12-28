@@ -7,9 +7,11 @@
 
 {% block content %}
 
-<p>Please enter the information for {% if menu%}'{{ menu.name }}'{% else %}your menu{% endif %}:</p>
+<p>Please enter the information for {% if menu %}'{{ menu.name }}'{% else %}your menu{% endif %}:</p>
 
-{% include 'base_form.html' %}
+{% with form_contains_image=True %}
+  {% include 'base_form.html' %}
+{% endwith %}
 
 <div id="bottom-links">
   {% if object %}

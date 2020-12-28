@@ -13,9 +13,7 @@
 {% block content %}
 
   {% if restaurant.image %}
-  <div style="text-align: center;">
-    <img src="{{ restaurant.image.url }}" style="max-width: 50%; height: auto; max-height: 33vh; margin-bottom: 2rem;">
-  </div>
+    <img src="{{ restaurant.image.url }}" class="item-img">
   {% endif %}
 
   {% if not restaurant.menu_set.all %}

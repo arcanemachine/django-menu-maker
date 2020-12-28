@@ -17,6 +17,7 @@ django-allauth = "*"
 django-timezone-field = "*"
 django-cors-headers = "*"
 drf-spectacular = "*"
+pillow = "*"
 
 [dev-packages]
 

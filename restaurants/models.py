@@ -1,16 +1,26 @@
+import os
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils.timezone import now as timezone_now
 from django.utils.text import slugify
 
 from menus_project import constants
 
 
+def upload_to(instance, filename):
+    now = timezone_now()
+    base, extension = os.path.splitext(filename)
+    extension = extension.lower()
+    return f"restaurants/{now:%Y/%m}/{instance.pk}{extension}"
+
 class Restaurant(models.Model):
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128, unique=True)
     admin_users = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    image = models.ImageField(upload_to=upload_to, null=True)
 
     class Meta:
         ordering = ['name']

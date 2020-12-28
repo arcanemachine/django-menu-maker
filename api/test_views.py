@@ -38,7 +38,7 @@ class IsUsernameAvailableTest(APITestCase):
             'username': unavailable_username})
 
         self.response = self.client.get(self.current_test_url)
-        self.assertEqual(self.response.status_code, 404)
+        self.assertEqual(self.response.status_code, 200)
         response_json = self.response.content.decode('utf-8')
         self.assertJSONEqual(response_json, {"isUsernameAvailable": False})
 
@@ -69,7 +69,7 @@ class IsEmailAvailableTest(APITestCase):
             'email': unavailable_email})
 
         self.response = self.client.get(self.current_test_url)
-        self.assertEqual(self.response.status_code, 404)
+        self.assertEqual(self.response.status_code, 200)
         response_json = self.response.content.decode('utf-8')
         self.assertJSONEqual(response_json, {"isEmailAvailable": False})
 

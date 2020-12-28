@@ -16,15 +16,15 @@ def api_root(request):
 
 def is_username_available(request, username):
     if not UserModel.objects.filter(username=username).exists():
-        return JsonResponse({'isUsernameAvailable': True}, status=200)
+        return JsonResponse({'isUsernameAvailable': True})
     else:
-        return JsonResponse({'isUsernameAvailable': False}, status=404)
+        return JsonResponse({'isUsernameAvailable': False})
 
 def is_email_available(request, email):
     if not UserModel.objects.filter(email=email).exists():
-        return JsonResponse({'isEmailAvailable': True}, status=200)
+        return JsonResponse({'isEmailAvailable': True})
     else:
-        return JsonResponse({'isEmailAvailable': False}, status=404)
+        return JsonResponse({'isEmailAvailable': False})
 
 class RestaurantList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]

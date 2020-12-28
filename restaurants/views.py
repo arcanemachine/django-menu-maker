@@ -19,7 +19,7 @@ class RestaurantListView(ListView):
 
 class RestaurantCreateView(LoginRequiredMixin, CreateView):
     model = Restaurant
-    fields = ('name',)
+    fields = ('name', 'image')
     success_message = "Restaurant Created: %(name)s"
 
     def dispatch(self, request, *args, **kwargs):
@@ -53,7 +53,7 @@ class RestaurantDetailView(DetailView):
 class RestaurantUpdateView(
         UserHasRestaurantPermissionsMixin, SuccessMessageMixin, UpdateView):
     model = Restaurant
-    fields = ('name',)
+    fields = ('name', 'image')
     success_message = "Restaurant Successfully Updated: %(name)s"
 
     def get_context_data(self, **kwargs):

@@ -9,7 +9,9 @@
 
 <p>Please enter the information for your restaurant:</p>
 
-{% include 'base_form.html' %}
+{% with form_contains_image=True %}
+  {% include 'base_form.html' %}
+{% endwith %}
 
 {% if user.restaurant_set.count %}
 <div id="bottom-links">

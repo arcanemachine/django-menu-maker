@@ -139,6 +139,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': validation_string + 'CommonPasswordValidator'},
     {'NAME': validation_string + 'NumericPasswordValidator'}]
 
+# media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = server_config.STATICFILES_DIRS

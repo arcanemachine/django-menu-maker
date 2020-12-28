@@ -5,12 +5,18 @@
 {% block body_title %}{{ restaurant.name }}{% endblock %}
 
 {% block body_subheading_wrapper %}
-  {% with body_subheading_text="Menus" body_subheading_tags="pb-4 text-center" %}
+  {% with body_subheading_text="Menus" body_subheading_tags="mb-2 text-center" %}
     {{ block.super }}
   {% endwith %}
 {% endblock body_subheading_wrapper %}
 
 {% block content %}
+
+  {% if restaurant.image %}
+  <div style="text-align: center;">
+    <img src="{{ restaurant.image.url }}" style="max-width: 50%; height: auto; max-height: 33vh; margin-bottom: 2rem;">
+  </div>
+  {% endif %}
 
   {% if not restaurant.menu_set.all %}
 <p>This restaurant does not have any menus.</p>

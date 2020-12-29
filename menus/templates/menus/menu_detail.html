@@ -13,25 +13,33 @@
 {% else %}
 
   {% for menusection in menu.menusection_set.all %}
+  <div id="menu-container" class="mt-4 mb-4">
 
-  <h2 class="mt-4 text-center"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h2>
+    <h2 class="text-center"><a class="text-dark" href="{% url 'menus:menusection_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug %}">{{ menusection.name }}</a></h2>
 
   {% if menusection.image %}
-    <img src="{{ menusection.image.url }}" class="menusection-img mt-4 mb-4">
+      <img src="{{ menusection.image.url }}" class="menusection-img mt-4 mb-4">
   {% endif %}
 
     {% if menusection.menuitem_set.count %}
-    <ul class="pt-2 pb-4">
+      <ul class="pt-2">
 
       {% for menuitem in menusection.menuitem_set.all %}
-      <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}{% if menuitem.price %}<span class="ml-2">{{ menuitem.get_readable_price }}</span>{% endif %}</li>
+        <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menu.restaurant.slug menu_slug=menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}{% if menuitem.price %}<span class="ml-2">{{ menuitem.get_readable_price }}</span>{% endif %}</li>
       {% endfor %}
-    </ul>
+
+      </ul>
+
+      {% if menusection.note %}
+        <div class="font-italic text-center">{{ menusection.note }}</div>
+      {% endif %}
 
     {% elif not menusection.menuitem_set.count %}
-    <p class="ml-3 font-weight-bold">- This section does not have any items.</p>
+      <p class="ml-3 font-weight-bold">This section does not have any items.</p>
     {% endif %}
 
+  </div>
+  <hr>
   {% endfor %}
 
 {% endif %}

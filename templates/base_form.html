@@ -4,9 +4,10 @@
 {% csrf_token %}
 
   {% for field in form %}
-  <div class="fieldWrapper mt-4">
+  <div class="fieldWrapper mt-2 mb-4">
     <p>{{ field|as_crispy_field }}</p>
   </div>
+  <hr>
   {% endfor %}
 
   {% if confirm_text %}

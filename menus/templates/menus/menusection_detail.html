@@ -15,13 +15,18 @@
 <p>This section has no items.</p>
 {% else %}
 
-<ul>
+<ul class="mt-4">
   {% for menuitem in menusection.menuitem_set.all %}
   <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}{% if menuitem.price %}<span class="ml-2">{{ menuitem.get_readable_price }}</span>{% endif %}</li>
   {% endfor %}
 </ul>
 
+  {% if menusection.note %}
+  <div class="font-italic text-center">{{ menusection.note }}</div>
+  {% endif %}
+
 {% endif %}
+
 
 {% if user.is_authenticated and user in menusection.menu.restaurant.admin_users.all %}
 <div class="auth-links">

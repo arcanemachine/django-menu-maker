@@ -7,15 +7,24 @@ from django.utils.text import slugify
 
 from menus_project import constants
 
+# removing this function breaks a past migration
+def upload_to():
+    return None
 
-def upload_to(instance, filename):
+# removing this function breaks a past migration
+def menuitem_upload_to():
+    return None
+
+def menu_upload_to(instance, filename):
     base, extension = os.path.splitext(filename)
     extension = extension.lower()
-    return f"img/restaurants/{instance.restaurant.pk}/" + \
-        f"menus/{instance.pk}-{instance.name}{extension}"
+    return "img/restaurants/"\
+        f"{instance.restaurant.pk}-{instance.restaurant.slug}/"\
+        f"menu-{instance.pk}-{instance.slug}{extension}"
 
 
 class Menu(models.Model):
+
     THEME_CHOICES = [
         ('default', "Default"),
         ('secondary', "Secondary")]
@@ -24,17 +33,11 @@ class Menu(models.Model):
         'restaurants.Restaurant',
         on_delete=models.CASCADE)
 
-    name = models.CharField(
-        max_length=128,
-        default=None,
-        blank=False)
-
-    image = models.ImageField(
-        upload_to=upload_to, blank=True, null=True,
-        help_text="An image or logo for this menu (optional)")
-
+    name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
-
+    image = models.ImageField(
+        help_text="An image or logo for this menu (optional)",
+        upload_to=menu_upload_to, blank=True, null=True)
     theme = models.CharField(
         max_length=32,
         choices=THEME_CHOICES,
@@ -74,10 +77,22 @@ class Menu(models.Model):
         super().save(*args, **kwargs)
 
 
+def menusection_upload_to(instance, filename):
+    base, extension = os.path.splitext(filename)
+    extension = extension.lower()
+    return "img/restaurants/"\
+        f"{instance.menu.restaurant.pk}-{instance.menu.restaurant.slug}/"\
+        f"menusection-{instance.pk}-{instance.slug}{extension}"
+
+
 class MenuSection(models.Model):
+
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE)
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
+    image = models.ImageField(
+        help_text="An image or logo for this section (optional)",
+        upload_to=menusection_upload_to, blank=True, null=True)
 
     def __str__(self):
         return f"{self.menu.restaurant.name}: {self.menu.name} - {self.name}"
@@ -115,8 +130,9 @@ class MenuItem(models.Model):
     menusection = models.ForeignKey('MenuSection', on_delete=models.CASCADE)
     name = models.CharField(max_length=128, default=None, blank=False)
     slug = models.SlugField(max_length=128)
-    price = models.IntegerField(blank=True, null=True,
-        help_text="Enter the price in cents (e.g. $5.00 = 500 cents)")
+    price = models.IntegerField(
+        help_text="Enter the price in cents (e.g. $5.00 = 500 cents)",
+        blank=True, null=True)
     description = models.CharField(max_length=1024, blank=True)
 
     def __str__(self):

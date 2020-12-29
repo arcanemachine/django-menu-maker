@@ -3,11 +3,13 @@
 {% block title %}Menu: {{ menusection.menu.restaurant.name }} - {{ menusection.menu.name }}: {{ menusection.name }}{% endblock %}
 
 {% block body_title %}<a class="text-dark" href="{% url 'restaurants:restaurant_detail' restaurant_slug=menusection.menu.restaurant.slug %}">{{ menusection.menu.restaurant.name }}</a>{% endblock %}
-{% block body_subheading %}<a class="text-dark" href="{% url 'menus:menu_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug %}">{{ menusection.menu.name }}</a>{% endblock %}
+{% block body_subheading %}<a class="text-dark" href="{% url 'menus:menu_detail' restaurant_slug=menusection.menu.restaurant.slug menu_slug=menusection.menu.slug %}">{{ menusection.menu.name }}</a> - {{ menusection.name }}{% endblock %}
 
 {% block content %}
 
-<h2 class="pb-2">{{ menusection.name }}</h2>
+{% if menusection.image %}
+  <img src="{{ menusection.image.url }}" class="menusection-img">
+{% endif %}
 
 {% if not menusection.menuitem_set.count %}
 <p>This section has no items.</p>
@@ -15,7 +17,7 @@
 
 <ul>
   {% for menuitem in menusection.menuitem_set.all %}
-  <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}{% if menuitem.price %}<span class="ml-2 font-italic">{{ menuitem.get_readable_price }}</span>{% endif %}</li>
+  <li><a class="text-dark font-weight-bold" href="{% url 'menus:menuitem_detail' restaurant_slug=menuitem.menusection.menu.restaurant.slug menu_slug=menuitem.menusection.menu.slug menusection_slug=menusection.slug menuitem_slug=menuitem.slug %}">{{ menuitem.name }}</a> - {{ menuitem.description }}{% if menuitem.price %}<span class="ml-2">{{ menuitem.get_readable_price }}</span>{% endif %}</li>
   {% endfor %}
 </ul>
 

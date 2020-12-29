@@ -1,7 +1,7 @@
 /* base */
 
 ul {
-  list-style-type: '- ';
+  list-style-type: none;
 }
 
 .underline {
@@ -72,8 +72,16 @@ ul {
   margin: auto;
   margin-bottom: 2rem;
   max-width: 80%;
-  max-height: 500px;
   height: auto;
-  max-height: 33vh;
+  max-height: 25vh;
   border-radius: 2rem;
+}
+
+.menusection-img {
+  display: block;
+  object-fit: cover;
+  margin: auto;
+  height: 15vh;
+  width: 15vh;
+  border-radius: 50%;
 }

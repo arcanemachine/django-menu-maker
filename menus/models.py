@@ -31,6 +31,7 @@ class Menu(models.Model):
     image = models.ImageField(
         help_text="An image or logo for this menu (optional)",
         upload_to=menu_upload_to, blank=True, null=True)
+    description = models.CharField(max_length=256, blank=True, null=True)
     theme = models.CharField(
         max_length=32,
         choices=THEME_CHOICES,

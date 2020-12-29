@@ -21,35 +21,45 @@
   </head>
   <body>
     <noscript><h4 class="text-center font-weight-bold">You have JavaScript disabled. Please enable it so this site can work properly.</h4></noscript>
+
     <nav class="navbar navbar-expand-sm navbar-dark project-theme">
+
       <a class="navbar-brand ml-2" href="{% url 'root' %}">{{ PROJECT_NAME }}</a>
-      <ul class="navbar-nav ml-auto">
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
 
     {% if user.is_authenticated %}
 
-        <li class="nav-item active">
-          <a class="nav-link" style="font-weight: normal;" title="View your user profile" href="{% url 'users:user_detail' %}">{{ user.username }}</a>
-        </li>
+          <li class="nav-item active">
+            <a class="nav-link" style="font-weight: normal;" title="View your user profile" href="{% url 'users:user_detail' %}">{{ user.username }}</a>
+          </li>
 
-        <li class="nav-item active">
-          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:logout' %}{% if request.path != '/' %}?next={{ request.path }}{% endif %}">Logout</a>
-        </li>
+          <li class="nav-item active">
+            <a class="nav-link" style="font-weight: normal;" href="{% url 'users:logout' %}{% if request.path != '/' %}?next={{ request.path }}{% endif %}">Logout</a>
+          </li>
 
     {% else %}
 
-        <li class="nav-item active mr-2">
-          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Register</a>
-        </li>
+          <li class="nav-item active mr-2">
+            <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Register</a>
+          </li>
 
-        <li class="nav-item active mr-2">
-          <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Login</a>
-        </li>
+          <li class="nav-item active mr-2">
+            <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Login</a>
+          </li>
 
     {% endif %}
-      </ul>
+        </ul>
+      </div>
+
     </nav>
 
-    <div id="content" class="container">
+    <main id="content" class="container">
 
       {% block body_title_wrapper %}
       <h1 id="body-title" class="{% if body_title_tags %}{{ body_title_tags }}{% else %}text-center{% endif %}">
@@ -83,11 +93,9 @@
 
     {% block content %}{% endblock content %}
 
-    </div>
+    </main>
+
     {% block footer %}{% include 'footer.html' %}{% endblock footer %}
-
-
-
     {% block body_end_script %}{% endblock body_end_script %}
     
   </body>

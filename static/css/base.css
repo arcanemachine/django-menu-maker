@@ -77,6 +77,12 @@ ul {
   border-radius: 2rem;
 }
 
+.restaurant-menu-img {
+  width: 100%;
+  height: 25vh;
+  object-fit: cover;
+}
+
 .menusection-img {
   display: block;
   object-fit: cover;

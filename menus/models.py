@@ -7,13 +7,6 @@ from django.utils.text import slugify
 
 from menus_project import constants
 
-# removing this function breaks a past migration
-def upload_to():
-    return None
-
-# removing this function breaks a past migration
-def menuitem_upload_to():
-    return None
 
 def menu_upload_to(instance, filename):
     base, extension = os.path.splitext(filename)

@@ -2,9 +2,9 @@
 
 ![Coverage Badge](/assets/img/coverage.svg "Coverage Badge")
 
-<strong><h3>Note: This project is currently not feature-complete. It is currently usable as a proof-of-concept for the reliable creation of restaurants, menus, menu items, etc., but it is not particularly pretty.</h3></strong>
+<strong><h3>Note: This project is currently usable as a proof-of-concept for the reliable creation of restaurants, menus, menu items, etc. It can be used to make a working menu with a minimalist design that includes pretty pictures.</h3></strong>
 
-<strong>Current Status:</strong> API complete, begin building frontend
+<strong>Current Status:</strong> Basic features are complete
 
 
 ### About

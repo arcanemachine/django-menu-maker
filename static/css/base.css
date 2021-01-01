@@ -8,15 +8,6 @@ ul {
   min-height: 100vh;
 }
 
-#body-title {
-  margin-bottom: 0;
-}
-
-#body-subheading {
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
-}
-
 #content {
   flex-grow: 1;
   margin-top: 1.5rem;

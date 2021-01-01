@@ -22,80 +22,84 @@
   <body>
     <noscript><h4 class="text-center font-weight-bold">You have JavaScript disabled. Please enable it so this site can work properly.</h4></noscript>
 
-    <nav class="navbar navbar-expand-sm navbar-dark project-theme">
+    <div class="page-container">
 
-      <a class="navbar-brand ml-2" href="{% url 'root' %}">{{ PROJECT_NAME }}</a>
+      <nav class="navbar navbar-expand-sm navbar-dark project-theme">
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <a class="navbar-brand ml-2" href="{% url 'root' %}">{{ PROJECT_NAME }}</a>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto text-center">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto text-center">
 
     {% if user.is_authenticated %}
 
-          <li class="nav-item active">
-            <a class="nav-link" style="font-weight: normal;" title="View your user profile" href="{% url 'users:user_detail' %}">{{ user.username }}</a>
-          </li>
+            <li class="nav-item active">
+              <a class="nav-link" style="font-weight: normal;" title="View your user profile" href="{% url 'users:user_detail' %}">{{ user.username }}</a>
+            </li>
 
-          <li class="nav-item active">
-            <a class="nav-link" style="font-weight: normal;" href="{% url 'users:logout' %}{% if request.path != '/' %}?next={{ request.path }}{% endif %}">Logout</a>
-          </li>
+            <li class="nav-item active">
+              <a class="nav-link" style="font-weight: normal;" href="{% url 'users:logout' %}{% if request.path != '/' %}?next={{ request.path }}{% endif %}">Logout</a>
+            </li>
 
     {% else %}
 
-          <li class="nav-item active mr-2">
-            <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Register</a>
-          </li>
+            <li class="nav-item active mr-2">
+              <a class="nav-link" style="font-weight: normal;" href="{% url 'users:register' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Register</a>
+            </li>
 
-          <li class="nav-item active mr-2">
-            <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Login</a>
-          </li>
+            <li class="nav-item active mr-2">
+              <a class="nav-link" style="font-weight: normal;" href="{% url 'users:login' %}{% if 'next' in request.GET %}?next={{ request.GET.next }}{% elif request.path != '/' and request.path != user_register_url and request.path != user_login_url %}?next={{ request.path }}{% endif %}">Login</a>
+            </li>
 
     {% endif %}
-        </ul>
-      </div>
+          </ul>
+        </div>
 
-    </nav>
+      </nav>
 
-    <main id="content" class="container">
+      <main id="content" class="container">
 
       {% block body_title_wrapper %}
-      <h1 id="body-title" class="{% if body_title_tags %}{{ body_title_tags }}{% else %}text-center{% endif %}">
+        <h1 id="body-title" class="{% if body_title_tags %}{{ body_title_tags }}{% else %}text-center{% endif %}">
         {% block body_title %}
           {% if body_title_text %}{{ body_title_text }}{% endif %}
         {% endblock body_title %}
-      </h1>
+        </h1>
       {% endblock body_title_wrapper %}
 
       {% block body_subheading_wrapper %}
-      <h3 id="body-subheading" class="{% if body_subheading_tags %}{{ body_subheading_tags }}{% else %}text-center{% endif %}">
+        <h3 id="body-subheading" class="{% if body_subheading_tags %}{{ body_subheading_tags }}{% else %}text-center{% endif %}">
         {% block body_subheading %}
           {% if body_subheading_text %}{{ body_subheading_text }}{% endif %}
         {% endblock body_subheading %}
-      </h3>
+        </h3>
       {% endblock body_subheading_wrapper %}
 
     {% if form.errors %}
       {% for error_field, error_message in form.errors.items %}
-      <div class="alert alert-danger mb-4">
-        <strong>Error: {{ error_message.0 }}</strong>
-      </div>
+        <div class="alert alert-danger mb-4">
+          <strong>Error: {{ error_message.0 }}</strong>
+        </div>
       {% endfor %}
     {% endif %}
 
     {% if messages %}
       {% for message in messages %}
-        <div class="alert{% if message.tags %} {{ message.tags }}{% endif %}{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %} alert-info{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %} alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} alert-danger{% endif %} message mb-4"><strong>{{ message }}</strong></div>
+          <div class="alert{% if message.tags %} {{ message.tags }}{% endif %}{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %} alert-info{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %} alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} alert-danger{% endif %} message mb-4"><strong>{{ message }}</strong></div>
       {% endfor %}
     {% endif %}
 
     {% block content %}{% endblock content %}
 
-    </main>
+      </main>
 
     {% block footer %}{% include 'footer.html' %}{% endblock footer %}
+
+    </div>
     {% block body_end_script %}{% endblock body_end_script %}
     
   </body>

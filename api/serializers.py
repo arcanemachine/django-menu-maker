@@ -19,7 +19,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class MenuSerializer(serializers.ModelSerializer):
-
     restaurant_name = serializers.ReadOnlyField(source='restaurant.name')
 
     class Meta:
@@ -42,7 +41,6 @@ class MenuSerializer(serializers.ModelSerializer):
 
 
 class MenuSectionSerializer(serializers.ModelSerializer):
-
     restaurant_name = \
         serializers.ReadOnlyField(source='menu.restaurant.name')
     menu_name = serializers.ReadOnlyField(source='menu.name')
@@ -64,7 +62,6 @@ class MenuSectionSerializer(serializers.ModelSerializer):
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
-
     restaurant_name = \
         serializers.ReadOnlyField(source='menusection.menu.restaurant.name')
     menu_name = serializers.ReadOnlyField(source='menusection.menu.name')

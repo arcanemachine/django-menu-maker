@@ -1,6 +1,7 @@
 from django.conf import settings
+import server_config
 
-FRONTEND_SERVER_URL = 'http://192.168.1.120:8081'
+FRONTEND_SERVER_URL = server_config.FRONTEND_SERVER_URL
 FRONTEND_SERVER_URL_CONFIRM_EMAIL = \
     FRONTEND_SERVER_URL + '/register/confirm-email/'
 

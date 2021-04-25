@@ -120,6 +120,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 EMAIL_CONFIRMATION_REQUIRED = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SERVER_EMAIL = server_config.SERVER_EMAIL
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
 # forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

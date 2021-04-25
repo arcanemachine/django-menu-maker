@@ -46,7 +46,7 @@ class Restaurant(models.Model):
     def delete(self, *args, **kwargs):
         if self.image:
             self.image.delete()
-        super.delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('restaurants:restaurant_detail', kwargs={

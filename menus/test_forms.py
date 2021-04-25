@@ -5,7 +5,6 @@ from menus.forms import MenuSectionForm, MenuItemForm
 
 
 class MenuSectionFormTest(SimpleTestCase):
-
     def setUp(self):
         self.form = MenuSectionForm
 
@@ -13,7 +12,8 @@ class MenuSectionFormTest(SimpleTestCase):
         self.assertEqual(self.form._meta.model.__name__, 'MenuSection')
 
     def test_meta_fields(self):
-        self.assertEqual(self.form._meta.fields, ['menu', 'name'])
+        self.assertEqual(
+            self.form._meta.fields, ['menu', 'name', 'image', 'note'])
 
     def test_meta_widgets(self):
         self.assertTrue(
@@ -21,7 +21,6 @@ class MenuSectionFormTest(SimpleTestCase):
 
 
 class MenuItemFormTest(SimpleTestCase):
-
     def setUp(self):
         self.form = MenuItemForm
 
@@ -30,7 +29,8 @@ class MenuItemFormTest(SimpleTestCase):
 
     def test_meta_fields(self):
         self.assertEqual(
-            self.form._meta.fields, ['menusection', 'name', 'description'])
+            self.form._meta.fields,
+            ['menusection', 'name', 'price', 'description'])
 
     def test_meta_widgets(self):
         self.assertTrue(

@@ -72,7 +72,7 @@ class RestaurantCreateViewTest(TestCase):
         self.assertEqual(self.view.model.__name__, 'Restaurant')
 
     def test_fields(self):
-        self.assertEqual(self.view.fields, ('name',))
+        self.assertEqual(self.view.fields, ('name', 'image'))
 
     def test_success_message(self):
         self.assertEqual(
@@ -279,7 +279,7 @@ class RestaurantUpdateViewTest(TestCase):
         self.assertEqual(self.view.model.__name__, 'Restaurant')
 
     def test_fields(self):
-        self.assertEqual(self.view.fields, ('name',))
+        self.assertEqual(self.view.fields, ('name', 'image'))
 
     def test_success_message(self):
         self.assertEqual(

@@ -10,7 +10,6 @@ from menus.models import Menu, MenuSection, MenuItem
 
 
 class MenuModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.test_restaurant = \
@@ -153,7 +152,6 @@ class MenuModelTest(TestCase):
 
 
 class MenuSectionModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.test_restaurant = \
@@ -271,7 +269,6 @@ class MenuSectionModelTest(TestCase):
 
 
 class MenuItemModelTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.test_restaurant = \

@@ -2,9 +2,7 @@
 
 ![Coverage Badge](/assets/img/coverage.svg "Coverage Badge")
 
-<strong><h3>Note: This project is currently usable as a proof-of-concept for an API that allows for the reliable creation of restaurants, menus, menu items, etc. It can be used to make a working menu with a minimalist design that includes pretty pictures.</h3></strong>
-
-<strong>Current Status:</strong> Backend Web/API CRUD systems both working and tested.
+<strong><h3>This project is currently usable for the creation of restaurants, menus, menu items, etc. It can be used to make a working menu with a minimalist design that includes pretty pictures. It has a functioning and tested web client and REST API.</h3></strong>
 
 
 ### About

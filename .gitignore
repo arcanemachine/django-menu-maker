@@ -4,7 +4,7 @@
 data.dump
 geckodriver.log
 secret_key.py
-gunicorn.sh 
+# gunicorn.sh 
 todo
 base_template.html
 menus/templatetags/
@@ -13,15 +13,16 @@ menus/templatetags/
 makenmigrate
 runserver
 runserver_insecure.sh
-shell
+# shell
 
 # Django #
 *.log
 *.pot
 *.pyc
 __pycache__
-db.sqlite3
-media
+# db.sqlite3
+staticfiles/
+# media/
 
 # Backup files # 
 *.bak 

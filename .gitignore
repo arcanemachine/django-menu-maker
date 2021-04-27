@@ -10,9 +10,9 @@ base_template.html
 menus/templatetags/
 
 ## local scripts
-makenmigrate
-runserver
-runserver_insecure.sh
+# makenmigrate
+# runserver
+# runserver_insecure.sh
 # shell
 
 # Django #

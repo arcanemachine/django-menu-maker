@@ -28,7 +28,7 @@
         {% else %}
         <div class="restaurant-menu-img bg-secondary"></div>
         {% endif %}
-        <p class="card-text p-2 border-top">Menu description placeholder text</p>
+        <p class="card-text p-2 border-top">{% if menu.description %}{{ menu.description }}{% else %}{{ menu.name }} menu{% endif %}</p>
       </a>
     </div>
 

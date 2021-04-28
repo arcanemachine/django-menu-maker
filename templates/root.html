@@ -7,7 +7,9 @@
 {% block content %}
 
 <div id="bottom-links">
-  <p><a href="{% url 'restaurants:restaurant_list' %}">View restaurants</a></p>
+  <p><a href="{% url 'menus:menu_detail' restaurant_slug='chez-nic' menu_slug='breakfast' %}">View example menu</a></p>
+  <p><a href="{% url 'restaurants:restaurant_list' %}">View all restaurants</a></p>
+  <p class="mt-4"><a href="{% url 'restaurants:restaurant_create' %}">Create your own restaurant</a></p>
 </div>
 
 {% endblock content %}

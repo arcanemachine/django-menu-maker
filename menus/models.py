@@ -88,8 +88,8 @@ class MenuSection(models.Model):
         help_text="An image or logo for this section (optional)",
         upload_to=menusection_upload_to, blank=True, null=True)
     note = models.CharField(
-            help_text="An optional note about this section (e.g. 'Drinks "\
-                "come with complimentary refills.')",
+            help_text="An optional note about this section (e.g."
+                      "'Drinks come with complimentary refills.')",
             max_length=256, blank=True, null=True)
 
     def __str__(self):

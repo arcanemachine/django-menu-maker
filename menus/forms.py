@@ -7,7 +7,7 @@ from .models import Menu, MenuSection, MenuItem
 class MenuForm(ModelForm):
     class Meta:
         model = Menu
-        fields = ['restaurant', 'name', 'image']
+        fields = ['restaurant', 'name', 'description', 'image']
         widgets = {'restaurant': forms.HiddenInput()}
 
 

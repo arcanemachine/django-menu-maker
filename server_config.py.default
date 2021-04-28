@@ -10,5 +10,6 @@ FRONTEND_SERVER_URL = 'http://192.168.1.120:8081'
 
 BASE_DIR = str(Path(__file__).resolve().parent)
 
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [os_path_join(BASE_DIR, 'static')]
 STATIC_ROOT = None

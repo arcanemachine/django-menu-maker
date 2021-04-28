@@ -8,6 +8,7 @@ secret_key.py
 todo
 base_template.html
 menus/templatetags/
+server_config.py
 
 ## local scripts
 # makenmigrate

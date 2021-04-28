@@ -11,6 +11,7 @@ import secret_key
 import server_config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 DEBUG = server_config.DEBUG
 SECRET_KEY = secret_key.SECRET_KEY

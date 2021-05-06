@@ -24,7 +24,8 @@ class RestaurantCreateView(LoginRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         # do not allow users to register too many restaurants
-        if request.user.restaurant_set.count() >= \
+        if request.user.is_authenticated \
+                and request.user.restaurant_set.count() >= \
                 c.MAX_RESTAURANTS_PER_USER  \
                 and not request.user.is_staff:
             messages.error(

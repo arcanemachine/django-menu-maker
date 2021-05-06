@@ -1,1 +1,1 @@
-gunicorn -w 3 -b 0.0.0.0:8003 menus_project.wsgi
+gunicorn -w 1 -b 0.0.0.0:8003 menus_project.wsgi

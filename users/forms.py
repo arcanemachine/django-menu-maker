@@ -99,7 +99,7 @@ class NewUserCreationForm(PasswordResetForm, UserCreationForm):
             if get_path:
                 return f'{base_url}{next_url}'
             if get_url:
-                return f'{protocol}://{domain}{base_url}{next_url}'
+                return f'{domain}{base_url}{next_url}'
         self.send_mail(
             subject_template_name, email_template_name, context, from_email,
             user_email, html_email_template_name=html_email_template_name)

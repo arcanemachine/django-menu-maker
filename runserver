@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 ~/scripts/wonky_input_fix
 ./manage.py runserver 0.0.0.0:8003

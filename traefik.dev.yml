@@ -1,0 +1,9 @@
+---
+entryPoints:
+  web:
+    address: ":80"
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: "traefik-dev-proxy"

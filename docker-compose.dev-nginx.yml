@@ -1,0 +1,35 @@
+---
+version: "3.8"
+
+services:
+  django:
+    command: >
+      bash -c "./1--secret-key-create-if-not-exists &&
+               ./2--server-config-choose dev &&
+               python3 manage.py migrate &&
+               python3 manage.py runserver 0.0.0.0:8000"
+    networks:
+      - traefik-global-proxy
+    expose:
+      - 8000
+
+  nginx:
+    image: nginx
+    depends_on:
+      - django
+    networks:
+      - traefik-global-proxy
+    ports:
+      - "${PROJECT_PORT}:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${DOMAIN_NAME}.localhost`, `www.${DOMAIN_NAME}.localhost`)"
+      - "traefik.http.routers.${PROJECT_NAME}.entrypoints=web"
+      - "traefik.http.routers.${PROJECT_NAME}.middlewares=redirect-non-www-to-www@file"
+
+networks:
+  traefik-global-proxy:
+    driver: bridge
+    external: true

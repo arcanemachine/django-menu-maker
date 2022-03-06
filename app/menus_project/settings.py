@@ -162,3 +162,8 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+# django-cors-headers
+CORS_ALLOW_ALL_ORIGINS = server_config.CORS_ALLOW_ALL_ORIGINS
+CORS_ALLOWED_ORIGINS = server_config.CORS_ALLOWED_ORIGINS
+CSRF_TRUSTED_ORIGINS = server_config.CSRF_TRUSTED_ORIGINS

@@ -5,7 +5,8 @@ SERVER_NAME = 'test'
 SERVER_LOCATION = 'https://django-menu-maker.nicholasmoen.com'
 SERVER_EMAIL = 'no-reply@nicholasmoen.com'
 DEBUG = False
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS =\
+    ['django-menu-maker.nicholasmoen.com.test.moendigitalservices.com']
 
 FRONTEND_SERVER_URL = SERVER_LOCATION
 

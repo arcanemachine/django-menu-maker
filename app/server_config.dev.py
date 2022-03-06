@@ -5,7 +5,8 @@ SERVER_NAME = 'dev'
 SERVER_LOCATION = '192.168.1.120:8000'
 SERVER_EMAIL = 'admin@email.local'
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS =\
+    ['*']
 
 FRONTEND_SERVER_URL = 'http://192.168.1.120:8081'
 

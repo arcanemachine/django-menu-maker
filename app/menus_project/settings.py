@@ -15,7 +15,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 DEBUG = server_config.DEBUG
 SECRET_KEY = secret_key.SECRET_KEY
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = server_config.ALLOWED_HOSTS
 
 
 # application

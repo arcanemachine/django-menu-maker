@@ -24,6 +24,8 @@ services:
       - traefik-global-proxy
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./app/staticfiles:/staticfiles:ro
+      - ./app/media:/media:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${DOMAIN_NAME}`)"

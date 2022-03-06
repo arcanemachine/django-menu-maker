@@ -5,6 +5,7 @@ SERVER_NAME = 'prod'
 SERVER_LOCATION = 'https://django-menu-maker.nicholasmoen.com'
 SERVER_EMAIL = 'no-reply@nicholasmoen.com'
 DEBUG = False
+ALLOWED_HOSTS = ['django-menu-maker.nicholasmoen.com']
 
 FRONTEND_SERVER_URL = SERVER_LOCATION
 

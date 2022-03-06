@@ -5,7 +5,7 @@ services:
   traefik:
     image: traefik:v2.6
     ports:
-      - "${PROJECT_PORT}:80"
+      - "${PROJECT_PORT_EXTERNAL}:80"
     networks:
       - traefik-dev-proxy
     volumes:
@@ -19,9 +19,9 @@ services:
       bash -c "./1--secret-key-create-if-not-exists &&
                ./2--server-config-choose dev &&
                python3 manage.py migrate &&
-               python3 manage.py runserver 0.0.0.0:8000"
+               python3 manage.py runserver 0.0.0.0:${PROJECT_PORT_INTERNAL}"
     expose:
-      - 8000
+      - ${PROJECT_PORT_INTERNAL}
     networks:
       - traefik-dev-proxy
     labels:

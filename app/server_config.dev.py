@@ -9,9 +9,9 @@ ALLOWED_HOSTS =\
     ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS =\
-    None
+    []
 CSRF_TRUSTED_ORIGINS =\
-    None
+    []
 
 FRONTEND_SERVER_URL = 'http://192.168.1.120:8081'
 

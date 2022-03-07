@@ -8,8 +8,6 @@ services:
                ./2--server-config-choose dev &&
                python3 manage.py migrate &&
                python3 manage.py runserver 0.0.0.0:${PROJECT_PORT_INTERNAL}"
-    networks:
-      - traefik-global-proxy
     expose:
       - "${PROJECT_PORT_INTERNAL}"
 
@@ -17,19 +15,14 @@ services:
     image: nginx
     depends_on:
       - django
-    networks:
-      - traefik-global-proxy
     ports:
       - "${PROJECT_PORT_EXTERNAL}:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./app/staticfiles:/staticfiles:ro
+      - ./app/media:/media:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${DOMAIN_NAME}.localhost`, `www.${DOMAIN_NAME}.localhost`)"
       - "traefik.http.routers.${PROJECT_NAME}.entrypoints=web"
       - "traefik.http.routers.${PROJECT_NAME}.middlewares=redirect-non-www-to-www@file"
-
-networks:
-  traefik-global-proxy:
-    driver: bridge
-    external: true

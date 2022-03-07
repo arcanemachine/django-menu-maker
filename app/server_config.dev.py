@@ -19,4 +19,4 @@ BASE_DIR = str(Path(__file__).resolve().parent)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os_path_join(BASE_DIR, 'static')]
-STATIC_ROOT = None
+STATIC_ROOT = os_path_join(BASE_DIR, 'staticfiles')

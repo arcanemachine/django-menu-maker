@@ -21,8 +21,3 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./app/staticfiles:/staticfiles:ro
       - ./app/media:/media:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${DOMAIN_NAME}.localhost`, `www.${DOMAIN_NAME}.localhost`)"
-      - "traefik.http.routers.${PROJECT_NAME}.entrypoints=web"
-      - "traefik.http.routers.${PROJECT_NAME}.middlewares=redirect-non-www-to-www@file"

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# source dotenv
+set -o allexport; source .env; set +o allexport
+
+# disable native docker builds
+export COMPOSE_DOCKER_CLI_BUILD=0
+
+# require SERVER_ENVIRONMENT to be set, or use first arg
+if [ "$1" != "." ]; then
+  export SERVER_ENVIRONMENT="$1"
+fi
+
+if [ "$SERVER_ENVIRONMENT" == "" ]; then
+  echo "SERVER_ENVIRONMENT not set. Aborting..."
+  exit 1
+fi
+
+# ensure the podman user service has been started
+if systemctl --user list-units --all | grep -Fq podman.service | grep -Fq inactive; then
+  systemctl --user start podman.service
+fi
+
+# ensure the traefik-global-proxy network exists
+if ! podman network ls | grep -Fq traefik-global-proxy; then
+  podman network create traefik-global-proxy
+fi
+
+# start the container
+docker-compose -H unix:$XDG_RUNTIME_DIR/podman/podman.sock -f docker-compose.yml -f docker-compose.$SERVER_ENVIRONMENT.yml up --remove-orphans $2 $3 $4 $5

@@ -4,5 +4,12 @@ version: "3.8"
 services:
   django:
     build: .
+    environment:
+      PROJECT_NAME_PYTHON: "${PROJECT_NAME_PYTHON:?}"
+      PROJECT_PORT_INTERNAL: "${PROJECT_PORT_INTERNAL:?}"
+      SERVER_ENVIRONMENT: "${SERVER_ENVIRONMENT:?}"
+    ports:
+      - "${PROJECT_PORT_INTERNAL}"
     volumes:
       - ./app:/app
+      - ./docker:/docker

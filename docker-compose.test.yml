@@ -5,17 +5,9 @@ services:
   django:
     networks:
       - traefik-global-proxy
-    expose:
-      - "${PROJECT_PORT_INTERNAL}"
-    command: >
-      bash -c "./1--secret-key-create-if-not-exists &&
-               ./2--server-config-choose test &&
-               python3 manage.py migrate &&
-               python3 manage.py collectstatic --no-input
-               gunicorn -b 0.0.0.0:${PROJECT_PORT_INTERNAL} $PROJECT_NAME_PYTHON.wsgi"
 
   nginx:
-    image: nginx
+    image: docker.io/nginx
     depends_on:
       - django
     networks:

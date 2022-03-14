@@ -1,0 +1,7 @@
+---
+version: "3.8"
+
+services:
+  django:
+    ports:
+      - "${PROJECT_PORT_EXTERNAL}:${PROJECT_PORT_INTERNAL}"

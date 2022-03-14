@@ -12,3 +12,7 @@ ENV PYTHONUNBUFFERED=1
 # install dependencies
 COPY ./app/requirements.txt .
 RUN python3 -m pip install -r requirements.txt
+
+ENTRYPOINT [ "/docker/entrypoint.sh" ]
+CMD [ "/docker/start.sh", "server" ]
+

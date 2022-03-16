@@ -1,4 +1,4 @@
 #!/bin/bash
 
-~/scripts/wonky_input_fix
+stty sane
 ./manage.py runserver 0.0.0.0:8002

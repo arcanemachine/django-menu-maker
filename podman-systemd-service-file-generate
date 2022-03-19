@@ -68,4 +68,4 @@ ExecStart=$(which docker-compose) -H unix:$XDG_RUNTIME_DIR/podman/podman.sock -f
 ExecStop=$(which docker-compose) -H unix:$XDG_RUNTIME_DIR/podman/podman.sock -f docker-compose.yml -f docker-compose.$SERVER_ENVIRONMENT.yml down
 
 [Install]
-WantedBy=default.target"
+WantedBy=default.target" > ~/.config/systemd/user/${service_name}.service

@@ -6,12 +6,12 @@ SERVER_LOCATION = 'https://django-menu-maker.nicholasmoen.com'
 SERVER_EMAIL = 'no-reply@nicholasmoen.com'
 DEBUG = False
 ALLOWED_HOSTS =\
-    ['django-menu-maker.nicholasmoen.com.test.moendigitalservices.com']
+    ['django-menu-maker.test.moendigitalservices.com']
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS =\
-    ['https://django-menu-maker.nicholasmoen.com.test.moendigitalservices.com']
+    ['https://django-menu-maker.test.moendigitalservices.com']
 CSRF_TRUSTED_ORIGINS =\
-    ['https://django-menu-maker.nicholasmoen.com.test.moendigitalservices.com']
+    ['https://django-menu-maker.test.moendigitalservices.com']
 
 FRONTEND_SERVER_URL = SERVER_LOCATION
 

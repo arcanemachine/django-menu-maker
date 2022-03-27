@@ -1,8 +1,17 @@
 # Menu Maker
 
-![Coverage Badge](/assets/img/coverage.svg "Coverage Badge")
+<!-- ![Coverage Badge](/static/img/coverage.svg "Coverage Badge") -->
 
 <strong><h3>This project is currently usable for the creation of restaurants, menus, menu items, etc. It can be used to make a working menu with a minimalist design that includes pretty pictures. It has a functioning and tested web client and REST API.</h3></strong>
+
+
+### Setup Guide
+
+- Must have `docker` and `docker-compose` installed
+- Clone the repo to your computer
+- From the project root folder, run `docker-compose -f docker-compose.yml -f docker-compose.dev.django-standalone.yml up` to start the project
+- Navigate to: `localhost:8002` or `[your-ip-address]:8002`
+- The default port `8002` can be changed by editing the `.env` file in the project root directory.
 
 
 ### About

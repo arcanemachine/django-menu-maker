@@ -9,6 +9,21 @@ fi
 
 PROCESS_TYPE=$1
 
+# get server environment
+if [ "$SERVER_ENVIRONMENT" == "" ] || [ "${SERVER_ENVIRONMENT:0:3}" == "dev" ]; then
+  export SERVER_ENVIRONMENT=dev
+elif [ "${SERVER_ENVIRONMENT:0:4}" == "test" ]; then
+  export SERVER_ENVIRONMENT=test
+elif [ "${SERVER_ENVIRONMENT:0:4}" == "prod" ]; then
+  export SERVER_ENVIRONMENT=prod
+else
+  echo "*** SERVER_ENVIRONMENT must begin with one of: dev, test, prod ***"
+  echo "*** Currently set to: '${SERVER_ENVIRONMENT}' ***"
+  exit 1
+fi
+echo "Using SERVER_ENVIRONMENT: '$SERVER_ENVIRONMENT'"
+echo ""
+
 if [ "$PROCESS_TYPE" = "server" ]; then
   if [ "$SERVER_ENVIRONMENT" = "dev" ]; then
     exec python3 manage.py runserver 0.0.0.0:$PROJECT_PORT_INTERNAL

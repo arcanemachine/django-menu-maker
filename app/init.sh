@@ -3,8 +3,6 @@
 app_path=$(dirname "$0")
 django_config_file_path="$app_path/server_config.py"
 
-environment_config_file_path="$app_path/server_config.$SERVER_ENVIRONMENT.py"
-
 cd $app_path
 
 # get server environment
@@ -16,10 +14,13 @@ elif [ "${SERVER_ENVIRONMENT:0:4}" == "prod" ]; then
   export SERVER_ENVIRONMENT=prod
 else
   echo "*** SERVER_ENVIRONMENT must begin with one of: dev, test, prod ***"
+  echo "*** Currently set to: '${SERVER_ENVIRONMENT}' ***"
   exit 1
 fi
 echo "Using SERVER_ENVIRONMENT: '$SERVER_ENVIRONMENT'"
 echo ""
+
+environment_config_file_path="$app_path/server_config.$SERVER_ENVIRONMENT.py"
 
 # ensure secret_key.py exists
 secret_key_path="$app_path/secret_key.py"

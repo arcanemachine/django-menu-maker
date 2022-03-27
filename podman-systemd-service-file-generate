@@ -41,6 +41,12 @@ if [ "$SERVER_ENVIRONMENT" == "" ]; then
   fi
 fi
 
+if [ "$DRY_RUN" == 1 ]; then
+  output_to=/dev/stdout
+else
+  output_to=~/.config/systemd/user/${service_name}.service
+fi
+
 echo "[Unit]
 Description=$service_name
 Wants=network-online.target
@@ -68,4 +74,6 @@ ExecStart=$(which docker-compose) -H unix:$XDG_RUNTIME_DIR/podman/podman.sock -f
 ExecStop=$(which docker-compose) -H unix:$XDG_RUNTIME_DIR/podman/podman.sock -f docker-compose.yml -f docker-compose.$SERVER_ENVIRONMENT.yml down
 
 [Install]
-WantedBy=default.target" > ~/.config/systemd/user/${service_name}.service
+WantedBy=default.target" > ${output_to}
+
+echo "done"
